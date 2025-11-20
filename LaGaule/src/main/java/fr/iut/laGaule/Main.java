@@ -1,17 +1,29 @@
 package fr.iut.laGaule;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
+        Druid dibiazah = new Druid("ya'qub qamar ad-din dibiazah", "male", 1.75, 80, 10, 50);
+        Merchant kashmiri = new Merchant("khalid kashmiri", "male", 1.70, 25, 40, 30);
+        Prefect karawita = new Prefect("khidir karawita", "male", 1.80, 54, 62, 52);
+        General kanabawi = new General("ismail ahmad kanabawi", "female", 1.65, 34, 64, 25);
+        Innkeeper sisha = new Innkeeper("usman abdul jalil sisha", "male", 1.79, 56, 12, 78);
+        Lycanthrope sumbul = new Lycanthrope("muhammad sumbul", "male", 2.0, 46, 80, 70);
 
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
-    }
+        dibiazah.concoctPotion();
+
+        kashmiri.drinkPotion(50);
+
+        System.out.println(karawita.getHealth());
+        Karawita.receiveDamage(20);
+        System.out.println(karawita.getHealth());
+        Karawita.heal(35);
+        System.out.println(karawita.getHealth());
+
+        sisha.work();
+
+        kanabawi.command();
+
+        minus.eat(10);
+
 }
