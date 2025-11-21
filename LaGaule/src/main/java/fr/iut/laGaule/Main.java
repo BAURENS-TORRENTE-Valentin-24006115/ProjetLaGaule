@@ -1,17 +1,20 @@
 package fr.iut.laGaule;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import fr.iut.laGaule.model.Character.*;
+import fr.iut.laGaule.model.Character.Character;
+import fr.iut.laGaule.model.Character.Gaul.Blacksmith;
+import fr.iut.laGaule.model.Character.Gaul.Druid;
+import fr.iut.laGaule.model.Character.Gaul.Gaul;
+import fr.iut.laGaule.model.Character.MythicalCreature.Lycanthrope;
+import fr.iut.laGaule.model.Character.Roman.Legionary;
+import fr.iut.laGaule.model.Character.Roman.Prefect;
+import fr.iut.laGaule.model.Character.Roman.Roman;
+import fr.iut.laGaule.model.Food.*;
+import fr.iut.laGaule.model.Place.*;
+
+import java.util.ArrayList;
+
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-
-
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
     }
 }
