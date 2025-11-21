@@ -102,13 +102,22 @@ public abstract class Place {
         return sb.toString();
     }
 
+    public void addFood(Food foodItem) {
+        if (foodItem != null) {
+            food.add(foodItem);
+            System.out.println(foodItem.getName() + " a été ajouté à " + name + ".");
+        } else {
+            System.out.println("Aliment invalide.");
+        }
+    }
+
     /**
-     * Soigne tous les personnages présents dans le lieu
+     * Heals all the characters present in the location
      */
-    public void healCharacters() {
+    public void healCharacters(int healingAmount) {
         if (Character != null && !Character.isEmpty()) {
             for (Character c : Character) {
-                c.heal();
+                c.heal(healingAmount);
             }
             System.out.println("Tous les personnages de " + name + " ont été soignés.");
         } else {
@@ -117,7 +126,7 @@ public abstract class Place {
     }
 
     /**
-     * Nourrit tous les personnages avec les aliments disponibles dans le lieu
+     * Feeds all characters with the food available in the location
      */
     public void feedCharacters() {
         if (Character == null || Character.isEmpty()) {
@@ -144,8 +153,8 @@ public abstract class Place {
     }
 
     /**
-     * Nourrit un personnage spécifique avec un aliment du lieu
-     * @param character Le personnage à nourrir
+     * Feeds a specific character with a local food item
+     * @param character The character to feed
      */
     public void feedCharacter(Character character) {
         if (character == null) {
@@ -167,5 +176,15 @@ public abstract class Place {
         character.eat(f);
         food.remove(0);
         System.out.println(character.getName() + " a mangé " + f.getName() + " dans " + name + ".");
+    }
+
+    public void addCharacter(Character character) {
+        if (character != null) {
+            Character.add(character);
+            nbCharacter++;
+            System.out.println(character.getName() + " a été ajouté à " + name + ".");
+        } else {
+            System.out.println("Personnage invalide.");
+        }
     }
 }
