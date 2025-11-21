@@ -1,6 +1,10 @@
 package fr.iut.laGaule.model.Character;
 
-public class Character {
+import fr.iut.laGaule.Serializer;
+
+import java.io.Serializable;
+
+public class Character implements Serializable {
 	 protected String name;
     protected String sex;
     protected double height;
@@ -45,6 +49,12 @@ public class Character {
     public void drinkPotion(int amount) {
         this.magicPotionLevel += amount;
         System.out.println(this.name + " drinks magic potion! Power level: " + this.magicPotionLevel);
+    }
+
+    public void eat(int amount) {
+        this.hunger += amount;
+        if (this.hunger > 100) this.hunger = 100;
+        System.out.println(this.name + " eat some food! Hunger: " + this.hunger);
     }
 
     public void die() {

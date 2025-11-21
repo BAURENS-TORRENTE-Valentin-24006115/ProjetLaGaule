@@ -31,6 +31,8 @@ public class Main {
 
         kanabawi.command();
 
+        dibiazah.eat(25);
+
     }
 
 }
