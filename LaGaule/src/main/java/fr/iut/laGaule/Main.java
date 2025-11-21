@@ -9,7 +9,7 @@ import fr.iut.laGaule.model.Character.Roman.Prefect;
 
 public class Main {
     public static void main(String[] args) {
-        Druid dibiazah = new Druid("ya'qub qamar ad-din dibiazah", "male", 1.75, 80, 10, 50);
+        Druid dibiazah = new Druid("ya'qub qamar ad-din dibiazah", "male", 1.75, 80, 54, 50);
         Merchant kashmiri = new Merchant("khalid kashmiri", "male", 1.70, 25, 40, 30);
         Prefect karawita = new Prefect("khidir karawita", "male", 1.80, 54, 62, 52);
         General kanabawi = new General("ismail ahmad kanabawi", "female", 1.65, 34, 64, 25);
@@ -32,6 +32,13 @@ public class Main {
         kanabawi.command();
 
         dibiazah.eat(25);
+        dibiazah.fight(karawita);
+        dibiazah.fight(karawita);
+        dibiazah.fight(karawita);
+        dibiazah.fight(karawita);
+        dibiazah.fight(karawita);
+        dibiazah.fight(karawita);
+        dibiazah.fight(karawita);
 
     }
 

@@ -63,4 +63,5 @@ public class Character implements Serializable {
     public String getName() { return name; }
     public int getEndurance() { return endurance; }
     public int getHealth() { return health; }
+    public int getStrength() { return strength; }
 }
