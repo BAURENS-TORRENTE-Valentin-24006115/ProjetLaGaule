@@ -2,7 +2,7 @@ package fr.iut.laGaule.model.Place;
 
 import fr.iut.laGaule.model.Character.Character;
 import fr.iut.laGaule.model.Character.ClanLeader;
-import fr.iut.laGaule.model.Food.Food;
+import fr.iut.laGaule.model.Consumables.Foods.Foods;
 
 import java.util.ArrayList;
 
@@ -12,9 +12,9 @@ public abstract class Place {
     private ClanLeader clanLeader;
     private int nbCharacter;
     private ArrayList<Character> Character;
-    private ArrayList<Food> food;
+    private ArrayList<Foods> food;
 
-    public Place(String name, int area, ClanLeader clanLeader, int nbCharacter, ArrayList<Character> character, ArrayList<Food> food) {
+    public Place(String name, int area, ClanLeader clanLeader, int nbCharacter, ArrayList<Character> character, ArrayList<Foods> food) {
         this.name = name;
         this.area = area;
         this.clanLeader = clanLeader;
@@ -55,11 +55,11 @@ public abstract class Place {
         Character = character;
     }
 
-    public ArrayList<Food> getFood() {
+    public ArrayList<Foods> getFood() {
         return food;
     }
 
-    public void setFood(ArrayList<Food> food) {
+    public void setFood(ArrayList<Foods> food) {
         this.food = food;
     }
 
@@ -92,8 +92,8 @@ public abstract class Place {
         // Affichage des aliments
         if (food != null && !food.isEmpty()) {
             sb.append("--- Aliments disponibles ---\n");
-            for (Food f : food) {
-                sb.append("- ").append(f.toString()).append("\n");
+            for (Foods f : food) {
+                sb.append("- ").append(f.getName()).append("\n");
             }
         } else {
             sb.append("Aucun aliment disponible.\n");
@@ -102,7 +102,7 @@ public abstract class Place {
         return sb.toString();
     }
 
-    public void addFood(Food foodItem) {
+    public void addFood(Foods foodItem) {
         if (foodItem != null) {
             food.add(foodItem);
             System.out.println(foodItem.getName() + " a été ajouté à " + name + ".");
@@ -141,9 +141,9 @@ public abstract class Place {
 
         for (Character c : Character) {
             if (!food.isEmpty()) {
-                Food f = food.getFirst(); // Prend le premier aliment disponible
+                Foods f = food.get(0);
                 c.eat(f);
-                food.removeFirst(); // Retire l'aliment consommé
+                food.remove(0);
                 System.out.println(c.getName() + " a mangé " + f.getName());
             } else {
                 System.out.println("Plus d'aliments disponibles pour nourrir " + c.getName());
@@ -172,7 +172,7 @@ public abstract class Place {
             return;
         }
 
-        Food f = food.get(0);
+        Foods f = food.get(0);
         character.eat(f);
         food.remove(0);
         System.out.println(character.getName() + " a mangé " + f.getName() + " dans " + name + ".");

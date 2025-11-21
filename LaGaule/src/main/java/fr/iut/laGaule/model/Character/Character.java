@@ -1,6 +1,7 @@
 package fr.iut.laGaule.model.Character;
 
-import fr.iut.laGaule.model.Food.Food;
+import fr.iut.laGaule.model.Consumables.Foods.Foods;
+
 
 public class Character {
     protected String name;
@@ -55,7 +56,7 @@ public class Character {
     public String getName() { return name; }
     public int getEndurance() { return endurance; }
     public int getHealth() { return health; }
-    public void eat(Food f) {
+    public void eat(Foods f) {
     //TODO: implement eat method
         }
     }
