@@ -4,12 +4,12 @@ import fr.iut.laGaule.model.Character.ClanLeader;
 import fr.iut.laGaule.model.Character.Character;
 import fr.iut.laGaule.model.Character.Gaul.Gaul;
 import fr.iut.laGaule.model.Character.MythicalCreature.Lycanthrope;
-import fr.iut.laGaule.model.Food.Food;
+import fr.iut.laGaule.model.Consumables.Foods.Foods;
 
 import java.util.ArrayList;
 
 public class GaulVillage extends Place {
-    public GaulVillage(String name, int area, ClanLeader clanLeader, int nbCharacter, ArrayList<Character> character, ArrayList<Food> food) {
+    public GaulVillage(String name, int area, ClanLeader clanLeader, int nbCharacter, ArrayList<Character> character, ArrayList<Foods> food) {
         super(name, area, clanLeader, nbCharacter, new ArrayList<>(), food);
 
         // Ajouter uniquement les personnages autorisés
