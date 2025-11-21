@@ -9,12 +9,9 @@ import fr.iut.laGaule.model.Character.MythicalCreature.Lycanthrope;
 import fr.iut.laGaule.model.Character.Roman.Legionary;
 import fr.iut.laGaule.model.Character.Roman.Prefect;
 import fr.iut.laGaule.model.Character.Roman.Roman;
-import fr.iut.laGaule.model.Food.*;
 import fr.iut.laGaule.model.Place.*;
 
-import java.util.ArrayList;
-
 public class Main {
-    public static void main(String[] args) {
+    public static <String> void main(String[] args) {
     }
 }
