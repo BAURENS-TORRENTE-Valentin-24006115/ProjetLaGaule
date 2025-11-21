@@ -1,5 +1,12 @@
 package fr.iut.laGaule;
 
+import fr.iut.laGaule.model.Character.Gaul.Druid;
+import fr.iut.laGaule.model.Character.Gaul.Innkeeper;
+import fr.iut.laGaule.model.Character.Gaul.Merchant;
+import fr.iut.laGaule.model.Character.MythicalCreature.Lycanthrope;
+import fr.iut.laGaule.model.Character.Roman.General;
+import fr.iut.laGaule.model.Character.Roman.Prefect;
+
 public class Main {
     public static void main(String[] args) {
         Druid dibiazah = new Druid("ya'qub qamar ad-din dibiazah", "male", 1.75, 80, 10, 50);
@@ -15,15 +22,15 @@ public class Main {
         kashmiri.drinkPotion(50);
 
         System.out.println(karawita.getHealth());
-        Karawita.receiveDamage(20);
+        karawita.receiveDamage(20);
         System.out.println(karawita.getHealth());
-        Karawita.heal(35);
+        karawita.heal(35);
         System.out.println(karawita.getHealth());
 
         sisha.work();
 
         kanabawi.command();
 
-        minus.eat(10);
+    }
 
 }

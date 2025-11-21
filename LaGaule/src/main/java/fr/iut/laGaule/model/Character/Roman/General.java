@@ -1,7 +1,9 @@
+package fr.iut.laGaule.model.Character.Roman;
+
 public class General extends Roman{
     
 
-    public General(String name, Gender sex, double height, int age, int strength, int endurance) {
+    public General(String name, String sex, double height, int age, int strength, int endurance) {
         super(name, sex, height, age, strength, endurance);
     }
 

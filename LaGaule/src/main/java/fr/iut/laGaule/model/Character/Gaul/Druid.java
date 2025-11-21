@@ -1,5 +1,8 @@
-public class Druid extends Gaul{
-    public Druid(String name, Gender sex, double height, int age, int strength, int endurance) {
+package fr.iut.laGaule.model.Character.Gaul;
+
+
+public class Druid extends Gaul {
+    public Druid(String name, String sex, double height, int age, int strength, int endurance) {
         super(name, sex, height, age, strength, endurance);
     }
 

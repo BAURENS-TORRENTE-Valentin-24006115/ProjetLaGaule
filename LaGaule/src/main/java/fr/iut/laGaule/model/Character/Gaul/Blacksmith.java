@@ -1,6 +1,9 @@
+package fr.iut.laGaule.model.Character.Gaul;
+
+
 public class Blacksmith extends Gaul{
 
-    public Blacksmith(String name, Gender sex, double height, int age, int strength, int endurance) {
+    public Blacksmith(String name, String sex, double height, int age, int strength, int endurance) {
         super(name, sex, height, age, strength, endurance);
     }
 
