@@ -64,4 +64,6 @@ public class Character implements Serializable {
     public int getEndurance() { return endurance; }
     public int getHealth() { return health; }
     public int getStrength() { return strength; }
+    public void setStrength(int strength) { this.strength = strength; }
+    public void setEndurance(int endurance) { this.endurance = endurance; }
 }

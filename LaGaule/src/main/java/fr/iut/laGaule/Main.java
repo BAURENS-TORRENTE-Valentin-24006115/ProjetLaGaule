@@ -1,11 +1,16 @@
 package fr.iut.laGaule;
 
+import fr.iut.laGaule.model.Character.Gaul.Blacksmith;
 import fr.iut.laGaule.model.Character.Gaul.Druid;
 import fr.iut.laGaule.model.Character.Gaul.Innkeeper;
 import fr.iut.laGaule.model.Character.Gaul.Merchant;
 import fr.iut.laGaule.model.Character.MythicalCreature.Lycanthrope;
 import fr.iut.laGaule.model.Character.Roman.General;
+import fr.iut.laGaule.model.Character.Roman.Legionary;
 import fr.iut.laGaule.model.Character.Roman.Prefect;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
@@ -15,7 +20,8 @@ public class Main {
         General kanabawi = new General("ismail ahmad kanabawi", "female", 1.65, 34, 64, 25);
         Innkeeper sisha = new Innkeeper("usman abdul jalil sisha", "male", 1.79, 56, 12, 78);
         Lycanthrope sumbul = new Lycanthrope("muhammad sumbul", "male", 2.0, 46, 80, 70);
-
+        Blacksmith oui = new Blacksmith("ouioui", "male", 2.0, 46, 80, 70);
+        Legionary non =  new Legionary("non", "male", 2.0, 46, 80, 70);
 
         dibiazah.concoctPotion();
 
@@ -29,7 +35,7 @@ public class Main {
 
         sisha.work();
 
-        kanabawi.command();
+        kanabawi.command(non, sisha);
 
         dibiazah.eat(25);
         dibiazah.fight(karawita);
@@ -39,6 +45,17 @@ public class Main {
         dibiazah.fight(karawita);
         dibiazah.fight(karawita);
         dibiazah.fight(karawita);
+        kanabawi.fight(dibiazah);
+
+        Map<String, Object> map = new HashMap();
+        map.put("bobi", dibiazah);
+        map.put("kashmiri", kashmiri);
+        map.put("sisha", sisha);
+        map.put("oui", oui);
+        Serializer serializer = new Serializer();
+        serializer.serialize("gaul", map);
+        oui.work();
+
 
     }
 
