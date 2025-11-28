@@ -9,6 +9,9 @@ import java.util.HashSet;
 import java.util.List;
 
 public class Pot {
+    /**
+     * List of foods required for a normal potion.
+     */
     private final List<Foods> normalPotion = List.of(
             Foods.GUI,
             Foods.CAROTTE,
@@ -19,15 +22,18 @@ public class Pot {
             Foods.HYDROMEL,
             Foods.INGREDIENT_SECRET
     );
-
     private final List<Foods> contents = new ArrayList<>();
     List<Effects> effect;
     int useAmounts;
 
     public Pot() {}
 
-    public void addFood(Foods food, int index) {
-        contents.add(index, food);
+    /**
+     * Method to add food to the pot at a specific index.
+     * @param food The food item to add.
+     */
+    public void addFood(Foods food) {
+        contents.add(food);
     }
 
     public List<Foods> getContents() {
@@ -38,6 +44,9 @@ public class Pot {
         return normalPotion;
     }
 
+    /**
+     * Method to concoct a potion based on the contents of the pot.
+     */
     public void concoctPotion() {
         if (new HashSet<>(contents).containsAll(normalPotion)) {
             if (contents.contains(Foods.HUILE_DE_ROCHE) && !contents.contains(Foods.JUS_DE_BETTERAVE)) {
@@ -69,20 +78,36 @@ public class Pot {
         contents.clear();
     }
 
+    /**
+     * Method to drink all uses of the potion.
+     * @param character The character drinking the potion.
+     */
     public void drinkAll(Character character) {
         // TODO: implement effect application on character
         useAmounts = 0;
     }
 
+    /**
+     * Method to drink one use of the potion.
+     * @param character The character drinking the potion.
+     */
     public void drinkOne(Character character) {
         //TODO: implement effect application on character
         --useAmounts;
     }
 
-    public Potion addInPotion() {
-        return new Potion("Custom Potion", effect);
+    /**
+     * Method to add the concocted potion into the inventory.
+     * @return The created potion.
+     */
+    public Potion addInPotion(String name) {
+        return new Potion(name, effect);
     }
 
+    /**
+     * Getter for the effects of the potion.
+     * @return List of effects.
+     */
     public List<Effects> getEffect() {
         return effect;
     }

@@ -1,5 +1,7 @@
 package fr.iut.laGaule.model.Consumables.Foods;
-
+/**
+ * Enum representing various food items with their properties.
+ */
 public enum Foods {
     SANGLIER("Sanglier", true, true, true, false),
     POISSON_FRAIS("Poisson frais", true, true, true, false),
