@@ -23,7 +23,7 @@ public class Main {
 
         // Créer des Romains
         Legionary brutus = new Legionary("Brutus", "M", 1.75, 30, 8, 7);
-        Legionary cesar = new Legionary("cesar", "M", 1.78, 28, 7, 6);
+        Legionary cesar = new Legionary("César", "M", 1.78, 28, 7, 6);
         General pompey = new General("Pompey", "M", 1.82, 45, 9, 9);
 
         // Listes de personnages

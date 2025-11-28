@@ -6,6 +6,8 @@ import fr.iut.laGaule.model.Consumables.Foods.Foods;
 import fr.iut.laGaule.model.Place.*;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Iterator;
 import java.util.Random;
 
 /**
@@ -15,15 +17,15 @@ public class InvasionTheater {
 
     private String nom;
     private int maxLieux;
-    private ArrayList<Place> lieux;
-    private ArrayList<ClanLeader> chefsClans;
+    private LinkedList<Place> lieux;
+    private LinkedList<ClanLeader> chefsClans;
     private Random random;
 
     public InvasionTheater(String name, int maxPlaces) {
         this.nom = name;
         this.maxLieux = maxPlaces;
-        this.lieux = new ArrayList<>();
-        this.chefsClans = new ArrayList<>();
+        this.lieux = new LinkedList<>();
+        this.chefsClans = new LinkedList<>();
         this.random = new Random();
 
         System.out.println("Théâtre d'envahissement créé : " + nom);
@@ -53,15 +55,20 @@ public class InvasionTheater {
             return;
         }
 
-        for (int i = 0; i < lieux.size(); i++) {
-            Place lieu = lieux.get(i);
-            System.out.println("[" + (i+1) + "] " + lieu.getName() + " (" + lieu.getClass().getSimpleName() + ")");
+        Iterator<Place> it = lieux.iterator();
+        int i = 1;
+        while (it.hasNext()) {
+            Place lieu = it.next();
+            System.out.println("[" + i + "] " + lieu.getName() + " (" + lieu.getClass().getSimpleName() + ")");
+            i++;
         }
     }
 
     public int compterPersonnages() {
         int total = 0;
-        for (Place lieu : lieux) {
+        Iterator<Place> it = lieux.iterator();
+        while (it.hasNext()) {
+            Place lieu = it.next();
             total += lieu.getNbCharacter();
         }
         return total;
@@ -70,7 +77,9 @@ public class InvasionTheater {
     public void afficherTousLesPersonnages() {
         System.out.println("\n--- Tous les personnages ---");
 
-        for (Place lieu : lieux) {
+        Iterator<Place> it = lieux.iterator();
+        while (it.hasNext()) {
+            Place lieu = it.next();
             System.out.println("\n" + lieu.getName() + " :");
 
             if (lieu.getCharacter().isEmpty()) {
@@ -106,7 +115,10 @@ public class InvasionTheater {
     private void faireApparaitreAliments() {
         System.out.println("Apparition d'aliments...");
 
-        for (Place lieu : lieux) {
+        Iterator<Place> it = lieux.iterator();
+        while (it.hasNext()) {
+            Place lieu = it.next();
+
             if (lieu instanceof BattleFields) {
                 continue;
             }
@@ -124,7 +136,10 @@ public class InvasionTheater {
 
         int modifs = 0;
 
-        for (Place lieu : lieux) {
+        Iterator<Place> it = lieux.iterator();
+        while (it.hasNext()) {
+            Place lieu = it.next();
+
             for (Character perso : lieu.getCharacter()) {
                 if (random.nextInt(100) < 20) {
                     int degats = random.nextInt(10) + 1;
@@ -147,7 +162,10 @@ public class InvasionTheater {
         System.out.println("- Chefs de clan : " + chefsClans.size());
 
         int survivants = 0;
-        for (Place lieu : lieux) {
+        Iterator<Place> it = lieux.iterator();
+        while (it.hasNext()) {
+            Place lieu = it.next();
+
             for (Character perso : lieu.getCharacter()) {
                 if (perso.getHealth() > 0) {
                     survivants++;
@@ -162,11 +180,11 @@ public class InvasionTheater {
         return nom;
     }
 
-    public ArrayList<Place> getLieux() {
+    public LinkedList<Place> getLieux() {
         return lieux;
     }
 
-    public ArrayList<ClanLeader> getChefsClans() {
+    public LinkedList<ClanLeader> getChefsClans() {
         return chefsClans;
     }
 
