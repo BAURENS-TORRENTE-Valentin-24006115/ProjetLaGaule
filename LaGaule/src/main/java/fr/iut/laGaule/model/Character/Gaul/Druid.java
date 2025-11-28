@@ -12,12 +12,10 @@ public class Druid extends Gaul {
         System.out.println(this.name + " is stirring the magic potion in the cauldron.");
     }
 
-    public void command(String command, Gaul gaul) {
+    public void command(Gaul gaul) {
         System.out.println(this.name + " advices the village with wisdom.");
-        if(command.equals("work")){
-            gaul.work();
-        }
-        //todo move to another place
+        gaul.work();
+
     }
 
     public void work() {

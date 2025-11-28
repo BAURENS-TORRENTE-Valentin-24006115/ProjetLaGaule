@@ -1,11 +1,13 @@
 package fr.iut.laGaule;
 
+import fr.iut.laGaule.model.Character.Character;
 import fr.iut.laGaule.model.Character.Gaul.Druid;
+import fr.iut.laGaule.model.Character.Gaul.Gaul;
 import fr.iut.laGaule.model.Character.Roman.General;
+import fr.iut.laGaule.model.Consumables.Foods.Foods;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 public class Serializer{
@@ -38,6 +40,28 @@ public class Serializer{
             ex.printStackTrace();
         }
         return null;
+    }
+
+    public Character deserializeRandomCharacter(String zoneName) {
+        Random random = new Random();
+        try (FileInputStream file = new FileInputStream(zoneName + ".ser");
+             ObjectInputStream in = new ObjectInputStream(file)) {
+
+            // On lit L'ENSEMBLE de la map d'un seul coup
+            Map<String, Object> map = (Map<String, Object>) in.readObject();
+
+            System.out.println("Objet désérialisé avec succès.");
+            List<String> keys = new ArrayList<>(map.keySet());
+            Random rand = new Random();
+            String randKey = keys.get(rand.nextInt(keys.size()));
+            Object randObj = map.get(randKey);
+            return randObj instanceof Character ? (Character) randObj : null;
+
+        } catch (IOException | ClassNotFoundException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+
     }
 
 

@@ -5,7 +5,7 @@ import fr.iut.laGaule.model.Consumables.Foods.Foods;
 
 import java.io.Serializable;
 
-public class Character implements Serializable {
+public abstract class Character implements Serializable {
 	 protected String name;
     protected String sex;
     protected double height;
@@ -16,6 +16,7 @@ public class Character implements Serializable {
     protected int hunger;       
     protected int belligerence; 
     protected int magicPotionLevel;
+    protected String place = "gaul";
 
 
     public Character(String name, String sex, double height, int age, int strength, int endurance) {
@@ -67,4 +68,6 @@ public class Character implements Serializable {
     public int getStrength() { return strength; }
     public void setStrength(int strength) { this.strength = strength; }
     public void setEndurance(int endurance) { this.endurance = endurance; }
+    public void setPlace(String place) { this.place = place; }
+    public String getPlace() { return place; }
 }
