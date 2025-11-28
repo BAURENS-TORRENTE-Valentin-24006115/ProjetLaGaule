@@ -1,5 +1,6 @@
 package fr.iut.laGaule.model.Items;
 
+import fr.iut.laGaule.model.Character.Character;
 import fr.iut.laGaule.model.Consumables.Foods.Foods;
 import fr.iut.laGaule.model.Consumables.Potions.Effects;
 import fr.iut.laGaule.model.Consumables.Potions.Potion;
@@ -23,10 +24,12 @@ public class Pot {
             Foods.INGREDIENT_SECRET
     );
     private final List<Foods> contents = new ArrayList<>();
-    List<Effects> effect;
+    private List<Effects> effect;
     int useAmounts;
 
-    public Pot() {}
+    public Pot() {
+        this.effect = new ArrayList<>();
+    }
 
     /**
      * Method to add food to the pot at a specific index.
@@ -85,6 +88,7 @@ public class Pot {
     public void drinkAll(Character character) {
         // TODO: implement effect application on character
         useAmounts = 0;
+        effect.clear();
     }
 
     /**
