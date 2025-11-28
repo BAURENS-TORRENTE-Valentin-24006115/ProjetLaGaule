@@ -1,6 +1,7 @@
 package fr.iut.laGaule.model.Character.Gaul;
 
 import fr.iut.laGaule.Serializer;
+import fr.iut.laGaule.model.Consumables.Foods.Foods;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,8 @@ public class Innkeeper extends Gaul{
         String randKey = keys.get(rand.nextInt(keys.size()));
         Object randObj = map.get(randKey);
         if(randObj instanceof Gaul){
-            ((Gaul) randObj).eat(rand.nextInt(50));
+            Foods food = (Foods) randObj;
+            ((Gaul) randObj).eat(food);
         }
         map.put(randKey, randObj);
         serializer.serialize("gaul", map);

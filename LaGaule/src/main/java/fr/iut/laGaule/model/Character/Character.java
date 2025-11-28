@@ -1,6 +1,7 @@
 package fr.iut.laGaule.model.Character;
 
 import fr.iut.laGaule.Serializer;
+import fr.iut.laGaule.model.Consumables.Foods.Foods;
 
 import java.io.Serializable;
 
@@ -51,8 +52,8 @@ public class Character implements Serializable {
         System.out.println(this.name + " drinks magic potion! Power level: " + this.magicPotionLevel);
     }
 
-    public void eat(int amount) {
-        this.hunger += amount;
+    public void eat(Foods food) {
+        this.hunger += 10;
         if (this.hunger > 100) this.hunger = 100;
         System.out.println(this.name + " eat some food! Hunger: " + this.hunger);
     }
