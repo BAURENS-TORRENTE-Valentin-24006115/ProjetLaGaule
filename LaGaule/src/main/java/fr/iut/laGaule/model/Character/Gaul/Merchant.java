@@ -8,5 +8,6 @@ public class Merchant extends Gaul{
     }
     public void work() {
         System.out.println(this.name + " sells fresh fish.");
+        //todo add random foods
     }
 }

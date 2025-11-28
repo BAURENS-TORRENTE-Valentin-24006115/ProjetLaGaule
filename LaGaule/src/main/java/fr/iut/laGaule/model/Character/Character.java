@@ -1,18 +1,19 @@
 package fr.iut.laGaule.model.Character;
 
-import fr.iut.laGaule.model.Consumables.Foods.Foods;
+import fr.iut.laGaule.Serializer;
 
+import java.io.Serializable;
 
-public class Character {
-    protected String name;
+public class Character implements Serializable {
+	 protected String name;
     protected String sex;
     protected double height;
     protected int age;
     protected int strength;
     protected int endurance;
-    protected int health;
-    protected int hunger;
-    protected int belligerence;
+    protected int health;       
+    protected int hunger;       
+    protected int belligerence; 
     protected int magicPotionLevel;
 
 
@@ -23,7 +24,7 @@ public class Character {
         this.age = age;
         this.strength = strength;
         this.endurance = endurance;
-
+        
         // Default values
         this.health = 100;
         this.hunger = 100;
@@ -50,13 +51,19 @@ public class Character {
         System.out.println(this.name + " drinks magic potion! Power level: " + this.magicPotionLevel);
     }
 
+    public void eat(int amount) {
+        this.hunger += amount;
+        if (this.hunger > 100) this.hunger = 100;
+        System.out.println(this.name + " eat some food! Hunger: " + this.hunger);
+    }
+
     public void die() {
         System.out.println("XXX " + this.name + " has passed away. XXX");
     }
     public String getName() { return name; }
     public int getEndurance() { return endurance; }
     public int getHealth() { return health; }
-    public void eat(Foods f) {
-    //TODO: implement eat method
-        }
-    }
+    public int getStrength() { return strength; }
+    public void setStrength(int strength) { this.strength = strength; }
+    public void setEndurance(int endurance) { this.endurance = endurance; }
+}

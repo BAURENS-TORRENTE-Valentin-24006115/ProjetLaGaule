@@ -1,5 +1,7 @@
 package fr.iut.laGaule.model.Character.Roman;
 
+import fr.iut.laGaule.model.Character.Gaul.Gaul;
+
 public class Prefect extends Roman {
 
 
@@ -8,7 +10,9 @@ public class Prefect extends Roman {
     }
 
 
-    public void command() {
-        System.out.println(this.name + " issues administrative orders.");
+    public void command(Legionary legionary, Gaul g) {
+        System.out.println(this.name + " commands the legions.");
+        legionary.fight(g);
+
     }
 }
