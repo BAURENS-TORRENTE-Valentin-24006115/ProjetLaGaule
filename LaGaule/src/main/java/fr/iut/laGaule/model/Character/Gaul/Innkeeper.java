@@ -27,7 +27,7 @@ public class Innkeeper extends Gaul{
         String randKey = keys.get(rand.nextInt(keys.size()));
         Object randObj = map.get(randKey);
         if(randObj instanceof Gaul){
-            Foods food = (Foods) randObj;
+            Foods food = Foods.SANGLIER;
             ((Gaul) randObj).eat(food);
         }
         map.put(randKey, randObj);
