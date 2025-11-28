@@ -8,6 +8,7 @@ import fr.iut.laGaule.model.Character.MythicalCreature.Lycanthrope;
 import fr.iut.laGaule.model.Character.Roman.General;
 import fr.iut.laGaule.model.Character.Roman.Legionary;
 import fr.iut.laGaule.model.Character.Roman.Prefect;
+import fr.iut.laGaule.model.Consumables.Foods.Foods;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,8 +37,7 @@ public class Main {
         sisha.work();
 
         kanabawi.command(non, sisha);
-
-        dibiazah.eat(25);
+        dibiazah.eat(Foods.SANGLIER);
         dibiazah.fight(karawita);
         dibiazah.fight(karawita);
         dibiazah.fight(karawita);
@@ -56,7 +56,6 @@ public class Main {
         serializer.serialize("gaul", map);
         oui.work();
 
-import java.util.ArrayList;
 
     }
 
