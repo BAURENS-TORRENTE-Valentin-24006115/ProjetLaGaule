@@ -98,6 +98,10 @@ public class Main {
         Main main = new Main();
         main.testSimulation(dibiazah);
 
+        CharacterThread u = new CharacterThread(dibiazah);
+        Thread t1 = new Thread(u);
+        t1.start();
+
 
     }
 
