@@ -16,37 +16,7 @@ import java.util.Random;
 public class Main {
 
 
-    public void testSimulation(Character character) throws InterruptedException {
-        Serializer serializer = new Serializer();
-        Random random = new Random();
 
-        if(character instanceof Druid){
-            int randomInt = random.nextInt(5);
-            if(randomInt == 0){
-                ((Druid) character).concoctPotion();
-            }
-            if(randomInt == 1){
-                Character oui = serializer.deserializeRandomCharacter(character.getPlace());
-                while(!(oui instanceof Gaul)){
-                    oui = serializer.deserializeRandomCharacter(character.getPlace());
-                    System.out.println(oui.getName());
-                }
-                ((Druid) character).command((Gaul) oui);
-            }
-            if(randomInt == 2){
-                Character oui = serializer.deserializeRandomCharacter(character.getPlace());
-                while(!(oui instanceof Roman)){
-                    oui = serializer.deserializeRandomCharacter(character.getPlace());
-                    System.out.println(oui.getName());
-                }
-                ((Druid) character).fight((Roman) oui);
-            }if(randomInt == 3){
-                ((Druid) character).work();
-            }
-            System.out.println(character.getName()+"a travail: "+randomInt);
-        }
-
-    }
 
 
 
@@ -91,16 +61,36 @@ public class Main {
         map.put("sumbul", sumbul);
         map.put("non", non);
         map.put("kanabawi", kanabawi);
+        map.put("karawita", karawita);
         Serializer serializer = new Serializer();
         serializer.serialize("gaul", map);
         oui.work();
 
-        Main main = new Main();
-        main.testSimulation(dibiazah);
 
         CharacterThread u = new CharacterThread(dibiazah);
         Thread t1 = new Thread(u);
+        u = new CharacterThread(kashmiri);
+        Thread t2 = new Thread(u);
+        u = new CharacterThread(sisha);
+        Thread t3 = new Thread(u);
+        u = new CharacterThread(oui);
+        Thread t4 = new Thread(u);
+        u = new CharacterThread(sumbul);
+        Thread t5 = new Thread(u);
+        u = new CharacterThread(kanabawi);
+        Thread t6 = new Thread(u);
+        u = new CharacterThread(non);
+        Thread t7 = new Thread(u);
+        u = new CharacterThread(karawita);
+        Thread t8 = new Thread(u);
         t1.start();
+        t2.start();
+        t3.start();
+        t4.start();
+        t5.start();
+        t6.start();
+        t7.start();
+        t8.start();
 
 
     }
