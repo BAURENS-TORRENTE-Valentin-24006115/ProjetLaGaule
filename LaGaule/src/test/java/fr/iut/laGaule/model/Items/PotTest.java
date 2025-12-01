@@ -102,4 +102,65 @@ class PotTest {
 
         assertTrue(pot.getContents().isEmpty());
     }
+
+    @Test
+    void testAddFood() {
+        pot.addFood(Foods.GUI);
+        assertEquals(1, pot.getContents().size());
+        assertTrue(pot.getContents().contains(Foods.GUI));
+    }
+
+    @Test
+    void testGetNormalPotion() {
+        List<Foods> normalPotion = pot.getNormalPotion();
+        assertEquals(8, normalPotion.size());
+        assertTrue(normalPotion.contains(Foods.GUI));
+        assertTrue(normalPotion.contains(Foods.CAROTTE));
+        assertTrue(normalPotion.contains(Foods.SEL));
+    }
+
+    @Test
+    void testDrinkAll() {
+        pot.getNormalPotion().forEach(pot::addFood);
+        pot.addFood(Foods.HUILE_DE_ROCHE);
+        pot.concoctPotion();
+
+        fr.iut.laGaule.model.Character.Gaul.Druid druid =
+            new fr.iut.laGaule.model.Character.Gaul.Druid("Test", "M", 1.75, 60, 50, 60);
+
+        pot.drinkAll(druid);
+        assertTrue(pot.getEffect().isEmpty());
+    }
+
+    @Test
+    void testDrinkOne() {
+        pot.getNormalPotion().forEach(pot::addFood);
+        pot.addFood(Foods.HUILE_DE_ROCHE);
+        pot.concoctPotion();
+
+        int initialUseAmounts = pot.useAmounts;
+
+        fr.iut.laGaule.model.Character.Gaul.Druid druid =
+            new fr.iut.laGaule.model.Character.Gaul.Druid("Test", "M", 1.75, 60, 50, 60);
+
+        pot.drinkOne(druid);
+        assertEquals(initialUseAmounts - 1, pot.useAmounts);
+    }
+
+    @Test
+    void testPotInitialization() {
+        Pot newPot = new Pot();
+        assertTrue(newPot.getContents().isEmpty());
+        assertTrue(newPot.getEffect().isEmpty());
+    }
+
+    @Test
+    void testMultipleFoodsCanBeAdded() {
+        pot.addFood(Foods.GUI);
+        pot.addFood(Foods.CAROTTE);
+        pot.addFood(Foods.SEL);
+
+        assertEquals(3, pot.getContents().size());
+    }
 }
+
