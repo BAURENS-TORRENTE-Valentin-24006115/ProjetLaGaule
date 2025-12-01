@@ -22,7 +22,11 @@ public class CharacterThread implements Runnable{
         Serializer serializer = new Serializer();
         Random random = new Random();
 
+
         while (true) {
+            if(character.getHealth()<=0){
+                Thread.currentThread().interrupt();
+            }
             // --- DRUID ---
             if (character instanceof Druid) {
                 int randomInt = random.nextInt(5);

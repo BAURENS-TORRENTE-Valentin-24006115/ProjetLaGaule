@@ -30,28 +30,7 @@ public class Main {
         Blacksmith oui = new Blacksmith("ouioui", "male", 2.0, 46, 80, 70);
         Legionary non =  new Legionary("non", "male", 2.0, 46, 80, 70);
 
-        dibiazah.concoctPotion();
 
-        kashmiri.drinkPotion(50);
-
-        System.out.println(karawita.getHealth());
-        karawita.receiveDamage(20);
-        System.out.println(karawita.getHealth());
-        karawita.heal(35);
-        System.out.println(karawita.getHealth());
-
-        sisha.work();
-
-        kanabawi.command(non, sisha);
-        dibiazah.eat(Foods.SANGLIER);
-        dibiazah.fight(karawita);
-        dibiazah.fight(karawita);
-        dibiazah.fight(karawita);
-        dibiazah.fight(karawita);
-        dibiazah.fight(karawita);
-        dibiazah.fight(karawita);
-        dibiazah.fight(karawita);
-        kanabawi.fight(dibiazah);
 
         Map<String, Object> map = new HashMap();
         map.put("bobi", dibiazah);

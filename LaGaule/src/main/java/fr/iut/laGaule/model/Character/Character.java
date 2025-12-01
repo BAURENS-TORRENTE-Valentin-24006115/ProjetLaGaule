@@ -1,6 +1,5 @@
 package fr.iut.laGaule.model.Character;
 
-import fr.iut.laGaule.Serializer;
 import fr.iut.laGaule.model.Consumables.Foods.Foods;
 
 import java.io.Serializable;
