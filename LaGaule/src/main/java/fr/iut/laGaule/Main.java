@@ -9,6 +9,7 @@ import fr.iut.laGaule.model.Place.*;
 import fr.iut.laGaule.model.InvasionTheater;
 import fr.iut.laGaule.model.Character.MythicalCreature.Lycanthrope;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
