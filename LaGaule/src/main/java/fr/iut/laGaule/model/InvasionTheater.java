@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.Random;
 
 /**
- * Classe qui gère le théâtre d'envahissement
+ * Class that manages the invasion theater
  */
 public class InvasionTheater {
 

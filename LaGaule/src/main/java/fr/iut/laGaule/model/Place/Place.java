@@ -6,6 +6,12 @@ import fr.iut.laGaule.model.Consumables.Foods.Foods;
 
 import java.util.ArrayList;
 
+/**
+ * Abstract base class representing a place in the game world.
+ * Places can contain characters, food supplies, and are managed by a clan leader.
+ * This class provides common functionality for all place types including villages,
+ * cities, camps, and battlefields.
+ */
 public abstract class Place {
     private String name;
     private int area;
@@ -14,6 +20,16 @@ public abstract class Place {
     private ArrayList<Character> Character;
     private ArrayList<Foods> food;
 
+    /**
+     * Constructs a new Place with the specified attributes.
+     *
+     * @param name the name of the place
+     * @param area the area/size of the place in square meters
+     * @param clanLeader the leader managing this place
+     * @param nbCharacter the initial number of characters
+     * @param character the list of characters present in the place
+     * @param food the list of food items available in the place
+     */
     public Place(String name, int area, ClanLeader clanLeader, int nbCharacter, ArrayList<Character> character, ArrayList<Foods> food) {
         this.name = name;
         this.area = area;
@@ -23,50 +39,110 @@ public abstract class Place {
         this.food = food;
     }
 
+    /**
+     * Gets the clan leader managing this place.
+     *
+     * @return the clan leader
+     */
     public ClanLeader getClanLeader() {
         return clanLeader;
     }
 
+    /**
+     * Sets the clan leader managing this place.
+     *
+     * @param clanLeader the new clan leader
+     */
     public void setClanLeader(ClanLeader clanLeader) {
         this.clanLeader = clanLeader;
     }
 
+    /**
+     * Gets the area/size of the place.
+     *
+     * @return the area in square meters
+     */
     public int getArea() {
         return area;
     }
 
+    /**
+     * Sets the area/size of the place.
+     *
+     * @param area the new area in square meters
+     */
     public void setArea(int area) {
         this.area = area;
     }
 
+    /**
+     * Gets the number of characters in the place.
+     *
+     * @return the number of characters
+     */
     public int getNbCharacter() {
         return nbCharacter;
     }
 
+    /**
+     * Sets the number of characters in the place.
+     *
+     * @param nbCharacter the new number of characters
+     */
     public void setNbCharacter(int nbCharacter) {
         this.nbCharacter = nbCharacter;
     }
 
+    /**
+     * Gets the list of characters present in the place.
+     *
+     * @return the ArrayList of characters
+     */
     public ArrayList<Character> getCharacter() {
         return Character;
     }
 
+    /**
+     * Sets the list of characters present in the place.
+     *
+     * @param character the new ArrayList of characters
+     */
     public void setCharacter(ArrayList<Character> character) {
         Character = character;
     }
 
+    /**
+     * Gets the list of food items available in the place.
+     *
+     * @return the ArrayList of food items
+     */
     public ArrayList<Foods> getFood() {
         return food;
     }
 
+    /**
+     * Sets the list of food items available in the place.
+     *
+     * @param food the new ArrayList of food items
+     */
     public void setFood(ArrayList<Foods> food) {
         this.food = food;
     }
 
+    /**
+     * Gets the name of the place.
+     *
+     * @return the name of the place
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets the name of the place.
+     *
+     * @param name the new name of the place
+     */
     public void setName(String name) {
         this.name = name;
     }
@@ -102,6 +178,11 @@ public abstract class Place {
         return sb.toString();
     }
 
+    /**
+     * Adds a food item to the place's inventory.
+     *
+     * @param foodItem the food item to add
+     */
     public void addFood(Foods foodItem) {
         if (foodItem != null) {
             food.add(foodItem);
@@ -112,7 +193,10 @@ public abstract class Place {
     }
 
     /**
-     * Heals all the characters present in the location
+     * Heals all the characters present in the location.
+     * Applies the specified healing amount to each character.
+     *
+     * @param healingAmount the amount of health points to restore to each character
      */
     public void healCharacters(int healingAmount) {
         if (Character != null && !Character.isEmpty()) {
@@ -126,7 +210,8 @@ public abstract class Place {
     }
 
     /**
-     * Feeds all characters with the food available in the location
+     * Feeds all characters with the food available in the location.
+     * Each character receives one food item until all food or characters are processed.
      */
     public void feedCharacters() {
         if (Character == null || Character.isEmpty()) {
@@ -153,8 +238,10 @@ public abstract class Place {
     }
 
     /**
-     * Feeds a specific character with a local food item
-     * @param character The character to feed
+     * Feeds a specific character with a food item from the place's inventory.
+     * The first available food item is given to the character and removed from inventory.
+     *
+     * @param character the character to feed
      */
     public void feedCharacter(Character character) {
         if (character == null) {
@@ -178,6 +265,12 @@ public abstract class Place {
         System.out.println(character.getName() + " a mangé " + f.getName() + " dans " + name + ".");
     }
 
+    /**
+     * Adds a character to the place.
+     * Increments the character count and adds the character to the list.
+     *
+     * @param character the character to add to the place
+     */
     public void addCharacter(Character character) {
         if (character != null) {
             Character.add(character);

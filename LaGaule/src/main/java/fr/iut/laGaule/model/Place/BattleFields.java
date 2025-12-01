@@ -9,7 +9,26 @@ import fr.iut.laGaule.model.Consumables.Foods.Foods;
 
 import java.util.ArrayList;
 
+ /**
+ * Represents a battlefield in the game.
+ * This place type allows Gauls, Romans, and Lycanthropes to be present for combat.
+ * Battlefields are neutral zones where opposing factions can engage in fights.
+ *
+ * @see Place
+ */
 public class BattleFields extends Place {
+
+    /**
+     * Constructs a new Battlefield with the specified attributes.
+     * Only allowed characters (Gauls, Romans, and Lycanthropes) from the provided list are added.
+     *
+     * @param name the name of the battlefield
+     * @param area the area/size of the battlefield in square meters
+     * @param clanLeader the leader managing this battlefield
+     * @param nbCharacter the initial number of characters
+     * @param character the list of characters to add (only allowed types will be added)
+     * @param food the list of food items available on the battlefield
+     */
     public BattleFields(String name, int area, ClanLeader clanLeader, int nbCharacter, ArrayList<Character> character, ArrayList<Foods> food) {
         super(name, area, clanLeader, nbCharacter, new ArrayList<>(), food);
 
@@ -26,14 +45,22 @@ public class BattleFields extends Place {
     }
 
     /**
-     * Vérifie si un personnage est autorisé dans le village gaulois
-     * @param character Le personnage à vérifier
-     * @return true si le personnage est un Gaulois ou une créature fantastique
+     * Checks if a character is allowed to enter the battlefield.
+     * Gauls, Romans, and Lycanthropes are permitted.
+     *
+     * @param character the character to verify
+     * @return true if the character is a Gaul, Roman, or Lycanthrope, false otherwise
      */
     private boolean isAllowedCharacter(Character character) {
         return character instanceof Gaul || character instanceof Roman || character instanceof Lycanthrope;
     }
 
+    /**
+     * Adds a character to the battlefield.
+     * Validates that only allowed character types can enter.
+     *
+     * @param character the character to add
+     */
     @Override
     public void addCharacter(Character character) {
         if (character == null) {

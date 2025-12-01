@@ -8,7 +8,6 @@ import fr.iut.laGaule.model.Character.MythicalCreature.Lycanthrope;
 import fr.iut.laGaule.model.Character.Roman.General;
 import fr.iut.laGaule.model.Character.Roman.Legionary;
 import fr.iut.laGaule.model.Character.Roman.Prefect;
-import fr.iut.laGaule.model.Consumables.Foods.Foods;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
@@ -97,14 +96,6 @@ class MainTest {
         assertDoesNotThrow(() -> general.command(legionary, target));
     }
 
-    @Test
-    void characterEatsFoodIncreasesHunger() {
-        Druid druid = new Druid("Druid", "male", 1.75, 80, 54, 50);
-
-        druid.eat(Foods.SANGLIER);
-
-        assertTrue(true);
-    }
 
     @Test
     void druidFightsPrefectMultipleTimes() {

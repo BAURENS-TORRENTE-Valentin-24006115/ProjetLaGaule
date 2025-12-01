@@ -8,9 +8,15 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+/**
+ * Represents a magic pot used to concoct potions with various effects.
+ * The pot contains ingredients (food items) that are mixed together
+ * to create potions with different magical effects based on the combination.
+ */
 public class Pot {
     /**
-     * List of foods required for a normal potion.
+     * List of foods required as base ingredients for a normal potion.
+     * These ingredients must be present for the potion to have positive effects.
      */
     private final List<Foods> normalPotion = List.of(
             Foods.GUI,
@@ -27,28 +33,53 @@ public class Pot {
     private final List<Effects> effect;
     int useAmounts;
 
+    /**
+     * Constructs a new empty pot with no effects.
+     */
     public Pot() {
         this.effect = new ArrayList<>();
     }
 
     /**
-     * Method to add food to the pot at a specific index.
-     * @param food The food item to add.
+     * Adds a food item to the pot's contents.
+     *
+     * @param food the food item to add to the pot
      */
     public void addFood(Foods food) {
         contents.add(food);
     }
 
+    /**
+     * Gets the current contents of the pot.
+     *
+     * @return the list of foods currently in the pot
+     */
     public List<Foods> getContents() {
         return contents;
     }
 
+    /**
+     * Gets the list of required ingredients for a normal potion.
+     *
+     * @return the list of base ingredients
+     */
     public List<Foods> getNormalPotion() {
         return normalPotion;
     }
 
     /**
-     * Method to concoct a potion based on the contents of the pot.
+     * Concocts a potion based on the current contents of the pot.
+     * The effects are determined by the combination of ingredients:
+     * - If all normal potion ingredients are present:
+     *   - With rock oil (without beet juice): STRENGTH + INVINCIBILITY
+     *   - With beet juice (without rock oil): STRENGTH + INVINCIBILITY + SATURATION
+     *   - With two-headed unicorn milk: CLONE
+     *   - With Idefix's hair: METAMORPHOSIS
+     *   - With lobster: SATURATION
+     *   - With strawberries: SATURATION
+     * - If normal potion ingredients are missing: DEATH
+     *
+     * After concoction, the pot is emptied and use amounts are set based on ingredient count.
      */
     public void concoctPotion() {
         if (new HashSet<>(contents).containsAll(normalPotion)) {
@@ -82,8 +113,11 @@ public class Pot {
     }
 
     /**
-     * Method to drink all uses of the potion.
-     * @param character The character drinking the potion.
+     * Makes a character drink all remaining uses of the potion.
+     * This consumes all potion uses and clears all effects.
+     * TODO: Implement effect application on the character.
+     *
+     * @param character the character drinking the potion
      */
     public void drinkAll(Character character) {
         // TODO: implement effect application on character
@@ -94,16 +128,20 @@ public class Pot {
     }
 
     /**
-     * Method to drink one use of the potion.
-     * @param character The character drinking the potion.
+     * Makes a character drink one use of the potion.
+     * This decrements the available uses by one.
+     * TODO: Implement effect application on the character.
+     *
+     * @param character the character drinking the potion
      */
     public void drinkOne(Character character) {
         if (useAmounts > 0)  --useAmounts;
     }
 
     /**
-     * Getter for the effects of the potion.
-     * @return List of effects.
+     * Gets the list of effects of the concocted potion.
+     *
+     * @return the list of potion effects
      */
     public List<Effects> getEffect() {
         return effect;

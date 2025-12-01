@@ -10,7 +10,26 @@ import fr.iut.laGaule.model.Consumables.Foods.Foods;
 
 import java.util.ArrayList;
 
+/**
+ * Represents a Roman fortified camp in the game.
+ * This place type is a military installation specifically for Roman soldiers.
+ * Only Generals, Legionaries, and Lycanthropes are allowed to enter this camp.
+ *
+ * @see Place
+ */
 public class RomanFortifiedCamp extends Place {
+
+    /**
+     * Constructs a new Roman Fortified Camp with the specified attributes.
+     * Only allowed characters (Generals, Legionaries, and Lycanthropes) from the provided list are added.
+     *
+     * @param name the name of the camp
+     * @param area the area/size of the camp in square meters
+     * @param clanLeader the leader managing this camp
+     * @param nbCharacter the initial number of characters
+     * @param character the list of characters to add (only allowed types will be added)
+     * @param food the list of food items available in the camp
+     */
     public RomanFortifiedCamp(String name, int area, ClanLeader clanLeader, int nbCharacter, ArrayList<Character> character, ArrayList<Foods> food) {
         super(name, area, clanLeader, nbCharacter, new ArrayList<>(), food);
 
@@ -27,14 +46,22 @@ public class RomanFortifiedCamp extends Place {
     }
 
     /**
-     * Vérifie si un personnage est autorisé dans le village gaulois
-     * @param character Le personnage à vérifier
-     * @return true si le personnage est un Gaulois ou une créature fantastique
+     * Checks if a character is allowed to enter the Roman fortified camp.
+     * Only Generals, Legionaries, and Lycanthropes are permitted.
+     *
+     * @param character the character to verify
+     * @return true if the character is a General, Legionary, or Lycanthrope, false otherwise
      */
     private boolean isAllowedCharacter(Character character) {
         return character instanceof General || character instanceof Legionary || character instanceof Lycanthrope;
     }
 
+    /**
+     * Adds a character to the camp.
+     * Validates that only allowed character types (Generals, Legionaries, and Lycanthropes) can enter.
+     *
+     * @param character the character to add
+     */
     @Override
     public void addCharacter(Character character) {
         if (character == null) {

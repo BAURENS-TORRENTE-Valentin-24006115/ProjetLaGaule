@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 /**
  * Enum representing various food items with their properties.
+ * Each food item has attributes defining whether it's suitable for Gauls or Romans,
+ * if it's edible, and if it's vegetarian.
  */
 public enum Foods {
     SANGLIER("Sanglier", true, true, true, false),
@@ -31,6 +33,15 @@ public enum Foods {
     private final boolean isComestible;
     private final boolean isVegetarian;
 
+    /**
+     * Constructs a food item with its properties.
+     *
+     * @param name the name of the food item
+     * @param isGallicFriendly true if the food is suitable for Gauls
+     * @param isRomanFriendly true if the food is suitable for Romans
+     * @param isComestible true if the food is edible
+     * @param isVegetarian true if the food is vegetarian
+     */
     Foods(String name, boolean isGallicFriendly, boolean isRomanFriendly, boolean isComestible, boolean isVegetarian) {
         this.name = name;
         this.isGallicFriendly = isGallicFriendly;
@@ -39,29 +50,55 @@ public enum Foods {
         this.isVegetarian = isVegetarian;
     }
 
+    /**
+     * Gets the name of the food item.
+     *
+     * @return the name of the food
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Checks if the food is suitable for Gauls.
+     *
+     * @return true if the food is Gallic-friendly, false otherwise
+     */
     public boolean isGallicFriendly() {
         return isGallicFriendly;
     }
 
+    /**
+     * Checks if the food is suitable for Romans.
+     *
+     * @return true if the food is Roman-friendly, false otherwise
+     */
     public boolean isRomanFriendly() {
         return isRomanFriendly;
     }
 
+    /**
+     * Checks if the food is edible.
+     *
+     * @return true if the food is edible, false otherwise
+     */
     public boolean isComestible() {
         return isComestible;
     }
 
+    /**
+     * Checks if the food is vegetarian.
+     *
+     * @return true if the food is vegetarian, false otherwise
+     */
     public boolean isVegetarian() {
         return isVegetarian;
     }
 
     /**
-     * Method to get a random food item from the enum.
-     * @return A random Foods enum value.
+     * Gets a random food item from the enum.
+     *
+     * @return a random Foods enum value
      */
     public Foods getRandomFood() {
         Foods[] foods = Foods.values();
@@ -70,9 +107,10 @@ public enum Foods {
     }
 
     /**
-     * Method to get a list of random food items.
-     * @param nbOfFood The number of random food items to retrieve.
-     * @return An ArrayList of random Foods enum values.
+     * Gets a list of random food items.
+     *
+     * @param nbOfFood the number of random food items to retrieve
+     * @return an ArrayList of random Foods enum values
      */
     public ArrayList<Foods> getRandomFoods(int nbOfFood) {
         ArrayList<Foods> randomFoods = new ArrayList<>();

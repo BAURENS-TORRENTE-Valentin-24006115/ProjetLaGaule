@@ -8,7 +8,26 @@ import fr.iut.laGaule.model.Consumables.Foods.Foods;
 
 import java.util.ArrayList;
 
+/**
+ * Represents a Gaul Village in the game.
+ * This place type only allows Gaul characters and mythical creatures (Lycanthropes) to enter.
+ * Romans and other character types are forbidden from entering the village.
+ *
+ * @see Place
+ */
 public class GaulVillage extends Place {
+
+    /**
+     * Constructs a new Gaul Village with the specified attributes.
+     * Only allowed characters (Gauls and Lycanthropes) from the provided list are added.
+     *
+     * @param name the name of the village
+     * @param area the area/size of the village in square meters
+     * @param clanLeader the leader managing this village
+     * @param nbCharacter the initial number of characters
+     * @param character the list of characters to add (only allowed types will be added)
+     * @param food the list of food items available in the village
+     */
     public GaulVillage(String name, int area, ClanLeader clanLeader, int nbCharacter, ArrayList<Character> character, ArrayList<Foods> food) {
         super(name, area, clanLeader, nbCharacter, new ArrayList<>(), food);
 
@@ -25,14 +44,22 @@ public class GaulVillage extends Place {
     }
 
     /**
-     * Vérifie si un personnage est autorisé dans le village gaulois
-     * @param character Le personnage à vérifier
-     * @return true si le personnage est un Gaulois ou une créature fantastique
+     * Checks if a character is allowed to enter the Gaul village.
+     * Only Gauls and Lycanthropes are permitted.
+     *
+     * @param character the character to verify
+     * @return true if the character is a Gaul or Lycanthrope, false otherwise
      */
     private boolean isAllowedCharacter(Character character) {
         return character instanceof Gaul || character instanceof Lycanthrope;
     }
 
+    /**
+     * Adds a character to the village.
+     * Validates that only allowed character types (Gauls and Lycanthropes) can enter.
+     *
+     * @param character the character to add
+     */
     @Override
     public void addCharacter(Character character) {
         if (character == null) {
