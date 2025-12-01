@@ -3,7 +3,6 @@ package fr.iut.laGaule.model.Items;
 import fr.iut.laGaule.model.Character.Character;
 import fr.iut.laGaule.model.Consumables.Foods.Foods;
 import fr.iut.laGaule.model.Consumables.Potions.Effects;
-import fr.iut.laGaule.model.Consumables.Potions.Potion;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -23,8 +22,9 @@ public class Pot {
             Foods.HYDROMEL,
             Foods.INGREDIENT_SECRET
     );
+
     private final List<Foods> contents = new ArrayList<>();
-    private List<Effects> effect;
+    private final List<Effects> effect;
     int useAmounts;
 
     public Pot() {
@@ -87,8 +87,10 @@ public class Pot {
      */
     public void drinkAll(Character character) {
         // TODO: implement effect application on character
-        useAmounts = 0;
-        effect.clear();
+        if (useAmounts > 0) {
+            useAmounts = 0;
+            effect.clear();
+        }
     }
 
     /**
@@ -96,16 +98,7 @@ public class Pot {
      * @param character The character drinking the potion.
      */
     public void drinkOne(Character character) {
-        //TODO: implement effect application on character
-        --useAmounts;
-    }
-
-    /**
-     * Method to add the concocted potion into the inventory.
-     * @return The created potion.
-     */
-    public Potion addInPotion(String name) {
-        return new Potion(name, effect);
+        if (useAmounts > 0)  --useAmounts;
     }
 
     /**

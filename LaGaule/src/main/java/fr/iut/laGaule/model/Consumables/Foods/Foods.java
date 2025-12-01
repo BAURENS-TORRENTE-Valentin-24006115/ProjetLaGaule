@@ -1,4 +1,7 @@
 package fr.iut.laGaule.model.Consumables.Foods;
+
+import java.util.ArrayList;
+
 /**
  * Enum representing various food items with their properties.
  */
@@ -54,5 +57,28 @@ public enum Foods {
 
     public boolean isVegetarian() {
         return isVegetarian;
+    }
+
+    /**
+     * Method to get a random food item from the enum.
+     * @return A random Foods enum value.
+     */
+    public Foods getRandomFood() {
+        Foods[] foods = Foods.values();
+        int randomIndex = (int) (Math.random() * foods.length);
+        return foods[randomIndex];
+    }
+
+    /**
+     * Method to get a list of random food items.
+     * @param nbOfFood The number of random food items to retrieve.
+     * @return An ArrayList of random Foods enum values.
+     */
+    public ArrayList<Foods> getRandomFoods(int nbOfFood) {
+        ArrayList<Foods> randomFoods = new ArrayList<>();
+        for (int i = 0; i < nbOfFood; i++) {
+            randomFoods.add(getRandomFood());
+        }
+        return randomFoods;
     }
 }
