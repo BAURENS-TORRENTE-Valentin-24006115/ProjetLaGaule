@@ -1,6 +1,7 @@
 package fr.iut.laGaule;
 
 import fr.iut.laGaule.model.Character.Character;
+import fr.iut.laGaule.model.Character.ClanLeader;
 import fr.iut.laGaule.model.Character.Gaul.*;
 
 import fr.iut.laGaule.model.Character.Roman.*;
@@ -13,10 +14,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         System.out.println("Bienvenue en Armorique !\n");
 
         // Créer le théâtre
@@ -119,15 +121,11 @@ public class Main {
         Thread t7 = new Thread(u);
         u = new CharacterThread(karawita);
         Thread t8 = new Thread(u);
-        t1.start();
-        t2.start();
-        t3.start();
-        t4.start();
-        t5.start();
-        t6.start();
-        t7.start();
-        t8.start();
-
+        ClanLeader leader = new ClanLeader("name","sex",12);
+        leader.transferCharacter(dibiazah,champBataille);
+        TimeUnit.SECONDS.sleep(20);
+        leader.transferCharacter(kanabawi,champBataille);
+        System.out.println(dibiazah.getPlace());
 
     }
 

@@ -1,11 +1,13 @@
 package fr.iut.laGaule.model.Character;
 
+import fr.iut.laGaule.Serializer;
 import fr.iut.laGaule.model.Character.Gaul.*;
 import fr.iut.laGaule.model.Character.MythicalCreature.Lycanthrope;
 import fr.iut.laGaule.model.Character.Roman.*;
 import fr.iut.laGaule.model.Place.*;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * Class representing a clan leader who manages a place
@@ -339,6 +341,17 @@ public class ClanLeader implements Serializable {
 
         System.out.println(this.name + " a transféré " + character.getName() +
                          " de " + managedPlace.getName() + " vers " + enclosure.getName());
+    }
+    public void transferCharacter(Character character,Place oui) {
+        Serializer serializer =  new Serializer();
+        if(oui.isAllowedCharacter(character)){
+            Map<String, Object> fi = serializer.deserialize(character.getPlace());
+            fi.remove(character.getName());
+            serializer.serialize(character.getPlace(),fi);
+            fi = serializer.deserialize(oui.getName());
+            fi.put(character.getName(),character);
+            serializer.serialize(oui.getName(),fi);
+        }
     }
 
     @Override

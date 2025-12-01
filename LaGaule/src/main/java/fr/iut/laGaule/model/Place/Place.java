@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * This class provides common functionality for all place types including villages,
  * cities, camps, and battlefields.
  */
-public abstract class Place {
+public class Place {
     private String name;
     private int area;
     private ClanLeader clanLeader;
@@ -38,6 +38,10 @@ public abstract class Place {
         Character = character;
         this.food = food;
     }
+
+    public Place(String defaltzone, int area, ClanLeader clanLeader, int nbCharacter) {
+    }
+
 
     /**
      * Gets the clan leader managing this place.
@@ -279,5 +283,9 @@ public abstract class Place {
         } else {
             System.out.println("Personnage invalide.");
         }
+    }
+
+    public boolean isAllowedCharacter(Character character) {
+        return false;
     }
 }

@@ -1,8 +1,10 @@
 package fr.iut.laGaule.model.Character;
 
 import fr.iut.laGaule.model.Consumables.Foods.Foods;
+import fr.iut.laGaule.model.Place.Place;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Abstract base class representing a character in the game.
@@ -22,7 +24,8 @@ public abstract class Character implements Serializable {
     protected int hunger;       
     protected int belligerence; 
     protected int magicPotionLevel;
-    protected String place = "gaul";
+    private Object ArrayList;
+    protected Place place = new Place("defaltzone", 500, null,12);
 
 
     /**
@@ -154,12 +157,12 @@ public abstract class Character implements Serializable {
      *
      * @param place the name of the new location
      */
-    public void setPlace(String place) { this.place = place; }
+    public void setPlace(Place place) { this.place = place; }
 
     /**
      * Gets the character's current place/location.
      *
      * @return the name of the current location
      */
-    public String getPlace() { return place; }
+    public String getPlace() { return place.getName(); }
 }

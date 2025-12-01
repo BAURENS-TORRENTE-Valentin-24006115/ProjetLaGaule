@@ -50,7 +50,7 @@ public class GalloRomanVillage extends Place {
      * @param character the character to verify
      * @return true if the character is a Gaul or Roman, false otherwise
      */
-    private boolean isAllowedCharacter(Character character) {
+    public boolean isAllowedCharacter(Character character) {
         return character instanceof Gaul || character instanceof Roman;
     }
 

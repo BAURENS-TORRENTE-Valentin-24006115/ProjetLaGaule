@@ -51,7 +51,7 @@ public class BattleFields extends Place {
      * @param character the character to verify
      * @return true if the character is a Gaul, Roman, or Lycanthrope, false otherwise
      */
-    private boolean isAllowedCharacter(Character character) {
+    public boolean isAllowedCharacter(Character character) {
         return character instanceof Gaul || character instanceof Roman || character instanceof Lycanthrope;
     }
 
