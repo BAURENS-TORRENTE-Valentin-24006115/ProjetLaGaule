@@ -2,7 +2,6 @@ package fr.iut.laGaule.controller;
 
 import fr.iut.laGaule.model.Place.Place;
 import fr.iut.laGaule.model.Character.Character;
-import fr.iut.laGaule.model.Food.Food;
 import fr.iut.laGaule.view.PlaceView;
 
 import java.util.ArrayList;
