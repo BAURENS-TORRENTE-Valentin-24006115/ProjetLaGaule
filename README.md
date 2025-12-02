@@ -22,7 +22,7 @@ Exécution parallèle avec threads
 
 Étape 1 - Cloner le repository :
 ```
-git clone https://github.com/user/repo.git
+git clone https://github.com/BAURENS-TORRENTE-Valentin-24006115/ProjetLaGaule
 ```
 
 Étape 2 - Compiler le projet :
