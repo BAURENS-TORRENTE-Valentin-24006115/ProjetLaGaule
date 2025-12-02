@@ -85,5 +85,49 @@ public class GeneralTest {
     public void testGeneralIsRoman() {
         assertTrue(general instanceof Roman);
     }
+
+    @Test
+    public void testFightWithMinimumDamage() {
+        // Create a gaul with very high endurance and health to test minimum damage (1)
+        Gaul strongGaul = new Druid("SuperDruid", "M", 1.75, 60, 5, 200);
+        strongGaul.heal(1000); // Max health
+
+        int gaulHealthBefore = strongGaul.getHealth();
+        general.fight(strongGaul);
+
+        // Should deal at least 1 damage even with negative calculated damage
+        assertTrue(strongGaul.getHealth() < gaulHealthBefore);
+    }
+
+    @Test
+    public void testFightCounterAttackMinimumDamage() {
+        // Create a general with very high endurance and health to test minimum damage from gaul
+        General strongGeneral = new General("SuperGeneral", "M", 1.82, 45, 5, 200);
+        strongGeneral.heal(1000); // Max health
+
+        Gaul weakGaul = new Druid("WeakDruid", "M", 1.75, 60, 5, 5);
+
+        int generalHealthBefore = strongGeneral.getHealth();
+        strongGeneral.fight(weakGaul);
+
+        // If gaul survives, it should deal at least 1 damage to general
+        if (weakGaul.getHealth() > 0) {
+            assertTrue(strongGeneral.getHealth() < generalHealthBefore);
+        }
+    }
+
+    @Test
+    public void testFightKillsGaulBeforeCounterAttack() {
+        Gaul weakGaul = new Druid("WeakDruid", "M", 1.75, 60, 10, 10);
+        weakGaul.receiveDamage(99); // Leave at 1 health
+
+        int generalHealthBefore = general.getHealth();
+        general.fight(weakGaul);
+
+        // If gaul dies from first attack, general should not take damage
+        if (weakGaul.getHealth() == 0) {
+            assertEquals(generalHealthBefore, general.getHealth());
+        }
+    }
 }
 

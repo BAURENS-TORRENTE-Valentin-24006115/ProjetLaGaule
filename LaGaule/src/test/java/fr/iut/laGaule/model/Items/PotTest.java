@@ -162,5 +162,47 @@ class PotTest {
 
         assertEquals(3, pot.getContents().size());
     }
+
+    @Test
+    void testDrinkOneWithZeroUses() {
+        fr.iut.laGaule.model.Character.Gaul.Druid druid =
+            new fr.iut.laGaule.model.Character.Gaul.Druid("Test", "M", 1.75, 60, 50, 60);
+
+        // Try to drink when useAmounts is 0
+        pot.drinkOne(druid);
+        assertEquals(0, pot.useAmounts);
+    }
+
+    @Test
+    void testDrinkAllWithZeroUses() {
+        fr.iut.laGaule.model.Character.Gaul.Druid druid =
+            new fr.iut.laGaule.model.Character.Gaul.Druid("Test", "M", 1.75, 60, 50, 60);
+
+        // Try to drink all when useAmounts is 0
+        pot.drinkAll(druid);
+        assertEquals(0, pot.useAmounts);
+    }
+
+    @Test
+    void testConcoctPotionWithNormalIngredientsOnly() {
+        pot.getNormalPotion().forEach(pot::addFood);
+
+        pot.concoctPotion();
+
+        // Without special ingredients, no effects should be added
+        assertEquals(0, pot.getEffect().size());
+    }
+
+    @Test
+    void testConcoctPotionWithBothOilAndBeetJuice() {
+        pot.getNormalPotion().forEach(pot::addFood);
+        pot.addFood(Foods.HUILE_DE_ROCHE);
+        pot.addFood(Foods.JUS_DE_BETTERAVE);
+
+        pot.concoctPotion();
+
+        // When both are present, no specific effect should be added
+        assertEquals(0, pot.getEffect().size());
+    }
 }
 

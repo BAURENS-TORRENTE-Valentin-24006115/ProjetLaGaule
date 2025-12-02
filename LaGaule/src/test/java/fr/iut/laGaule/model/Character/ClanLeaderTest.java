@@ -236,6 +236,36 @@ public class ClanLeaderTest {
         Druid outsider = new Druid("Outsider", "M", 1.75, 60, 50, 60);
         assertDoesNotThrow(() -> leader.askDruidForMagicPotion(outsider));
     }
+
+    @Test
+    public void testHealCharacterWithNull() {
+        assertDoesNotThrow(() -> leader.healCharacter(null, 20));
+    }
+
+    @Test
+    public void testCreateCharacterWithAllPrefixes() {
+        // Test all character type prefixes to ensure complete coverage
+        Character gaulMerchant = leader.createCharacter("gaul_merchant", "Test1", "M", 1.70, 30, 50, 50);
+        assertTrue(gaulMerchant instanceof Merchant);
+
+        Character gaulInnkeeper = leader.createCharacter("gaul_innkeeper", "Test2", "M", 1.70, 30, 50, 50);
+        assertTrue(gaulInnkeeper instanceof Innkeeper);
+
+        Character gaulBlacksmith = leader.createCharacter("gaul_blacksmith", "Test3", "M", 1.70, 30, 50, 50);
+        assertTrue(gaulBlacksmith instanceof Blacksmith);
+
+        Character gaulDruid = leader.createCharacter("gaul_druid", "Test4", "M", 1.70, 30, 50, 50);
+        assertTrue(gaulDruid instanceof Druid);
+
+        Character romanLegionary = leader.createCharacter("roman_legionary", "Test5", "M", 1.70, 30, 50, 50);
+        assertTrue(romanLegionary instanceof Legionary);
+
+        Character romanPrefect = leader.createCharacter("roman_prefect", "Test6", "M", 1.70, 30, 50, 50);
+        assertTrue(romanPrefect instanceof Prefect);
+
+        Character romanGeneral = leader.createCharacter("roman_general", "Test7", "M", 1.70, 30, 50, 50);
+        assertTrue(romanGeneral instanceof General);
+    }
 }
 
 

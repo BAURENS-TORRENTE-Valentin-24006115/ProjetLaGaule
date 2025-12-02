@@ -44,5 +44,32 @@ public class GaulTest {
         gaul.setPlace("village");
         assertEquals("village", gaul.getPlace());
     }
+
+    @Test
+    public void testGaulCanEat() {
+        assertDoesNotThrow(() -> gaul.eat(fr.iut.laGaule.model.Consumables.Foods.Foods.SANGLIER));
+    }
+
+    @Test
+    public void testGaulCanDrinkPotion() {
+        assertDoesNotThrow(() -> gaul.drinkPotion(10));
+    }
+
+    @Test
+    public void testGaulCanBeHealed() {
+        gaul.receiveDamage(50);
+        assertEquals(50, gaul.getHealth());
+        gaul.heal(30);
+        assertEquals(80, gaul.getHealth());
+    }
+
+    @Test
+    public void testGaulSettersAndGetters() {
+        gaul.setStrength(60);
+        assertEquals(60, gaul.getStrength());
+
+        gaul.setEndurance(70);
+        assertEquals(70, gaul.getEndurance());
+    }
 }
 

@@ -167,5 +167,56 @@ public class SerializerTest {
         assertNotNull(deserializedMap);
         assertEquals(3, deserializedMap.size());
     }
+
+    @Test
+    public void testDeserializeRandomCharacterFromNonExistentFile() {
+        Character randomChar = serializer.deserializeRandomCharacter("nonExistent");
+        assertNull(randomChar);
+    }
+
+    @Test
+    public void testDeserializeRandomGaulFromNullMap() {
+        Gaul randomGaul = serializer.deserializeRandomGaul("nonExistent");
+        assertNull(randomGaul);
+    }
+
+    @Test
+    public void testDeserializeRandomRomanFromNullMap() {
+        Roman randomRoman = serializer.deserializeRandomRoman("nonExistent");
+        assertNull(randomRoman);
+    }
+
+    @Test
+    public void testDeserializeRandomLegionaryFromNullMap() {
+        Legionary randomLegionary = serializer.deserializeRandomLegionary("nonExistent");
+        assertNull(randomLegionary);
+    }
+
+    @Test
+    public void testDeserializeRandomLegionaryFromEmptyMap() {
+        Druid druid = new Druid("Panoramix", "M", 1.75, 60, 50, 60);
+        General general = new General("Pompey", "M", 1.80, 45, 70, 65);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("druid", druid);
+        map.put("general", general);
+
+        serializer.serialize(TEST_ZONE, map);
+        Legionary randomLegionary = serializer.deserializeRandomLegionary(TEST_ZONE);
+
+        assertNull(randomLegionary);
+    }
+
+    @Test
+    public void testDeserializeRandomCharacterWithNonCharacterObjects() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("string", "not a character");
+        map.put("number", 42);
+
+        serializer.serialize(TEST_ZONE, map);
+        Character randomChar = serializer.deserializeRandomCharacter(TEST_ZONE);
+
+        assertNull(randomChar);
+    }
 }
 

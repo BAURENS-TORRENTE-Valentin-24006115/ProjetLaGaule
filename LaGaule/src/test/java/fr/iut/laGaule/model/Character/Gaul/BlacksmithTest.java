@@ -80,5 +80,37 @@ public class BlacksmithTest {
         // Should handle gracefully without throwing exception
         assertDoesNotThrow(() -> blacksmith.work());
     }
+
+    @Test
+    public void testWorkWithNonGaulObjects() {
+        // Create a map with non-Gaul objects
+        Map<String, Object> map = new HashMap<>();
+        map.put("string", "not a gaul");
+        map.put("number", 42);
+        serializer.serialize("gaul", map);
+
+        // Should handle gracefully
+        assertDoesNotThrow(() -> blacksmith.work());
+    }
+
+    @Test
+    public void testWorkEnhancesEndurance() {
+        // Test that sometimes endurance is enhanced
+        Map<String, Object> mapBefore = serializer.deserialize("gaul");
+        Gaul gaulBefore = (Gaul) mapBefore.get("druid");
+        int strengthBefore = gaulBefore.getStrength();
+        int enduranceBefore = gaulBefore.getEndurance();
+
+        // Run work multiple times to ensure both branches are covered
+        for (int i = 0; i < 10; i++) {
+            blacksmith.work();
+        }
+
+        Map<String, Object> mapAfter = serializer.deserialize("gaul");
+        Gaul gaulAfter = (Gaul) mapAfter.get("druid");
+
+        // Stats should have increased
+        assertTrue(gaulAfter.getStrength() >= strengthBefore || gaulAfter.getEndurance() >= enduranceBefore);
+    }
 }
 

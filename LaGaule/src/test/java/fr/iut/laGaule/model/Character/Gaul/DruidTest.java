@@ -83,5 +83,49 @@ public class DruidTest {
         // Druid should deal damage even to strong roman (with 1.5x strength bonus)
         assertTrue(strongRoman.getHealth() < romanHealthBefore);
     }
+
+    @Test
+    public void testFightWithMinimumDamage() {
+        // Create a roman with very high endurance and health to test minimum damage (1)
+        General strongRoman = new General("SuperRoman", "M", 1.82, 45, 5, 200);
+        strongRoman.heal(1000); // Max health
+
+        int romanHealthBefore = strongRoman.getHealth();
+        druid.fight(strongRoman);
+
+        // Should deal at least 1 damage even with negative calculated damage
+        assertTrue(strongRoman.getHealth() < romanHealthBefore);
+    }
+
+    @Test
+    public void testFightCounterAttackMinimumDamage() {
+        // Create a druid with very high endurance and health to test minimum damage from roman
+        Druid strongDruid = new Druid("SuperDruid", "M", 1.75, 60, 5, 200);
+        strongDruid.heal(1000); // Max health
+
+        Legionary weakRoman = new Legionary("WeakRoman", "M", 1.75, 30, 5, 5);
+
+        int druidHealthBefore = strongDruid.getHealth();
+        strongDruid.fight(weakRoman);
+
+        // If roman survives, it should deal at least 1 damage to druid
+        if (weakRoman.getHealth() > 0) {
+            assertTrue(strongDruid.getHealth() < druidHealthBefore);
+        }
+    }
+
+    @Test
+    public void testFightKillsRomanBeforeCounterAttack() {
+        Legionary weakRoman = new Legionary("WeakRoman", "M", 1.75, 30, 10, 10);
+        weakRoman.receiveDamage(99); // Leave at 1 health
+
+        int druidHealthBefore = druid.getHealth();
+        druid.fight(weakRoman);
+
+        // If roman dies from first attack, druid should not take damage
+        if (weakRoman.getHealth() == 0) {
+            assertEquals(druidHealthBefore, druid.getHealth());
+        }
+    }
 }
 

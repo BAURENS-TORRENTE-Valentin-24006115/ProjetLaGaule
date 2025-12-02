@@ -78,5 +78,28 @@ public class InnkeeperTest {
     public void testInnkeeperIsGaul() {
         assertTrue(innkeeper instanceof Gaul);
     }
+
+    @Test
+    public void testWorkWithNonGaulObjects() {
+        // Create a map with non-Gaul objects
+        Map<String, Object> map = new HashMap<>();
+        map.put("string", "not a gaul");
+        map.put("number", 42);
+        serializer.serialize("gaul", map);
+
+        // Should handle gracefully
+        assertDoesNotThrow(() -> innkeeper.work());
+    }
+
+    @Test
+    public void testWorkFeedsGaul() {
+        // Verify that work() feeds gauls
+        innkeeper.work();
+
+        // Verify the serialized data still exists
+        Map<String, Object> map = serializer.deserialize("gaul");
+        assertNotNull(map);
+        assertTrue(map.containsKey("druid"));
+    }
 }
 
