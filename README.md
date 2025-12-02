@@ -18,21 +18,47 @@ Sauvegarde de l'état du jeu
 Exécution parallèle avec threads
 
 
-## Comment l'installer
+### Installation et configuration
 
-Étape 1 - Cloner le repository :
-```
-git clone https://github.com/BAURENS-TORRENTE-Valentin-24006115/ProjetLaGaule
+#### 1. Cloner le repository
+```bash
+git clone https://github.com/BAURENS-TORRENTE-Valentin-24006115/ProjetLaGaule.git
+cd ProjetLaGaule
 ```
 
-Étape 2 - Compiler le projet :
+#### 2. Structure du projet
+Le projet suit une architecture Maven standard :
 ```
+LaGaule/
+├── src/
+│   ├── main/
+│   │   └── java/
+│   │       └── fr/
+│   │           └── iut/
+│   │               └── laGaule/
+│   └── test/
+│       └── java/
+├── pom.xml
+└── target/
+```
+
+#### 3. Build du projet
+```bash
+cd LaGaule
 mvn clean install
 ```
 
-Étape 3 - Lancer l'application :
+#### 4. Exécution des tests
+```bash
+mvn test
 ```
-mvn exec:java -Dexec.mainClass="fr.iut.laGaule.Main"
+
+#### 5. Génération de la documentation Javadoc
+```bash
+mvn javadoc:javadoc
 ```
+La documentation sera générée dans le dossier `Documentation/`.
+
+---
 
 
