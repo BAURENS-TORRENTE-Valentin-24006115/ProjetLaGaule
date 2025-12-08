@@ -146,7 +146,14 @@ public class ClanLeader implements Serializable {
 
             // Créatures fantastiques
             case "lycanthrope":
-                newCharacter = new Lycanthrope(name, sex, height, age, strength, endurance);
+                // Création avec valeurs par défaut pour les nouveaux paramètres
+                newCharacter = new Lycanthrope(
+                    name, sex, height, age, strength, endurance,
+                    fr.iut.laGaule.model.Character.MythicalCreature.AgeCategory.ADULT, // AgeCategory par défaut
+                    0, // dominationFactor initial à 0
+                    fr.iut.laGaule.model.Character.MythicalCreature.Rank.OMEGA, // Rank par défaut (Omega)
+                    50 // impetuosityFactor par défaut
+                );
                 break;
 
             default:
