@@ -96,29 +96,78 @@ public class Lycanthrope extends Character {
     }
 
     /**
-     * Makes the lycanthrope howl to communicate with other lycanthropes.
-     * The howl type depends on the howl parameter.
+     * Emits a pack affiliation howl to express belonging to a pack.
+     * When a pack member emits this howl, all other members of the pack who hear it respond with the same type of howl.
+     * Other packs can also respond with their own pack affiliation howl.
      *
-     * @param howlType the type of howl to emit
+     * @return the emitted howl
      */
-    public void howl(String howlType) {
-        System.out.println(name + " howls: " + howlType);
-        // Additional logic for howling can be implemented here
+    public Howl howlPackAffiliation() {
+        Howl howl = new Howl(this, HowlType.PACK_AFFILIATION);
+        howl.displayCharacteristics();
+        System.out.println(name + " emits a PACK AFFILIATION howl!\n");
+
+        if (!isSolitary && pack != null) {
+            System.out.println("→ All pack members respond with the same howl:");
+            pack.getMembers().stream()
+                    .filter(member -> member != this)
+                    .filter(member -> member.listenToHowl(howl))
+                    .forEach(member -> System.out.println("  " + member.getName() + " responds: PACK AFFILIATION howl!"));
+        }
+        return howl;
+    }
+
+    /**
+     * Emits a domination howl to express dominance over other lycanthropes.
+     *
+     * @return the emitted howl
+     */
+    public Howl howlDomination() {
+        Howl howl = new Howl(this, HowlType.DOMINATION);
+        howl.displayCharacteristics();
+        System.out.println(name + " emits a DOMINATION howl!\n");
+        return howl;
+    }
+
+    /**
+     * Emits a submission howl in response to a domination howl.
+     * This howl is emitted to acknowledge another lycanthrope's dominance.
+     *
+     * @return the emitted howl
+     */
+    public Howl howlSubmission() {
+        Howl howl = new Howl(this, HowlType.SUBMISSION);
+        howl.displayCharacteristics();
+        System.out.println(name + " emits a SUBMISSION howl!\n");
+        return howl;
+    }
+
+    /**
+     * Emits an aggression howl in response to a domination howl or towards an omega member.
+     * This howl expresses aggressive intent.
+     *
+     * @return the emitted howl
+     */
+    public Howl howlAggression() {
+        Howl howl = new Howl(this, HowlType.AGGRESSION);
+        howl.displayCharacteristics();
+        System.out.println(name + " emits an AGGRESSION howl!\n");
+        return howl;
     }
 
     /**
      * Makes the lycanthrope listen to a howl from another lycanthrope.
      * The lycanthrope can only hear howls if they are not too sick/weak.
      *
-     * @param howl the howl message to listen to
+     * @param howl the howl to listen to
      * @return true if the howl was heard successfully, false otherwise
      */
-    public boolean listenToHowl(String howl) {
+    public boolean listenToHowl(Howl howl) {
         if (health < 30) {
             System.out.println(name + " is too weak to hear properly.");
             return false;
         }
-        System.out.println(name + " hears: " + howl);
+        System.out.println(name + " hears the " + howl.getHowlType().getDescription() + " howl from " + howl.getEmitter().getName());
         return true;
     }
 

@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
  */
 public class Pack {
     private String name;
-    private List<Lycanthrope> members;
+    private final List<Lycanthrope> members;
     private Lycanthrope alphaMale;
     private Lycanthrope alphaFemale;
 
@@ -264,17 +264,16 @@ public class Pack {
     }
 
     /**
-     * Broadcasts a message to all pack members.
-     * All members will hear the message if they are healthy enough.
+     * Broadcasts a howl to all pack members.
+     * All members will hear the howl if they are healthy enough.
      *
-     * @param message the message to broadcast
-     * @param sender the lycanthrope sending the message
+     * @param howl the howl to broadcast
      */
-    public void broadcast(String message, Lycanthrope sender) {
-        System.out.println("[Pack " + name + "] " + sender.getName() + " howls: " + message);
+    public void broadcast(Howl howl) {
+        System.out.println("[Pack " + name + "] " + howl.getEmitter().getName() + " broadcasts: " + howl.getHowlType().getDescription());
         for (Lycanthrope member : members) {
-            if (member != sender) {
-                member.listenToHowl(message);
+            if (member != howl.getEmitter()) {
+                member.listenToHowl(howl);
             }
         }
     }
