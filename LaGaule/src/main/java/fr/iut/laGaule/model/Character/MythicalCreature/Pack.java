@@ -14,6 +14,8 @@ public class Pack {
     private List<Lycanthrope> members;
     private Lycanthrope alphaMale;
     private Lycanthrope alphaFemale;
+    private List<Pregnancy> pregnancies;
+
 
     /**
      * Constructs a new Pack with the specified name.
@@ -25,6 +27,7 @@ public class Pack {
         this.members = new ArrayList<>();
         this.alphaMale = null;
         this.alphaFemale = null;
+        this.pregnancies = new ArrayList<>();
     }
 
     /**
@@ -156,6 +159,105 @@ public class Pack {
      */
     public boolean hasAlphaCouple() {
         return alphaMale != null && alphaFemale != null;
+    }
+
+    /**
+     * Manages the alpha couple dynamics.
+     * Ensures the alpha male maintains dominance over the alpha female.
+     * If the male loses dominance, a new couple is formed with the highest-level adult female.
+     */
+    public void manageAlphaCouple() {
+        if (!hasAlphaCouple()) {
+            return;
+        }
+
+        System.out.println("\n=== Managing Alpha Couple in " + name + " ===");
+
+        // Check if alpha male still dominates alpha female
+        if (alphaMale.getDominationFactor() <= alphaFemale.getDominationFactor()) {
+            System.out.println("Warning: Alpha male " + alphaMale.getName() +
+                " is losing dominance over alpha female " + alphaFemale.getName());
+
+            // Try to restore dominance
+            boolean dominationSuccess = alphaMale.dominate(alphaFemale);
+
+            if (!dominationSuccess || alphaMale.getDominationFactor() <= alphaFemale.getDominationFactor()) {
+                System.out.println("Alpha male cannot maintain dominance! Reforming couple...");
+                reformAlphaCouple();
+            }
+        } else {
+            System.out.println("Alpha couple is stable: " + alphaMale.getName() +
+                " maintains dominance over " + alphaFemale.getName());
+        }
+
+        System.out.println("=== End of Alpha Couple Management ===\n");
+    }
+
+    /**
+     * Reforms the alpha couple when the current alpha male loses dominance.
+     * The alpha female keeps her rank and mates with the adult male with the highest level.
+     * The previous alpha female keeps the same domination rank as her former mate.
+     */
+    private void reformAlphaCouple() {
+        if (alphaFemale == null) {
+            return;
+        }
+
+        System.out.println("\n--- Reforming Alpha Couple ---");
+
+        // Store the old alpha female's domination level
+        Lycanthrope oldAlphaFemale = alphaFemale;
+        int oldDominationLevel = oldAlphaFemale.getDominationFactor();
+
+        // Find the adult male with the highest level (excluding current alpha male)
+        List<Lycanthrope> adultMales = members.stream()
+            .filter(l -> l != alphaMale)
+            .filter(l -> l.getSex().equalsIgnoreCase("male") ||
+                        l.getSex().equalsIgnoreCase("mâle") ||
+                        l.getSex().equalsIgnoreCase("m"))
+            .filter(l -> l.getAgeCategory() == AgeCategory.ADULT)
+            .sorted((l1, l2) -> Integer.compare(l2.getLevel(), l1.getLevel()))
+            .collect(Collectors.toList());
+
+        if (adultMales.isEmpty()) {
+            System.out.println("No suitable adult male found to replace alpha male!");
+            return;
+        }
+
+        Lycanthrope newAlphaMale = adultMales.get(0);
+
+        // Demote old alpha male
+        if (alphaMale != null) {
+            System.out.println(alphaMale.getName() + " is demoted from alpha male position");
+            alphaMale.setHierarchyRank(Rank.BETA);
+        }
+
+        // Find the adult female with highest level for new alpha female
+        List<Lycanthrope> adultFemales = members.stream()
+            .filter(l -> l.getSex().equalsIgnoreCase("female") ||
+                        l.getSex().equalsIgnoreCase("femelle") ||
+                        l.getSex().equalsIgnoreCase("f"))
+            .filter(l -> l.getAgeCategory() == AgeCategory.ADULT)
+            .sorted((l1, l2) -> Integer.compare(l2.getLevel(), l1.getLevel()))
+            .collect(Collectors.toList());
+
+        if (!adultFemales.isEmpty()) {
+            Lycanthrope newAlphaFemale = adultFemales.get(0);
+
+            // Old alpha female keeps same domination rank as old mate
+            oldAlphaFemale.setDominationFactor(oldDominationLevel);
+            oldAlphaFemale.setHierarchyRank(Rank.BETA);
+
+            // Set new alpha couple
+            setAlphaMale(newAlphaMale);
+            setAlphaFemale(newAlphaFemale);
+
+            System.out.println("New alpha couple formed:");
+            System.out.println("  Alpha Male: " + newAlphaMale.getName());
+            System.out.println("  Alpha Female: " + newAlphaFemale.getName());
+        }
+
+        System.out.println("--- End of Couple Reform ---\n");
     }
 
     /**
@@ -379,6 +481,182 @@ public class Pack {
                 ", members=" + members.size() +
                 ", hasAlphaCouple=" + hasAlphaCouple() +
                 '}';
+    }
+
+    // ========== Reproduction System ==========
+
+    /**
+     * Initiates reproduction for the alpha couple.
+     * Only the alpha couple (α) has the right to reproduce during mating season.
+     * A litter of 1 to 7 young lycanthropes is expected after a gestation period.
+     *
+     * @return true if reproduction was initiated successfully, false otherwise
+     */
+    public boolean initiateReproduction() {
+        if (!hasAlphaCouple()) {
+            System.out.println("Cannot reproduce: pack does not have a complete alpha couple");
+            return false;
+        }
+
+        // Check if alpha female is already pregnant
+        for (Pregnancy pregnancy : pregnancies) {
+            if (pregnancy.getMother() == alphaFemale) {
+                System.out.println(alphaFemale.getName() + " is already pregnant");
+                return false;
+            }
+        }
+
+        // Check age requirements
+        if (alphaFemale.getAgeCategory() != AgeCategory.ADULT) {
+            System.out.println("Alpha female must be adult to reproduce");
+            return false;
+        }
+
+        if (alphaMale.getAgeCategory() != AgeCategory.ADULT) {
+            System.out.println("Alpha male must be adult to reproduce");
+            return false;
+        }
+
+        System.out.println("\n=== Reproduction Initiated ===");
+        System.out.println("Alpha couple " + alphaMale.getName() + " and " + alphaFemale.getName() + " are mating");
+
+        // Random gestation period and litter size
+        Random random = new Random();
+        int gestationTurns = 5 + random.nextInt(4); // 5-8 turns
+        int litterSize = 1 + random.nextInt(7); // 1-7 pups
+
+        Pregnancy pregnancy = new Pregnancy(alphaFemale, gestationTurns, litterSize);
+        pregnancies.add(pregnancy);
+
+        System.out.println(alphaFemale.getName() + " is now pregnant");
+        System.out.println("Expected litter size: " + litterSize + " pups");
+        System.out.println("Gestation period: " + gestationTurns + " turns");
+        System.out.println("=== End of Reproduction ===\n");
+
+        return true;
+    }
+
+    /**
+     * Processes pregnancies in the pack, advancing gestation and handling births.
+     * Should be called each turn/season.
+     */
+    public void processPregnancies() {
+        if (pregnancies.isEmpty()) {
+            return;
+        }
+
+        System.out.println("\n--- Processing Pregnancies in " + name + " ---");
+
+        List<Pregnancy> completedPregnancies = new ArrayList<>();
+
+        for (Pregnancy pregnancy : pregnancies) {
+            pregnancy.decrementGestation();
+
+            if (pregnancy.isReadyToBirth()) {
+                completedPregnancies.add(pregnancy);
+            } else {
+                System.out.println(pregnancy.getMother().getName() + " - " +
+                    pregnancy.getGestationTurnsRemaining() + " turns remaining");
+            }
+        }
+
+        // Handle births
+        for (Pregnancy pregnancy : completedPregnancies) {
+            giveBirth(pregnancy);
+            pregnancies.remove(pregnancy);
+        }
+
+        System.out.println("--- End of Pregnancy Processing ---\n");
+    }
+
+    /**
+     * Handles the birth of young lycanthropes.
+     *
+     * @param pregnancy the completed pregnancy
+     */
+    private void giveBirth(Pregnancy pregnancy) {
+        System.out.println("\n*** BIRTH EVENT ***");
+        System.out.println(pregnancy.getMother().getName() + " is giving birth!");
+
+        Random random = new Random();
+        int actualLitterSize = pregnancy.getLitterSize();
+
+        // Small chance of complications reducing litter size
+        if (random.nextInt(100) < 10) {
+            actualLitterSize = Math.max(1, actualLitterSize - random.nextInt(3));
+            System.out.println("Complications during birth! Litter size reduced.");
+        }
+
+        System.out.println("Number of pups born: " + actualLitterSize);
+
+        // Generate young lycanthropes
+        for (int i = 0; i < actualLitterSize; i++) {
+            String sex = random.nextBoolean() ? "male" : "female";
+            String puppyName = generatePuppyName(sex, i + 1);
+
+            // Young lycanthropes have lower stats
+            int strength = 5 + random.nextInt(10);
+            int endurance = 5 + random.nextInt(10);
+            double height = 0.3 + (random.nextDouble() * 0.2); // 0.3-0.5m for pups
+            int impetuosity = random.nextInt(30);
+
+            Lycanthrope pup = new Lycanthrope(
+                puppyName,
+                sex,
+                height,
+                0, // newborn
+                strength,
+                endurance,
+                AgeCategory.YOUNG,
+                0, // no domination factor yet
+                Rank.OMEGA, // pups start at lowest rank
+                impetuosity
+            );
+
+            addMember(pup);
+            System.out.println("  - Born: " + puppyName + " (" + sex + ")");
+        }
+
+        System.out.println("Mother " + pregnancy.getMother().getName() + " and all pups are healthy!");
+        System.out.println("*** END OF BIRTH EVENT ***\n");
+    }
+
+    /**
+     * Generates a name for a newborn lycanthrope pup.
+     *
+     * @param sex the sex of the pup
+     * @param number the pup number in the litter
+     * @return a generated name
+     */
+    private String generatePuppyName(String sex, int number) {
+        String[] maleNames = {"Fenrir Jr.", "Lupus", "Shadow", "Hunter", "Fang", "Ash", "Storm"};
+        String[] femaleNames = {"Luna Jr.", "Selene", "Mist", "Willow", "Nova", "Ember", "Rain"};
+
+        Random random = new Random();
+
+        if (sex.equalsIgnoreCase("male") || sex.equalsIgnoreCase("mâle") || sex.equalsIgnoreCase("m")) {
+            return maleNames[random.nextInt(maleNames.length)] + number;
+        } else {
+            return femaleNames[random.nextInt(femaleNames.length)] + number;
+        }
+    }
+
+    /**
+     * Gets the list of ongoing pregnancies in the pack.
+     *
+     * @return list of pregnancies
+     */
+    public List<Pregnancy> getPregnancies() {
+        return Collections.unmodifiableList(pregnancies);
+    }
+
+    /**
+     * Checks if there are any ongoing pregnancies.
+     *
+     * @return true if at least one pregnancy is in progress
+     */
+    public boolean hasPregnancies() {
+        return !pregnancies.isEmpty();
     }
 }
 
