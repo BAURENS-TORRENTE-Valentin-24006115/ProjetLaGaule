@@ -203,6 +203,86 @@ public class Lycanthrope extends Character {
         // Additional logic for transformation can be implemented here
     }
 
+
+    // ===== Domination and Submission Methods ===
+    /**
+     * Attempts to dominate another lycanthrope.
+     * Can only dominate if the target is considered inferior or equal based on impetuosity factor.
+     * Cannot dominate the alpha female or omega lycanthropes under certain conditions.
+     *
+     * @param target the lycanthrope to attempt to dominate
+     * @return true if domination was successful, false otherwise
+     */
+    public boolean attemptDomination(Lycanthrope target) {
+        // Cannot dominate if target is null
+        if (target == null) {
+            System.out.println(name + " cannot dominate a null target.");
+            return false;
+        }
+
+        // Check if target is considered inferior or equal (based on impetuosity)
+        int targetPower = target.strength + target.impetuosityFactor;
+        int myPower = this.strength + this.impetuosityFactor;
+
+        if (targetPower > myPower) {
+            System.out.println(name + " considers " + target.name + " too strong to dominate.");
+            return false;
+        }
+
+        // Determine domination success
+        boolean dominationSuccess = false;
+
+        // Success if aggressor has higher level
+        if (this.level > target.level) {
+            dominationSuccess = true;
+        }
+        // Success if target is omega (very weak)
+        else if (target.dominationFactor < -5) {
+            dominationSuccess = true;
+        }
+        else {
+            // Target resists and becomes aggressive
+            System.out.println(target.name + " resists and shows aggression towards " + name);
+            target.receiveDamage(5); // Minor damage from the confrontation
+            return false;
+        }
+
+        // Apply domination effects if successful
+        if (dominationSuccess) {
+            System.out.println(name + " successfully dominates " + target.name + "!");
+
+            // Increase domination factor for aggressor
+            this.dominationFactor++;
+            this.updateLevel();
+
+            // Decrease domination factor for target (submission)
+            target.submit();
+
+            // Exchange ranks
+            Rank tempRank = this.hierarchyRank;
+            this.hierarchyRank = target.hierarchyRank;
+            target.hierarchyRank = tempRank;
+
+            System.out.println(name + " and " + target.name + " have exchanged ranks.");
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Makes this lycanthrope submit to another.
+     * Reduces the domination factor as a result of submission.
+     */
+    public void submit() {
+        this.dominationFactor--;
+        this.updateLevel();
+        System.out.println(name + " submits and lowers its domination factor to " + dominationFactor);
+    }
+
+
+
+
     // ========== Hierarchy Management Methods ==========
 
     /**
