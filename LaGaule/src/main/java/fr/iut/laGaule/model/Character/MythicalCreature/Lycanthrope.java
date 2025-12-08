@@ -1,6 +1,8 @@
 package fr.iut.laGaule.model.Character.MythicalCreature;
 
 import fr.iut.laGaule.model.Character.Character;
+import fr.iut.laGaule.model.Character.Gaul.Gaul;
+import fr.iut.laGaule.model.Character.Roman.Roman;
 
 /**
  * Represents a Lycanthrope (werewolf) character in the game.
@@ -197,10 +199,80 @@ public class Lycanthrope extends Character {
 
     /**
      * Transforms the lycanthrope into human form.
+     * There is a probability, based on the lycanthrope's level, that it may leave
+     * its pack and enclosure (which is equivalent to the death of the lycanthrope).
+     * This can disrupt the organization of a pack.
+     * If the lycanthrope leaves, a new human character (Gaul or Roman) is created.
+     *
+     * @return the new human Character if the lycanthrope left permanently, null otherwise
      */
-    public void transformToHuman() {
-        System.out.println(name + " transforms into human form.");
-        // Additional logic for transformation can be implemented here
+    public Character transformToHuman() {
+        System.out.println("\n=== " + name + " transforms into human form ===");
+
+        // Calculate the probability of leaving the pack based on level
+        // Higher level = higher chance to leave (level is typically between 0-100)
+        // Probability = level / 100 (e.g., level 50 = 50% chance)
+        java.util.Random random = new java.util.Random();
+        int chanceToLeave = Math.min(level, 100); // Cap at 100%
+        int roll = random.nextInt(100);
+
+        System.out.println("Level: " + level + " | Chance to leave pack: " + chanceToLeave + "%");
+
+        if (roll < chanceToLeave) {
+            System.out.println(">>> " + name + " decides to leave their lycanthrope life behind!");
+
+            // If the lycanthrope is in a pack, handle the departure (equivalent to death)
+            if (pack != null) {
+                System.out.println(name + " leaves the pack: " + pack.getName());
+                pack.handleMemberDeath(this);
+            } else {
+                System.out.println(name + " was already solitary.");
+            }
+
+            // Mark the lycanthrope as "dead" (left the lycanthrope life)
+            this.health = 0;
+            this.isSolitary = true;
+            this.pack = null;
+
+            // Create a new human character randomly (Gaul or Roman)
+            Character newHuman = createRandomHumanCharacter(random);
+
+            System.out.println("*** " + name + " has permanently left the lycanthrope world ***");
+            System.out.println("*** A new human has been born: " + newHuman.getName() + " (" + newHuman.getClass().getSimpleName() + ") ***");
+            System.out.println("=== End of Transformation ===\n");
+            return newHuman;
+        } else {
+            System.out.println(name + " transforms back but stays with the pack.");
+            System.out.println("=== End of Transformation ===\n");
+            return null;
+        }
+    }
+
+    /**
+     * Creates a new random human character (Gaul or Roman) based on the lycanthrope's attributes.
+     * The new character inherits some attributes from the former lycanthrope.
+     *
+     * @param random the Random instance to use for randomization
+     * @return a new Gaul or Roman character
+     */
+    private Character createRandomHumanCharacter(java.util.Random random) {
+        // Generate a new name for the human
+        String humanName = name + " (Human)";
+
+        // Randomly choose between Gaul and Roman
+        int characterType = random.nextInt(2);
+
+        // The new human inherits some attributes but with reduced strength (no longer a lycanthrope)
+        int humanStrength = Math.max(1, strength / 2);
+        int humanEndurance = Math.max(1, endurance / 2);
+
+        if (characterType == 0) {
+            // Create a Gaul
+            return new Gaul(humanName, sex, height, age, humanStrength, humanEndurance);
+        } else {
+            // Create a Roman
+            return new Roman(humanName, sex, height, age, humanStrength, humanEndurance);
+        }
     }
 
 
