@@ -154,6 +154,186 @@ public class Lycanthrope extends Character {
         // Additional logic for transformation can be implemented here
     }
 
+    // ========== Hierarchy Management Methods ==========
+
+    /**
+     * Attempts to dominate another lycanthrope.
+     * The outcome depends on multiple factors including rank, strength, level, and impetuosity.
+     * If successful, both lycanthropes' domination factors are updated.
+     *
+     * @param target the lycanthrope to dominate
+     * @return true if the domination was successful, false otherwise
+     */
+    public boolean dominate(Lycanthrope target) {
+        if (target == this) {
+            System.out.println(name + " cannot dominate itself!");
+            return false;
+        }
+
+        if (this.isSolitary && target.isSolitary) {
+            System.out.println("Solitary lycanthropes do not establish domination relationships!");
+            return false;
+        }
+
+        if (this.pack != null && target.pack != null && this.pack != target.pack) {
+            System.out.println(name + " and " + target.getName() + " are in different packs!");
+            return false;
+        }
+
+        System.out.println("\n--- " + name + " attempts to dominate " + target.getName() + " ---");
+
+        // Calculate domination probability based on multiple factors
+        int dominationScore = calculateDominationScore(target);
+
+        // Add randomness based on impetuosity
+        java.util.Random random = new java.util.Random();
+        int randomFactor = random.nextInt(impetuosityFactor + 1);
+        dominationScore += randomFactor;
+
+        boolean success = dominationScore > 0;
+
+        if (success) {
+            System.out.println("✓ " + name + " successfully dominates " + target.getName() + "!");
+            this.dominationFactor++;
+            target.dominationFactor--;
+            this.updateLevel();
+            target.updateLevel();
+
+            // Check if rank should change
+            checkRankChange(target);
+        } else {
+            System.out.println("✗ " + name + " failed to dominate " + target.getName() + "!");
+            // Failed domination can lower domination factor
+            this.dominationFactor--;
+            target.dominationFactor++;
+            this.updateLevel();
+            target.updateLevel();
+        }
+
+        return success;
+    }
+
+    /**
+     * Calculates the domination score when attempting to dominate another lycanthrope.
+     * Takes into account rank hierarchy, strength, level, and domination factor.
+     *
+     * @param target the target lycanthrope
+     * @return the domination score (positive favors attacker, negative favors defender)
+     */
+    private int calculateDominationScore(Lycanthrope target) {
+        int score = 0;
+
+        // Rank difference (most important factor)
+        if (this.hierarchyRank != null && target.hierarchyRank != null) {
+            score += (this.hierarchyRank.getHierarchyLevel() - target.hierarchyRank.getHierarchyLevel()) * 10;
+        }
+
+        // Strength difference
+        score += (this.strength - target.strength);
+
+        // Level difference
+        score += (this.level - target.level) / 2;
+
+        // Domination factor difference
+        score += (this.dominationFactor - target.dominationFactor);
+
+        return score;
+    }
+
+    /**
+     * Checks if a rank change should occur after a domination event.
+     * If the dominated lycanthrope has a higher rank, there may be a rank swap.
+     *
+     * @param dominated the dominated lycanthrope
+     */
+    private void checkRankChange(Lycanthrope dominated) {
+        if (this.hierarchyRank == null || dominated.hierarchyRank == null) {
+            return;
+        }
+
+        // If dominator has lower rank than dominated, they may swap ranks
+        if (dominated.hierarchyRank.getHierarchyLevel() > this.hierarchyRank.getHierarchyLevel()) {
+            // Check if domination factor justifies rank change
+            if (this.dominationFactor > dominated.dominationFactor + 5) {
+                System.out.println(">>> Rank change! " + name + " rises from " + this.hierarchyRank.getSymbol()
+                    + " to " + dominated.hierarchyRank.getSymbol());
+
+                Rank temp = this.hierarchyRank;
+                this.hierarchyRank = dominated.hierarchyRank;
+                dominated.hierarchyRank = temp;
+
+                this.updateLevel();
+                dominated.updateLevel();
+
+                // Notify pack if they belong to one
+                if (pack != null) {
+                    pack.notifyRankChange(this, dominated);
+                }
+            }
+        }
+    }
+
+    /**
+     * Receives domination from another lycanthrope.
+     * This is a passive response to being dominated.
+     *
+     * @param dominator the lycanthrope that dominates this one
+     */
+    public void receiveDomination(Lycanthrope dominator) {
+        System.out.println(name + " is dominated by " + dominator.getName());
+        this.dominationFactor--;
+        this.updateLevel();
+    }
+
+    /**
+     * Submits to another lycanthrope, acknowledging their superiority.
+     * This is a voluntary submission that affects domination factor.
+     *
+     * @param superior the lycanthrope to submit to
+     */
+    public void submitTo(Lycanthrope superior) {
+        if (superior == this) {
+            return;
+        }
+
+        System.out.println(name + " submits to " + superior.getName());
+        this.dominationFactor--;
+        superior.dominationFactor++;
+        this.updateLevel();
+        superior.updateLevel();
+    }
+
+    /**
+     * Checks if this lycanthrope can dominate another based on rank hierarchy.
+     *
+     * @param other the other lycanthrope
+     * @return true if this lycanthrope's rank dominates the other's rank
+     */
+    public boolean canDominateByRank(Lycanthrope other) {
+        if (this.hierarchyRank == null || other.hierarchyRank == null) {
+            return false;
+        }
+        return this.hierarchyRank.dominates(other.hierarchyRank);
+    }
+
+    /**
+     * Shows aggression towards another lycanthrope.
+     * This is a warning display that may lead to domination attempt.
+     *
+     * @param target the target of aggression
+     */
+    public void showAggression(Lycanthrope target) {
+        System.out.println(name + " shows aggression towards " + target.getName() + "!");
+        System.out.println(name + " growls menacingly...");
+
+        // Impetuosity may cause immediate domination attempt
+        java.util.Random random = new java.util.Random();
+        if (random.nextInt(100) < impetuosityFactor) {
+            System.out.println(name + "'s impetuosity triggers a domination attempt!");
+            dominate(target);
+        }
+    }
+
     // Getters and Setters
 
     /**

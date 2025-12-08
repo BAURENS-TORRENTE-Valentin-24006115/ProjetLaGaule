@@ -279,6 +279,99 @@ public class Pack {
         }
     }
 
+    /**
+     * Notifies the pack of a rank change between two members.
+     * This may trigger additional hierarchy adjustments.
+     *
+     * @param riser the lycanthrope who gained rank
+     * @param demoted the lycanthrope who lost rank
+     */
+    public void notifyRankChange(Lycanthrope riser, Lycanthrope demoted) {
+        System.out.println("[Pack " + name + "] Hierarchy change detected!");
+        System.out.println("  " + riser.getName() + " has risen to " + riser.getHierarchyRank().getSymbol());
+        System.out.println("  " + demoted.getName() + " has fallen to " + demoted.getHierarchyRank().getSymbol());
+
+        // Check if alpha positions need to be updated
+        if (riser.getHierarchyRank() == Rank.ALPHA) {
+            if (riser.getSex().equalsIgnoreCase("male") || riser.getSex().equalsIgnoreCase("mâle") || riser.getSex().equalsIgnoreCase("m")) {
+                if (alphaMale != riser) {
+                    System.out.println("  New alpha male: " + riser.getName());
+                    alphaMale = riser;
+                }
+            } else {
+                if (alphaFemale != riser) {
+                    System.out.println("  New alpha female: " + riser.getName());
+                    alphaFemale = riser;
+                }
+            }
+        }
+    }
+
+    /**
+     * Simulates pack dynamics where members may compete for rank.
+     * This method triggers random dominance displays based on hierarchy.
+     */
+    public void simulateHierarchyDynamics() {
+        if (members.size() < 2) {
+            return;
+        }
+
+        System.out.println("\n=== Pack Dynamics: " + name + " ===");
+        java.util.Random random = new java.util.Random();
+
+        // Omegas are often targeted
+        List<Lycanthrope> omegas = getOmegas();
+        if (!omegas.isEmpty() && members.size() > omegas.size()) {
+            Lycanthrope omega = omegas.get(random.nextInt(omegas.size()));
+            List<Lycanthrope> nonOmegas = members.stream()
+                .filter(l -> l.getHierarchyRank() != Rank.OMEGA && l != omega)
+                .collect(Collectors.toList());
+
+            if (!nonOmegas.isEmpty()) {
+                Lycanthrope aggressor = nonOmegas.get(random.nextInt(nonOmegas.size()));
+                System.out.println("Omega " + omega.getName() + " is targeted by " + aggressor.getName());
+                aggressor.dominate(omega);
+            }
+        }
+
+        // Random challenges between adjacent ranks
+        for (int i = 0; i < members.size() - 1; i++) {
+            if (random.nextInt(100) < 20) { // 20% chance of challenge
+                Lycanthrope challenger = members.get(i);
+                Lycanthrope target = members.get(i + 1);
+
+                if (challenger.getHierarchyRank() != null && target.getHierarchyRank() != null) {
+                    if (challenger.getHierarchyRank().getHierarchyLevel() < target.getHierarchyRank().getHierarchyLevel()) {
+                        challenger.showAggression(target);
+                    }
+                }
+            }
+        }
+
+        System.out.println("=== End of Pack Dynamics ===\n");
+    }
+
+    /**
+     * Resolves conflicts within the pack by establishing clear dominance.
+     * This is useful when the pack hierarchy becomes unstable.
+     */
+    public void resolveConflicts() {
+        System.out.println("\n--- Resolving conflicts in " + name + " ---");
+
+        // Sort members by level to establish baseline hierarchy
+        List<Lycanthrope> sortedMembers = new ArrayList<>(members);
+        sortedMembers.sort((l1, l2) -> Integer.compare(l2.getLevel(), l1.getLevel()));
+
+        System.out.println("Establishing order based on level:");
+        for (int i = 0; i < sortedMembers.size(); i++) {
+            Lycanthrope lycan = sortedMembers.get(i);
+            System.out.println((i+1) + ". " + lycan.getName() + " (Level: " + lycan.getLevel() +
+                ", Rank: " + lycan.getHierarchyRank().getSymbol() + ")");
+        }
+
+        System.out.println("--- Conflicts resolved ---\n");
+    }
+
     @Override
     public String toString() {
         return "Pack{" +
