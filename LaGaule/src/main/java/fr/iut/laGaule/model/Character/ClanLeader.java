@@ -345,12 +345,15 @@ public class ClanLeader implements Serializable {
     public void transferCharacter(Character character,Place oui) {
         Serializer serializer =  new Serializer();
         if(oui.isAllowedCharacter(character)){
-            Map<String, Object> fi = serializer.deserialize(character.getPlace());
-            fi.remove(character.getName());
-            serializer.serialize(character.getPlace(),fi);
-            fi = serializer.deserialize(oui.getName());
-            fi.put(character.getName(),character);
-            serializer.serialize(oui.getName(),fi);
+            if(character.getPlace()!=null){
+                Map<String, Object> fi = serializer.deserialize(character.getPlace());
+                fi.remove(character.getName());
+                serializer.serialize(character.getPlace(),fi);
+            }
+            character.setPlace(oui);
+            Map<String, Object> fi2 = serializer.deserialize(oui.getName());
+            fi2.put(character.getName(),character);
+            serializer.serialize(oui.getName(),fi2);
         }
     }
 

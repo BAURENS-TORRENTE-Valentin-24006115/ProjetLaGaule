@@ -1,5 +1,6 @@
 package fr.iut.laGaule.model.Place;
 
+import fr.iut.laGaule.Serializer;
 import fr.iut.laGaule.model.Character.ClanLeader;
 import fr.iut.laGaule.model.Character.Character;
 import fr.iut.laGaule.model.Character.Gaul.Gaul;
@@ -31,6 +32,8 @@ public class BattleFields extends Place {
      */
     public BattleFields(String name, int area, ClanLeader clanLeader, int nbCharacter, ArrayList<Character> character, ArrayList<Foods> food) {
         super(name, area, clanLeader, nbCharacter, new ArrayList<>(), food);
+        serializePlace(character);
+
 
         // Ajouter uniquement les personnages autorisés
         if (character != null) {

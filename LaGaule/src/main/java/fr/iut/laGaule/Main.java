@@ -102,7 +102,6 @@ public class Main {
         map.put("karawita", karawita);
         Serializer serializer = new Serializer();
         serializer.serialize("gaul", map);
-        oui.work();
 
 
         CharacterThread u = new CharacterThread(dibiazah);
@@ -121,11 +120,19 @@ public class Main {
         Thread t7 = new Thread(u);
         u = new CharacterThread(karawita);
         Thread t8 = new Thread(u);
+        t1.start();
+        t6.start();
         ClanLeader leader = new ClanLeader("name","sex",12);
-        leader.transferCharacter(dibiazah,champBataille);
-        TimeUnit.SECONDS.sleep(20);
-        leader.transferCharacter(kanabawi,champBataille);
         System.out.println(dibiazah.getPlace());
+        System.out.println(champBataille.getName());
+        leader.transferCharacter(dibiazah,village);
+        System.out.println(champBataille.getName());
+        TimeUnit.SECONDS.sleep(10);
+        leader.transferCharacter(kanabawi,champBataille);
+        System.out.println(kanabawi.getPlace());
+        leader.transferCharacter(kanabawi,village);
+        System.out.println(kanabawi.getPlace());
+        System.out.println(serializer.deserialize(champBataille.getName()));
 
     }
 

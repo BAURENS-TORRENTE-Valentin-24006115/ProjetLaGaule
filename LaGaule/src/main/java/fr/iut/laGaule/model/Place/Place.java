@@ -1,10 +1,15 @@
 package fr.iut.laGaule.model.Place;
 
+import fr.iut.laGaule.Serializer;
 import fr.iut.laGaule.model.Character.Character;
 import fr.iut.laGaule.model.Character.ClanLeader;
+import fr.iut.laGaule.model.Character.Roman.Roman;
 import fr.iut.laGaule.model.Consumables.Foods.Foods;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Abstract base class representing a place in the game world.
@@ -12,7 +17,7 @@ import java.util.ArrayList;
  * This class provides common functionality for all place types including villages,
  * cities, camps, and battlefields.
  */
-public class Place {
+public class Place implements Serializable {
     private String name;
     private int area;
     private ClanLeader clanLeader;
@@ -37,6 +42,8 @@ public class Place {
         this.nbCharacter = nbCharacter;
         Character = character;
         this.food = food;
+        serializePlace(character);
+
     }
 
     public Place(String defaltzone, int area, ClanLeader clanLeader, int nbCharacter) {
@@ -149,6 +156,15 @@ public class Place {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void serializePlace(ArrayList<Character> character) {
+        Serializer serializer = new Serializer();
+        Map<String, Object> oui = new HashMap<>();
+        for (Character c : character) {
+            oui.put(c.getName(), c);
+        }
+        serializer.serialize(name,oui);
     }
 
     @Override
