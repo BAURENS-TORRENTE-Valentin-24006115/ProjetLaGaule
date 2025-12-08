@@ -69,6 +69,149 @@ public class Pack {
     }
 
     /**
+     * Handles the death of a pack member and reorganizes the pack hierarchy if needed.
+     * If an alpha dies, a new alpha will be automatically selected from the remaining members.
+     * The new alpha is chosen based on level and age category (must be adult).
+     *
+     * @param lycanthrope the lycanthrope who died
+     */
+    public void handleMemberDeath(Lycanthrope lycanthrope) {
+        if (!members.contains(lycanthrope)) {
+            System.out.println(lycanthrope.getName() + " is not a member of this pack.");
+            return;
+        }
+
+        System.out.println("\n*** DEATH IN THE PACK ***");
+        System.out.println(lycanthrope.getName() + " has died in pack " + name);
+        System.out.println("Rank: " + lycanthrope.getHierarchyRank().getSymbol() + " (" + lycanthrope.getHierarchyRank().name() + ")");
+
+        boolean wasAlphaMale = (lycanthrope == alphaMale);
+        boolean wasAlphaFemale = (lycanthrope == alphaFemale);
+
+        // Remove the deceased from the pack
+        members.remove(lycanthrope);
+
+        // Handle alpha positions
+        if (wasAlphaMale) {
+            alphaMale = null;
+            System.out.println("The alpha male has died!");
+            reorganizeAfterAlphaDeath(true);
+        }
+
+        if (wasAlphaFemale) {
+            alphaFemale = null;
+            System.out.println("The alpha female has died!");
+            reorganizeAfterAlphaDeath(false);
+        }
+
+        // Cancel any ongoing pregnancy if the deceased was pregnant
+        pregnancies.removeIf(pregnancy -> pregnancy.getMother() == lycanthrope);
+
+        System.out.println("Pack size now: " + members.size() + " members");
+        System.out.println("*** END OF DEATH EVENT ***\n");
+    }
+
+    /**
+     * Reorganizes the pack hierarchy after an alpha dies.
+     * Selects a new alpha from the remaining adult members based on level.
+     *
+     * @param isAlphaMale true if reorganizing for alpha male position, false for alpha female
+     */
+    private void reorganizeAfterAlphaDeath(boolean isAlphaMale) {
+        if (members.isEmpty()) {
+            System.out.println("The pack is now empty.");
+            return;
+        }
+
+        System.out.println("\n--- Reorganizing Pack After Alpha Death ---");
+
+        String targetSex = isAlphaMale ? "male" : "female";
+        List<String> sexVariants = isAlphaMale ?
+            Arrays.asList("male", "mâle", "m") :
+            Arrays.asList("female", "femelle", "f");
+
+        // Find suitable replacement: adult members of the correct sex, sorted by level
+        List<Lycanthrope> candidates = members.stream()
+            .filter(l -> sexVariants.stream().anyMatch(s -> l.getSex().equalsIgnoreCase(s)))
+            .filter(l -> l.getAgeCategory() == AgeCategory.ADULT)
+            .sorted((l1, l2) -> Integer.compare(l2.getLevel(), l1.getLevel()))
+            .collect(Collectors.toList());
+
+        if (candidates.isEmpty()) {
+            System.out.println("No suitable adult " + targetSex + " found to replace the deceased alpha!");
+
+            // Try to find ANY adult regardless of original alpha's sex
+            candidates = members.stream()
+                .filter(l -> l.getAgeCategory() == AgeCategory.ADULT)
+                .sorted((l1, l2) -> Integer.compare(l2.getLevel(), l1.getLevel()))
+                .collect(Collectors.toList());
+
+            if (candidates.isEmpty()) {
+                System.out.println("No adult members available. Pack has no alpha!");
+                System.out.println("--- End of Reorganization ---\n");
+                return;
+            }
+        }
+
+        Lycanthrope newAlpha = candidates.get(0);
+
+        // Set the new alpha
+        if (isAlphaMale || sexVariants.stream().anyMatch(s -> newAlpha.getSex().equalsIgnoreCase(s))) {
+            if (newAlpha.getSex().equalsIgnoreCase("male") ||
+                newAlpha.getSex().equalsIgnoreCase("mâle") ||
+                newAlpha.getSex().equalsIgnoreCase("m")) {
+                setAlphaMale(newAlpha);
+                System.out.println("New alpha male appointed: " + newAlpha.getName() + " (Level: " + newAlpha.getLevel() + ")");
+            } else {
+                setAlphaFemale(newAlpha);
+                System.out.println("New alpha female appointed: " + newAlpha.getName() + " (Level: " + newAlpha.getLevel() + ")");
+            }
+        }
+
+        // Check if we need to establish a complete alpha couple
+        if (alphaMale != null && alphaFemale == null) {
+            establishAlphaCouple(false);
+        } else if (alphaFemale != null && alphaMale == null) {
+            establishAlphaCouple(true);
+        }
+
+        System.out.println("--- End of Reorganization ---\n");
+    }
+
+    /**
+     * Attempts to establish a complete alpha couple by finding a suitable mate for the existing alpha.
+     *
+     * @param needsMale true if we need to find an alpha male, false if we need an alpha female
+     */
+    private void establishAlphaCouple(boolean needsMale) {
+        System.out.println("Attempting to establish complete alpha couple...");
+
+        String targetSex = needsMale ? "male" : "female";
+        List<String> sexVariants = needsMale ?
+            Arrays.asList("male", "mâle", "m") :
+            Arrays.asList("female", "femelle", "f");
+
+        List<Lycanthrope> candidates = members.stream()
+            .filter(l -> sexVariants.stream().anyMatch(s -> l.getSex().equalsIgnoreCase(s)))
+            .filter(l -> l.getAgeCategory() == AgeCategory.ADULT)
+            .filter(l -> needsMale ? (l != alphaFemale) : (l != alphaMale))
+            .sorted((l1, l2) -> Integer.compare(l2.getLevel(), l1.getLevel()))
+            .collect(Collectors.toList());
+
+        if (!candidates.isEmpty()) {
+            Lycanthrope newAlpha = candidates.get(0);
+            if (needsMale) {
+                setAlphaMale(newAlpha);
+            } else {
+                setAlphaFemale(newAlpha);
+            }
+            System.out.println("Alpha couple is now complete!");
+        } else {
+            System.out.println("No suitable " + targetSex + " found to complete the alpha couple.");
+        }
+    }
+
+    /**
      * Sets the alpha male of the pack.
      * Only one alpha male can exist at a time.
      *
