@@ -1,7 +1,6 @@
 package fr.iut.laGaule.model.Character.MythicalCreature;
 
 import fr.iut.laGaule.model.Character.Character;
-import fr.iut.laGaule.model.Character.MythicalCreature.AgeCategory;
 
 /**
  * Represents a Lycanthrope (werewolf) character in the game.
@@ -17,7 +16,7 @@ public class Lycanthrope extends Character {
 
     private AgeCategory ageCategory;
     private int dominationFactor;
-    private int rank;
+    private Rank hierarchyRank;
     private int level;
     private int impetuosityFactor;
     private Pack pack;
@@ -34,15 +33,15 @@ public class Lycanthrope extends Character {
      * @param endurance the endurance attribute of the lycanthrope
      * @param ageCategory the age category (young, adult, or old)
      * @param dominationFactor the domination factor (difference between dominations exercised and received)
-     * @param rank the rank within the pack
+     * @param hierarchyRank the rank within the pack hierarchy
      * @param impetuosityFactor the impetuosity factor of the lycanthrope
      */
     public Lycanthrope(String name, String sex, double height, int age, int strength, int endurance,
-                       AgeCategory ageCategory, int dominationFactor, int rank, int impetuosityFactor) {
+                       AgeCategory ageCategory, int dominationFactor, Rank hierarchyRank, int impetuosityFactor) {
         super(name, sex, height, age, strength, endurance);
         this.ageCategory = ageCategory;
         this.dominationFactor = dominationFactor;
-        this.rank = rank;
+        this.hierarchyRank = hierarchyRank != null ? hierarchyRank : Rank.OMEGA;
         this.impetuosityFactor = impetuosityFactor;
         this.isSolitary = true;
         this.pack = null;
@@ -51,7 +50,7 @@ public class Lycanthrope extends Character {
 
     /**
      * Calculates the level of the lycanthrope based on age category, strength,
-     * domination factor, and rank.
+     * domination factor, and hierarchy rank.
      * Level is a subjective quality criterion for both male and female lycanthropes.
      *
      * @return the calculated level
@@ -62,7 +61,8 @@ public class Lycanthrope extends Character {
             case ADULT -> 2;
             case OLD -> 3;
         };
-        return (ageFactor * 10) + strength + dominationFactor + rank;
+        int rankValue = hierarchyRank != null ? hierarchyRank.getHierarchyLevel() : 0;
+        return (ageFactor * 10) + strength + dominationFactor + rankValue;
     }
 
     /**
@@ -88,7 +88,7 @@ public class Lycanthrope extends Character {
         System.out.println("Strength: " + strength);
         System.out.println("Endurance: " + endurance);
         System.out.println("Domination Factor: " + dominationFactor);
-        System.out.println("Rank: " + rank);
+        System.out.println("Hierarchy Rank: " + (hierarchyRank != null ? hierarchyRank.getSymbol() + " (" + hierarchyRank.name() + ")" : "None"));
         System.out.println("Level: " + level);
         System.out.println("Impetuosity Factor: " + impetuosityFactor);
         System.out.println("Pack: " + (isSolitary ? "Solitary" : pack != null ? pack.getName() : "None"));
@@ -143,10 +143,7 @@ public class Lycanthrope extends Character {
         if (this.pack != null) {
             leavePack();
         }
-        this.pack = pack;
-        this.isSolitary = false;
-        pack.addMember(this);
-        System.out.println(name + " joins the pack: " + pack.getName());
+        pack.addMember(this); // Pack will set the pack reference and isSolitary
     }
 
     /**
@@ -198,21 +195,21 @@ public class Lycanthrope extends Character {
     }
 
     /**
-     * Gets the rank of the lycanthrope.
+     * Gets the hierarchy rank of the lycanthrope.
      *
-     * @return the rank
+     * @return the hierarchy rank
      */
-    public int getRank() {
-        return rank;
+    public Rank getHierarchyRank() {
+        return hierarchyRank;
     }
 
     /**
-     * Sets the rank of the lycanthrope.
+     * Sets the hierarchy rank of the lycanthrope.
      *
-     * @param rank the new rank
+     * @param hierarchyRank the new hierarchy rank
      */
-    public void setRank(int rank) {
-        this.rank = rank;
+    public void setHierarchyRank(Rank hierarchyRank) {
+        this.hierarchyRank = hierarchyRank;
         updateLevel();
     }
 
@@ -253,6 +250,16 @@ public class Lycanthrope extends Character {
     }
 
     /**
+     * Sets the pack the lycanthrope belongs to.
+     * This method is used internally by the Pack class.
+     *
+     * @param pack the pack to set
+     */
+    void setPack(Pack pack) {
+        this.pack = pack;
+    }
+
+    /**
      * Checks if the lycanthrope is solitary.
      *
      * @return true if solitary, false otherwise
@@ -268,61 +275,5 @@ public class Lycanthrope extends Character {
      */
     public void setSolitary(boolean solitary) {
         isSolitary = solitary;
-    }
-
-    /**
-     * Inner class representing a pack of lycanthropes.
-     */
-    public static class Pack {
-        private String name;
-        private java.util.List<Lycanthrope> members;
-
-        /**
-         * Constructs a new Pack with the specified name.
-         *
-         * @param name the name of the pack
-         */
-        public Pack(String name) {
-            this.name = name;
-            this.members = new java.util.ArrayList<>();
-        }
-
-        /**
-         * Adds a member to the pack.
-         *
-         * @param lycanthrope the lycanthrope to add
-         */
-        public void addMember(Lycanthrope lycanthrope) {
-            if (!members.contains(lycanthrope)) {
-                members.add(lycanthrope);
-            }
-        }
-
-        /**
-         * Removes a member from the pack.
-         *
-         * @param lycanthrope the lycanthrope to remove
-         */
-        public void removeMember(Lycanthrope lycanthrope) {
-            members.remove(lycanthrope);
-        }
-
-        /**
-         * Gets the name of the pack.
-         *
-         * @return the pack name
-         */
-        public String getName() {
-            return name;
-        }
-
-        /**
-         * Gets the list of pack members.
-         *
-         * @return the list of lycanthropes in the pack
-         */
-        public java.util.List<Lycanthrope> getMembers() {
-            return members;
-        }
     }
 }
