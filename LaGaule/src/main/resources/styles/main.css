@@ -1,0 +1,191 @@
+﻿/*
+ * La Gaule - Main CSS Stylesheet
+ * A beautiful dark theme with gold and red accents
+ */
+/* ===== ROOT STYLES ===== */
+.root {
+    -fx-font-family: "Georgia";
+    -fx-background-color: #1a1a2e;
+}
+/* ===== MENU BUTTONS ===== */
+.menu-button {
+    -fx-background-radius: 30;
+    -fx-border-radius: 30;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+.menu-button:hover {
+    -fx-effect: dropshadow(gaussian, rgba(233, 69, 96, 0.5), 20, 0, 0, 0);
+}
+/* ===== SCROLL PANES ===== */
+.scroll-pane {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+.scroll-bar {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+}
+.scroll-bar .thumb {
+    -fx-background-color: rgba(233, 69, 96, 0.5);
+    -fx-background-radius: 5;
+}
+.scroll-bar .thumb:hover {
+    -fx-background-color: rgba(233, 69, 96, 0.8);
+}
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+}
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-background-color: rgba(255, 255, 255, 0.3);
+}
+/* ===== TEXT FIELDS ===== */
+.text-field {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: rgba(255, 255, 255, 0.5);
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-border-width: 1;
+}
+.text-field:focused {
+    -fx-border-color: #e94560;
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+}
+/* ===== SPINNERS ===== */
+.spinner {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 10;
+}
+.spinner .text-field {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+}
+.spinner .increment-arrow-button,
+.spinner .decrement-arrow-button {
+    -fx-background-color: rgba(233, 69, 96, 0.5);
+}
+.spinner .increment-arrow-button:hover,
+.spinner .decrement-arrow-button:hover {
+    -fx-background-color: rgba(233, 69, 96, 0.8);
+}
+.spinner .increment-arrow-button .increment-arrow,
+.spinner .decrement-arrow-button .decrement-arrow {
+    -fx-background-color: white;
+}
+/* ===== CHECK BOXES ===== */
+.check-box {
+    -fx-text-fill: white;
+}
+.check-box .box {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+}
+.check-box:selected .box {
+    -fx-background-color: #e94560;
+    -fx-border-color: #e94560;
+}
+.check-box:selected .mark {
+    -fx-background-color: white;
+}
+/* ===== SEPARATORS ===== */
+.separator .line {
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+}
+/* ===== PROGRESS BARS ===== */
+.progress-bar {
+    -fx-background-color: rgba(0, 0, 0, 0.3);
+    -fx-background-radius: 5;
+}
+.progress-bar .track {
+    -fx-background-color: rgba(0, 0, 0, 0.3);
+    -fx-background-radius: 5;
+}
+.progress-bar .bar {
+    -fx-background-radius: 5;
+    -fx-padding: 2;
+}
+/* ===== TOOLTIPS ===== */
+.tooltip {
+    -fx-background-color: rgba(26, 26, 46, 0.95);
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-padding: 10;
+    -fx-background-radius: 8;
+    -fx-border-color: #e94560;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+}
+/* ===== ALERTS AND DIALOGS ===== */
+.alert {
+    -fx-background-color: #1a1a2e;
+}
+.dialog-pane {
+    -fx-background-color: #1a1a2e;
+    -fx-border-color: #e94560;
+    -fx-border-width: 2;
+}
+.dialog-pane .header-panel {
+    -fx-background-color: #16213e;
+}
+.dialog-pane .content {
+    -fx-text-fill: white;
+}
+.dialog-pane .button-bar .button {
+    -fx-background-color: #e94560;
+    -fx-text-fill: white;
+    -fx-background-radius: 20;
+    -fx-padding: 8 20;
+}
+.dialog-pane .button-bar .button:hover {
+    -fx-background-color: derive(#e94560, 20%);
+}
+/* ===== LABELS ===== */
+.label {
+    -fx-text-fill: white;
+}
+/* ===== CARDS ===== */
+.card {
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 0, 5);
+}
+.card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(233, 69, 96, 0.3), 15, 0, 0, 5);
+}
+/* ===== CUSTOM CLASSES ===== */
+.title-text {
+    -fx-fill: #e94560;
+    -fx-font-weight: bold;
+}
+.subtitle-text {
+    -fx-fill: #f8b500;
+}
+.accent-text {
+    -fx-fill: #e94560;
+}
+.gold-text {
+    -fx-fill: #f8b500;
+}
+.gaul-color {
+    -fx-background-color: rgba(139, 69, 19, 0.8);
+}
+.roman-color {
+    -fx-background-color: rgba(139, 0, 0, 0.8);
+}
+.health-high {
+    -fx-accent: #2ecc71;
+}
+.health-medium {
+    -fx-accent: #f39c12;
+}
+.health-low {
+    -fx-accent: #e74c3c;
+}
