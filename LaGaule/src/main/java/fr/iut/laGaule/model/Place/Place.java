@@ -304,4 +304,8 @@ public class Place implements Serializable {
     public boolean isAllowedCharacter(Character character) {
         return false;
     }
+
+    public void removeCharacter(Character selectedCharacter) {
+        Character.remove(selectedCharacter);
+    }
 }

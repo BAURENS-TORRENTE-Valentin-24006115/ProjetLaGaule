@@ -357,6 +357,29 @@ public class ClanLeader implements Serializable {
         }
     }
 
+    /**
+     * Rappelle un personnage distant vers le lieu géré par ce chef.
+     * @param character Le personnage à rappeler.
+     * @param currentPlace Le lieu actuel où se trouve le personnage.
+     */
+    public void recallCharacter(Character character, Place currentPlace) {
+        if (managedPlace == null) return;
+
+        System.out.println(this.name + " rappelle " + character.getName() + " au bercail !");
+
+        // On utilise la logique de transfert existante, mais vers le lieu géré
+        // 1. Retrait de l'ancien lieu (Mémoire)
+        if(currentPlace != null) {
+            synchronized(currentPlace) { currentPlace.removeCharacter(character); }
+        }
+
+        // 2. Ajout au lieu du chef (Mémoire)
+        synchronized(managedPlace) { managedPlace.addCharacter(character); }
+
+        // 3. Mise à jour de la référence du perso
+        character.setPlace(managedPlace);
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

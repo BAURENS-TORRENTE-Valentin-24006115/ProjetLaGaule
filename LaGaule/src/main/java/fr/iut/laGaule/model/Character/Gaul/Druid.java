@@ -3,6 +3,8 @@ package fr.iut.laGaule.model.Character.Gaul;
 
 import fr.iut.laGaule.model.Character.Roman.Roman;
 
+import java.util.Random;
+
 /**
  * Represents a Druid character in the Gaul faction.
  * Druids are special characters capable of concocting magic potions,
@@ -68,26 +70,66 @@ public class Druid extends Gaul {
      *
      * @param character the Roman character to fight
      */
+    /**
+     * Combat contre un Romain.
+     * Le Druide attaque en premier (et peut-être avec magie/potion).
+     * Si le Romain survit, il riposte.
+     */
     public void fight(Roman character) {
-        System.out.println(this.name + " is fighting herbs in the forest.");
-        int damage;
-        if(character.getHealth() >0){
-            damage = (int) (this.getStrength()*1.5-(character.getEndurance()/10)-character.getHealth()/4)/4;
-            if (damage < 0){
-                damage = 1;
-            }
-            System.out.println(damage);
-            character.receiveDamage(damage);
-            System.out.println(character.getHealth());
+        if (character == null || character.getHealth() <= 0) {
+            System.out.println(this.name + " regarde le Romain déjà à terre.");
+            return;
         }
-        if(character.getHealth() >0){
-            damage = (int) (character.getStrength()-(this.getEndurance()/10)-this.getHealth()/4)/4;
-            System.out.println(damage);
-            if (damage < 0){
-                damage = 1;
+
+        System.out.println("⚔️ " + this.name + " lève sa serpe d'or contre " + character.getName() + " !");
+
+        // --- 1. TOUR DU DRUIDE ---
+
+        // Bonus énorme si sous potion magique
+        double potionMultiplier = (this.magicPotionLevel > 0) ? 3.0 : 1.0;
+
+        // Facteur aléatoire (entre 0.8 et 1.2) pour varier les dégâts de +/- 20%
+        double randomFactor = 0.8 + (Math.random() * 0.4);
+
+        // Calcul : Force * Potion * Random - (Endurance ennemie / 3)
+        // On divise l'endurance par 3 au lieu de 10 pour que l'armure serve à quelque chose,
+        // mais on ne divise plus l'attaque par 4.
+        int rawDamage = (int) ((this.getStrength() * 1.2 * potionMultiplier * randomFactor) - (character.getEndurance() / 3.0));
+
+        // Coup Critique (20% de chance) : La serpe d'or touche un point sensible !
+        boolean isCrit = Math.random() < 0.2;
+        if (isCrit) {
+            rawDamage *= 2;
+            System.out.println("✨ COUP CRITIQUE ! La serpe d'or étincelle !");
+        }
+
+        // Dégâts minimum de 1 garantis
+        int damageDealt = Math.max(1, rawDamage);
+
+        // Application des dégâts
+        character.receiveDamage(damageDealt);
+        System.out.println("   -> " + this.name + " inflige " + damageDealt + " dégâts. (PV Romain: " + character.getHealth() + ")");
+
+        // --- 2. RIPOSTE DU ROMAIN (S'il est encore vivant) ---
+        if (character.getHealth() > 0) {
+            System.out.println("🛡️ " + character.getName() + " riposte avec son glaive !");
+
+            // Les romains sont disciplinés : moins d'aléatoire, dégâts constants
+            // Formule : Force Ennemie - (Endurance Druide / 2) -> Les druides ont des robes, pas d'armure lourde
+            int romanDamage = (int) (character.getStrength() - (this.getEndurance() / 4.0));
+
+            // Le romain est affaibli s'il a pris cher juste avant
+            if (character.getHealth() < 20) {
+                romanDamage /= 2;
+                System.out.println("   (Le Romain chancelle et frappe moins fort)");
             }
-            this.receiveDamage(damage);
-            System.out.println(this.getHealth());
+
+            romanDamage = Math.max(1, romanDamage);
+
+            this.receiveDamage(romanDamage);
+            System.out.println("   -> " + character.getName() + " inflige " + romanDamage + " dégâts. (PV Druide: " + this.getHealth() + ")");
+        } else {
+            System.out.println("💀 " + character.getName() + " s'effondre. Victoire pour la Gaule !");
         }
     }
 }
