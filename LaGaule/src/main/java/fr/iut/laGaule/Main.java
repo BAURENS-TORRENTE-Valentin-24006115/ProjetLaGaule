@@ -108,7 +108,7 @@ public class Main {
         InvasionTheatre theatre = new InvasionTheatre();
 
         // Exemple : 5 zones, 20 personnages, dure 30 secondes max
-        theatre.invasionTheatre(5, 20, 30);
+        theatre.invasionTheatre(15, 55, 15);
 
     }
 
