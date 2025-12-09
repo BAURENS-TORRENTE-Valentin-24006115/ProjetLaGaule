@@ -42,11 +42,15 @@ public class Lycanthrope extends Character {
                        AgeCategory ageCategory, int dominationFactor, Rank hierarchyRank, int impetuosityFactor) {
         super(name, sex, height, age, strength, endurance);
         this.ageCategory = ageCategory;
-        this.dominationFactor = dominationFactor;
-        this.hierarchyRank = hierarchyRank != null ? hierarchyRank : Rank.OMEGA;
         this.impetuosityFactor = impetuosityFactor;
-        this.isSolitary = true;
+
+        // By default, lycanthropes are created as solitary
         this.pack = null;
+        this.isSolitary = true;
+        // Solitary lycanthropes have no domination factor or hierarchy rank
+        this.dominationFactor = 0;
+        this.hierarchyRank = null;
+
         this.level = calculateLevel();
     }
 
@@ -175,18 +179,36 @@ public class Lycanthrope extends Character {
 
     /**
      * Makes the lycanthrope leave its current pack and become solitary.
+     * When a lycanthrope becomes solitary, it loses its domination factor and hierarchy rank.
      */
     public void leavePack() {
         if (pack != null) {
             System.out.println(name + " leaves the pack: " + pack.getName());
             pack.removeMember(this);
-            this.pack = null;
+            // Don't set pack to null here - removeMember will call becomeSolitary()
+        } else {
+            // If not in a pack, just become solitary
+            becomeSolitary();
         }
+    }
+
+    /**
+     * Internal method to make the lycanthrope solitary without triggering pack removal.
+     * This is called by Pack.removeMember() to avoid infinite recursion.
+     */
+    void becomeSolitary() {
+        this.pack = null;
         this.isSolitary = true;
+        // Solitary lycanthropes have no domination factor or hierarchy rank
+        this.dominationFactor = 0;
+        this.hierarchyRank = null;
+        this.updateLevel();
+        System.out.println(name + " is now solitary with no domination rank.");
     }
 
     /**
      * Makes the lycanthrope join a pack.
+     * When joining a pack, the lycanthrope is no longer solitary and will receive a rank.
      *
      * @param pack the pack to join
      */
@@ -195,6 +217,7 @@ public class Lycanthrope extends Character {
             leavePack();
         }
         pack.addMember(this); // Pack will set the pack reference and isSolitary
+        // Pack should also assign a rank when the lycanthrope joins
     }
 
     /**

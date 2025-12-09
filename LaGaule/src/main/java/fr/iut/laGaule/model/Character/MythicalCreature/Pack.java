@@ -33,6 +33,7 @@ public class Pack {
     /**
      * Adds a member to the pack.
      * If the lycanthrope is already in another pack, it will leave that pack first.
+     * New members are assigned a default subordinate rank unless they become alphas.
      *
      * @param lycanthrope the lycanthrope to add
      */
@@ -41,6 +42,13 @@ public class Pack {
             members.add(lycanthrope);
             lycanthrope.setPack(this);
             lycanthrope.setSolitary(false);
+
+            // Assign a default rank (SUBORDINATE) if not already set
+            // Alphas will get their rank set via setAlphaMale/setAlphaFemale
+            if (lycanthrope.getHierarchyRank() == null) {
+                lycanthrope.setHierarchyRank(Rank.OMEGA);
+            }
+
             System.out.println(lycanthrope.getName() + " joins the pack: " + name);
         }
     }
@@ -62,8 +70,8 @@ public class Pack {
                 alphaFemale = null;
                 System.out.println("The alpha female has left the pack!");
             }
-            lycanthrope.setPack(null);
-            lycanthrope.setSolitary(true);
+            // Use becomeSolitary() to avoid infinite recursion (leavePack calls removeMember)
+            lycanthrope.becomeSolitary();
             System.out.println(lycanthrope.getName() + " has left the pack: " + name);
         }
     }
