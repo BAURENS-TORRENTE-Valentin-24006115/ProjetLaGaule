@@ -280,4 +280,24 @@ public abstract class Place {
             System.out.println("Personnage invalide.");
         }
     }
+
+    /**
+     * Removes a character from the place.
+     * Decrements the character count and removes the character from the list.
+     *
+     * @param character the character to remove from the place
+     * @return true if the character was removed, false otherwise
+     */
+    public boolean removeCharacter(Character character) {
+        if (character != null && Character.contains(character)) {
+            Character.remove(character);
+            nbCharacter--;
+            System.out.println(character.getName() + " a été retiré de " + name + ".");
+            return true;
+        } else {
+            System.out.println("Personnage non trouvé ou invalide.");
+            return false;
+        }
+    }
 }
+
