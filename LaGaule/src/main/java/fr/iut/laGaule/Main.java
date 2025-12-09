@@ -9,6 +9,7 @@ import fr.iut.laGaule.model.Consumables.Foods.Foods;
 import fr.iut.laGaule.model.Place.*;
 import fr.iut.laGaule.model.InvasionTheater;
 import fr.iut.laGaule.model.Character.MythicalCreature.Lycanthrope;
+import fr.iut.laGaule.process.InvasionTheatre;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -104,35 +105,10 @@ public class Main {
         serializer.serialize("gaul", map);
 
 
-        CharacterThread u = new CharacterThread(dibiazah);
-        Thread t1 = new Thread(u);
-        u = new CharacterThread(kashmiri);
-        Thread t2 = new Thread(u);
-        u = new CharacterThread(sisha);
-        Thread t3 = new Thread(u);
-        u = new CharacterThread(oui);
-        Thread t4 = new Thread(u);
-        u = new CharacterThread(sumbul);
-        Thread t5 = new Thread(u);
-        u = new CharacterThread(kanabawi);
-        Thread t6 = new Thread(u);
-        u = new CharacterThread(non);
-        Thread t7 = new Thread(u);
-        u = new CharacterThread(karawita);
-        Thread t8 = new Thread(u);
-        t1.start();
-        t6.start();
-        ClanLeader leader = new ClanLeader("name","sex",12);
-        System.out.println(dibiazah.getPlace());
-        System.out.println(champBataille.getName());
-        leader.transferCharacter(dibiazah,village);
-        System.out.println(champBataille.getName());
-        TimeUnit.SECONDS.sleep(10);
-        leader.transferCharacter(kanabawi,champBataille);
-        System.out.println(kanabawi.getPlace());
-        leader.transferCharacter(kanabawi,village);
-        System.out.println(kanabawi.getPlace());
-        System.out.println(serializer.deserialize(champBataille.getName()));
+        InvasionTheatre theatre = new InvasionTheatre();
+
+        // Exemple : 5 zones, 20 personnages, dure 30 secondes max
+        theatre.invasionTheatre(5, 20, 30);
 
     }
 
