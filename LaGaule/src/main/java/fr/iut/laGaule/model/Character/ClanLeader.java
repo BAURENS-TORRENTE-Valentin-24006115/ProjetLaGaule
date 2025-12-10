@@ -349,19 +349,38 @@ public class ClanLeader implements Serializable {
         System.out.println(this.name + " a transféré " + character.getName() +
                          " de " + managedPlace.getName() + " vers " + enclosure.getName());
     }
-    public void transferCharacter(Character character,Place oui) {
-        Serializer serializer =  new Serializer();
-        if(oui.isAllowedCharacter(character)){
-            if(character.getPlace()!=null){
-                Map<String, Object> fi = serializer.deserialize(character.getPlace());
-                fi.remove(character.getName());
-                serializer.serialize(character.getPlace(),fi);
-            }
-            character.setPlace(oui);
-            Map<String, Object> fi2 = serializer.deserialize(oui.getName());
-            fi2.put(character.getName(),character);
-            serializer.serialize(oui.getName(),fi2);
+    public boolean transferCharacter(Character character, Place destination) {
+        if (managedPlace == null || character == null || destination == null) {
+            return false;
         }
+
+        // 1. VÉRIFICATION : Le personnage a-t-il le droit d'entrer ?
+        if (!destination.isAllowedCharacter(character)) {
+            System.out.println("Refusé : " + character.getName() + " n'a pas le droit d'entrer dans " + destination.getName());
+            return false; // On arrête tout ici, le personnage ne bouge pas
+        }
+
+        // 2. VÉRIFICATION : Le personnage est-il bien ici ?
+        if (!managedPlace.getCharacter().contains(character)) {
+            return false;
+        }
+
+        // 3. TRANSFERT EFFECTIF
+        // Retrait de l'ancien lieu
+        synchronized(managedPlace) {
+            managedPlace.removeCharacter(character);
+        }
+
+        // Ajout au nouveau lieu
+        synchronized(destination) {
+            destination.addCharacter(character);
+        }
+
+        // Mise à jour de la référence
+        character.setPlace(destination);
+
+        System.out.println("Succès : " + character.getName() + " transféré vers " + destination.getName());
+        return true;
     }
 
     /**
