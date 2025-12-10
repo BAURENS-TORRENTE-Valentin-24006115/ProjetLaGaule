@@ -59,6 +59,13 @@ mvn javadoc:javadoc
 ```
 La documentation sera générée dans le dossier `Documentation/`.
 
+#### 6. Génération de la couverture de code Jacoco
+```bash
+mvn jacoco:report
+```
+
+La documentation sera générée dans le dossier "LaGaule/target/site"
+
 ---
 
 
