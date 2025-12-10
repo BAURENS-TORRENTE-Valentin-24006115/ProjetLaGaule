@@ -1,10 +1,10 @@
 package fr.iut.laGaule.model.Place;
 
+import fr.iut.laGaule.model.Character.Character;
 import fr.iut.laGaule.model.Character.ClanLeader;
-import fr.iut.laGaule.model.Character.Gaul.Druid;
-import fr.iut.laGaule.model.Character.Gaul.Merchant;
-import fr.iut.laGaule.model.Character.MythicalCreature.Lycanthrope;
-import fr.iut.laGaule.model.Character.Roman.Legionary;
+import fr.iut.laGaule.model.Character.Gaul.Gaul;
+import fr.iut.laGaule.model.Character.Roman.Roman;
+import fr.iut.laGaule.model.Character.MythicalCreature.*;
 import fr.iut.laGaule.model.Consumables.Foods.Foods;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,80 +15,135 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for the GaulVillage class.
- * Tests Gaul village specific functionality including character restrictions.
  */
-public class GaulVillageTest {
+class GaulVillageTest {
 
     private GaulVillage village;
-    private ClanLeader leader;
+    private ArrayList<Character> characters;
+    private ArrayList<Foods> foods;
 
     @BeforeEach
-    public void setUp() {
-        leader = new ClanLeader("Abraracourcix", "M", 50);
-        village = new GaulVillage("Village Gaulois", 1000, leader, 0, new ArrayList<>(), new ArrayList<>());
+    void setUp() {
+        characters = new ArrayList<>();
+        foods = new ArrayList<>();
+        foods.add(Foods.SANGLIER);
+        foods.add(Foods.POISSON_FRAIS);
+        village = new GaulVillage("Village des Irréductibles", 200, null, 0, characters, foods);
     }
 
     @Test
-    public void testGaulVillageCreation() {
-        assertEquals("Village Gaulois", village.getName());
-        assertEquals(1000, village.getArea());
+    void testConstructor() {
+        assertEquals("Village des Irréductibles", village.getName());
+        assertEquals(200, village.getArea());
+        assertNotNull(village.getCharacter());
+        assertNotNull(village.getFood());
+    }
+
+    @Test
+    void testIsAllowedCharacterGaul() {
+        Gaul gaul = new Gaul("Astérix", "M", 1.50, 35, 80, 70);
+        assertTrue(village.isAllowedCharacter(gaul));
+    }
+
+    @Test
+    void testIsAllowedCharacterLycanthrope() {
+        Lycanthrope lycan = new Lycanthrope("Fenrir", "M", 2.0, 100, 90, 85,
+                AgeCategory.ADULT, 5, Rank.BETA, 60);
+        assertTrue(village.isAllowedCharacter(lycan));
+    }
+
+    @Test
+    void testIsAllowedCharacterRoman() {
+        Roman roman = new Roman("Marcus", "M", 1.75, 30, 60, 65);
+        assertFalse(village.isAllowedCharacter(roman));
+    }
+
+    @Test
+    void testAddCharacterGaul() {
+        Gaul gaul = new Gaul("Astérix", "M", 1.50, 35, 80, 70);
+        village.addCharacter(gaul);
+        assertTrue(village.getCharacter().contains(gaul));
+    }
+
+    @Test
+    void testAddCharacterRoman() {
+        Roman roman = new Roman("Marcus", "M", 1.75, 30, 60, 65);
+        int initialSize = village.getCharacter().size();
+        village.addCharacter(roman);
+        // Roman should not be added
+        assertEquals(initialSize, village.getCharacter().size());
+    }
+
+    @Test
+    void testAddCharacterNull() {
+        int initialSize = village.getCharacter().size();
+        village.addCharacter(null);
+        assertEquals(initialSize, village.getCharacter().size());
+    }
+
+    @Test
+    void testConstructorWithMixedCharacters() {
+        ArrayList<Character> mixedChars = new ArrayList<>();
+        mixedChars.add(new Gaul("Astérix", "M", 1.50, 35, 80, 70));
+        mixedChars.add(new Roman("Marcus", "M", 1.75, 30, 60, 65)); // Should be filtered out
+
+        GaulVillage mixedVillage = new GaulVillage("Test Village", 100, null, 0, mixedChars, new ArrayList<>());
+
+        // Only Gaul should be added
+        assertEquals(1, mixedVillage.getCharacter().size());
+    }
+
+    @Test
+    void testSetClanLeader() {
+        ClanLeader leader = new ClanLeader("Abraracourcix", "M", 50);
+        village.setClanLeader(leader);
         assertEquals(leader, village.getClanLeader());
     }
 
     @Test
-    public void testAddGaulCharacter() {
-        Druid druid = new Druid("Panoramix", "M", 1.75, 60, 50, 60);
-        village.addCharacter(druid);
-
-        assertTrue(village.getCharacter().contains(druid));
-        assertEquals(1, village.getNbCharacter());
+    void testConstructorWithNullCharacters() {
+        GaulVillage v = new GaulVillage("Test", 100, null, 0, null, new ArrayList<>());
+        assertNotNull(v.getCharacter());
     }
 
     @Test
-    public void testAddLycanthrope() {
-        Lycanthrope lycanthrope = new Lycanthrope("Fenrir", "M", 1.90, 35, 80, 75);
-        village.addCharacter(lycanthrope);
-
-        assertTrue(village.getCharacter().contains(lycanthrope));
+    void testAddFood() {
+        village.addFood(Foods.MIEL);
+        assertTrue(village.getFood().contains(Foods.MIEL));
     }
 
     @Test
-    public void testAddRomanCharacterIsBlocked() {
-        Legionary roman = new Legionary("Brutus", "M", 1.75, 30, 60, 55);
-        village.addCharacter(roman);
+    void testHealCharacters() {
+        Gaul gaul = new Gaul("Astérix", "M", 1.50, 35, 80, 70);
+        gaul.receiveDamage(40);
+        village.addCharacter(gaul);
 
-        assertFalse(village.getCharacter().contains(roman));
-        assertEquals(0, village.getNbCharacter());
+        village.healCharacters(20);
+        assertEquals(80, gaul.getHealth());
     }
 
     @Test
-    public void testAddNullCharacter() {
-        int initialSize = village.getNbCharacter();
-        village.addCharacter(null);
-        assertEquals(initialSize, village.getNbCharacter());
+    void testFeedCharacters() {
+        Gaul gaul = new Gaul("Astérix", "M", 1.50, 35, 80, 70);
+        village.addCharacter(gaul);
+
+        int initialFoodSize = village.getFood().size();
+        village.feedCharacters();
+        assertEquals(initialFoodSize - 1, village.getFood().size());
     }
 
     @Test
-    public void testConstructorFiltersCharacters() {
-        ArrayList<fr.iut.laGaule.model.Character.Character> characters = new ArrayList<>();
-        characters.add(new Druid("Panoramix", "M", 1.75, 60, 50, 60));
-        characters.add(new Legionary("Brutus", "M", 1.75, 30, 60, 55));
-        characters.add(new Merchant("Unhygienix", "M", 1.70, 45, 40, 50));
-
-        ArrayList<Foods> foods = new ArrayList<>();
-
-        GaulVillage filteredVillage = new GaulVillage("Filtered", 1000, leader, 3, characters, foods);
-
-        // Should only have 2 Gauls, not the Roman
-        assertEquals(2, filteredVillage.getCharacter().size());
+    void testAddLycanthrope() {
+        Lycanthrope lycan = new Lycanthrope("Fenrir", "M", 2.0, 100, 90, 85,
+                AgeCategory.ADULT, 5, Rank.BETA, 60);
+        village.addCharacter(lycan);
+        assertTrue(village.getCharacter().contains(lycan));
     }
 
     @Test
-    public void testAddMultipleGauls() {
-        village.addCharacter(new Druid("Panoramix", "M", 1.75, 60, 50, 60));
-        village.addCharacter(new Merchant("Unhygienix", "M", 1.70, 45, 40, 50));
-
-        assertEquals(2, village.getNbCharacter());
+    void testToString() {
+        String result = village.toString();
+        assertNotNull(result);
+        assertTrue(result.contains("Superficie"));
     }
 }
-

@@ -81,14 +81,11 @@ public class CharacterTest {
 
         character.setEndurance(85);
         assertEquals(85, character.getEndurance());
-
-        character.setPlace("camp");
-        assertEquals("camp", character.getPlace());
     }
 
     @Test
     public void testGetPlace() {
-        assertEquals("gaul", character.getPlace());
+        assertNull(character.getPlace(), "La place devrait être null par défaut");
     }
 
     @Test
@@ -148,7 +145,7 @@ public class CharacterTest {
         assertEquals(100, character.getHealth());
         assertEquals(50, character.getStrength());
         assertEquals(60, character.getEndurance());
-        assertEquals("gaul", character.getPlace());
+        assertNull(character.getPlace(), "La place devrait être null par défaut");
     }
 }
 

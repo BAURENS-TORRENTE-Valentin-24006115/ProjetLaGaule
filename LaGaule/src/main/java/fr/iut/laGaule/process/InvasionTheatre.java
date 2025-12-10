@@ -13,6 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Main class managing the invasion simulation.
+ * It configures the locations, the characters, and controls the progress of the simulation.
+ */
 public class InvasionTheatre {
 
     private List<Place> places;

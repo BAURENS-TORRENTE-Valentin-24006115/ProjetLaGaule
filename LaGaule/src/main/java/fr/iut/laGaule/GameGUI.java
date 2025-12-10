@@ -16,6 +16,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Main GUI class for the La Gaule game simulation.
+ * Provides an interface for managing places and characters,
+ * including recruitment, healing, feeding, potion use,
+ * transferring characters between places, and recalling troops.
+ */
 public class GameGUI extends JFrame {
 
     private InvasionTheatre engine;

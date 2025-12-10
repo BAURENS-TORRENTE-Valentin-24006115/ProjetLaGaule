@@ -389,6 +389,11 @@ public class Lycanthrope extends Character {
      * @return true if the domination was successful, false otherwise
      */
     public boolean dominate(Lycanthrope target) {
+        if (target == null) {
+            System.out.println(name + " cannot dominate a null target.");
+            return false;
+        }
+
         if (target == this) {
             System.out.println(name + " cannot dominate itself!");
             return false;
@@ -516,6 +521,11 @@ public class Lycanthrope extends Character {
      * @param superior the lycanthrope to submit to
      */
     public void submitTo(Lycanthrope superior) {
+        if (superior == null) {
+            System.out.println(name + " cannot submit to a null superior.");
+            return;
+        }
+
         if (superior == this) {
             return;
         }
@@ -547,6 +557,11 @@ public class Lycanthrope extends Character {
      * @param target the target of aggression
      */
     public void showAggression(Lycanthrope target) {
+        if (target == null) {
+            System.out.println(name + " cannot show aggression to a null target.");
+            return;
+        }
+
         System.out.println(name + " shows aggression towards " + target.getName() + "!");
         System.out.println(name + " growls menacingly...");
 
