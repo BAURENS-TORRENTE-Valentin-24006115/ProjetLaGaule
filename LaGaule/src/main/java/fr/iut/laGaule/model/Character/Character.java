@@ -3,6 +3,9 @@ package fr.iut.laGaule.model.Character;
 import fr.iut.laGaule.model.Consumables.Foods.Foods;
 import fr.iut.laGaule.model.Place.Place;
 
+import fr.iut.laGaule.model.Character.Gaul.Gaul;
+import fr.iut.laGaule.model.Character.Roman.Roman;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -25,7 +28,9 @@ public abstract class Character implements Serializable {
     protected int belligerence; 
     protected int magicPotionLevel;
     private Object ArrayList;
-    protected Place place = new Place("defaltzone", 500, null,12);
+    protected Place place = null;
+    protected String lastAction = "En attente";
+    private Foods lastFoodEaten;
 
 
     /**
@@ -46,7 +51,8 @@ public abstract class Character implements Serializable {
         this.age = age;
         this.strength = strength;
         this.endurance = endurance;
-        
+        Foods lastFoodEaten = null;
+
         // Default values
         this.health = 100;
         this.hunger = 100;
@@ -96,10 +102,73 @@ public abstract class Character implements Serializable {
      *
      * @param food the food item to consume
      */
-    public void eat(Foods food) {
-        this.hunger += 10;
+    /**
+     * @return true si la nourriture a été consommée, false si elle a été refusée.
+     */
+    public boolean eat(Foods food) {
+        if (food == null) return false;
+
+        // --- 1. FILTRE : EST-CE QUE JE PEUX MANGER ÇA ? ---
+        boolean canEat = false;
+
+        // Pourri ou Légume ? OK (Risque de maladie)
+        if (food == Foods.POISSON_NON_FRAIS || food == Foods.TREFLE_QUATRE_FEUILLES_PAS_FRAIS || food.isVegetarian()) {
+            canEat = true;
+        }
+        // Comestible et Ami ? OK
+        else if (food.isComestible()) {
+            if (this instanceof Gaul && food.isGallicFriendly()) canEat = true;
+            else if (this instanceof Roman && food.isRomanFriendly()) canEat = true;
+        }
+
+        // REFUS
+        if (!canEat) {
+            setLastAction("Refuse de manger : " + food.getName() + " ✋");
+            // IMPORTANT : On retourne false, donc l'interface saura qu'il ne faut pas supprimer l'item
+            return false;
+        }
+
+        // --- 2. DÉROULEMENT DU REPAS (Si on arrive ici, c'est qu'on mange) ---
+
+        StringBuilder feedback = new StringBuilder();
+        feedback.append("Mange ").append(food.getName());
+
+        int healthChange = 0;
+        int hungerGain = 20;
+
+        // Logique Maladie / Légumes / Bonus (Identique à avant...)
+        if (food == Foods.POISSON_NON_FRAIS || food == Foods.TREFLE_QUATRE_FEUILLES_PAS_FRAIS) {
+            healthChange -= 20; hungerGain = 5; feedback.append(" (🤢 Pas frais !)");
+        }
+
+        if (food.isVegetarian()) {
+            if (lastFoodEaten != null && lastFoodEaten.isVegetarian()) {
+                healthChange -= 10; feedback.append(" (🤢 Trop de légumes !)");
+            }
+        }
+
+        boolean lovesIt = (this instanceof Gaul && food.isGallicFriendly()) || (this instanceof Roman && food.isRomanFriendly());
+        if (lovesIt && healthChange >= 0) {
+            healthChange += 5; feedback.append(" (Délicieux !)");
+        }
+
+        // Application Stats
+        this.hunger += hungerGain;
         if (this.hunger > 100) this.hunger = 100;
-        System.out.println(this.name + " eat some food! Hunger: " + this.hunger);
+
+        this.health += healthChange;
+        if (this.health > 100) this.health = 100;
+        if (this.health < 0) this.health = 0;
+
+        this.lastFoodEaten = food;
+        setLastAction(feedback.toString());
+
+        if (this.health == 0) {
+            die();
+            setLastAction("Est mort d'intoxication ☠️");
+        }
+
+        return true; // SUCCÈS : La nourriture a été consommée
     }
 
     /**
@@ -123,6 +192,17 @@ public abstract class Character implements Serializable {
      * @return the sex of the character
      */
     public String getSex() { return sex; }
+
+    public String getLastAction() {
+        return lastAction;
+    }
+
+    public void setLastAction(String lastAction) {
+        this.lastAction = lastAction;
+    }
+
+
+
 
     /**
      * Gets the character's endurance.
@@ -172,4 +252,8 @@ public abstract class Character implements Serializable {
      * @return the name of the current location
      */
     public String getPlace() { return place.getName(); }
+
+    public Place getPlaceData() { return this.place; }
+
+    public int getHunger() { return hunger; }
 }

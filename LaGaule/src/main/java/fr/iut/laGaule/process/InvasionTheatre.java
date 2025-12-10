@@ -1,8 +1,9 @@
 package fr.iut.laGaule.process;
 
+import fr.iut.laGaule.model.Consumables.Foods.Foods;
 import fr.iut.laGaule.process.CharacterThread;
 import fr.iut.laGaule.model.Character.Character;
-import fr.iut.laGaule.model.Character.ClanLeader; // Import du Chef
+import fr.iut.laGaule.model.Character.ClanLeader;
 import fr.iut.laGaule.model.Character.Gaul.*;
 import fr.iut.laGaule.model.Character.Roman.*;
 import fr.iut.laGaule.model.Place.*;
@@ -14,11 +15,13 @@ import java.util.Random;
 
 public class InvasionTheatre {
 
-    // Attributs de classe pour stocker l'état du jeu (accessibles par le GUI)
     private List<Place> places;
     private List<CharacterThread> runnables;
     private List<Thread> activeThreads;
-    private volatile boolean simulationActive; // volatile car modifié par un thread et lu par un autre
+    private volatile boolean simulationActive;
+    private long startTime;
+    private int durationSeconds;
+    private String endMessage = "";
 
     public InvasionTheatre() {
         this.places = new ArrayList<>();
@@ -27,230 +30,171 @@ public class InvasionTheatre {
         this.simulationActive = false;
     }
 
-    // --- Getters pour l'interface graphique ---
     public List<Place> getPlaces() { return places; }
     public boolean isSimulationActive() { return simulationActive; }
-    // ------------------------------------------
+    public String getEndMessage() { return endMessage; }
 
-    /**
-     * Supprime les anciennes sauvegardes.
-     */
-    private void deleteSaveFiles() {
-        System.out.println("--- Nettoyage des anciennes sauvegardes (.ser) ---");
-        File currentDir = new File(".");
-        File[] files = currentDir.listFiles((dir, name) -> name.endsWith(".ser"));
-        if (files != null) {
-            for (File file : files) file.delete();
-        }
+    public int getRemainingTime() {
+        if (!simulationActive) return 0;
+        long elapsed = (System.currentTimeMillis() - startTime) / 1000;
+        return (int) Math.max(0, durationSeconds - elapsed);
     }
 
-    /**
-     * ÉTAPE 1 : Configuration de la simulation (Création des lieux et des persos).
-     * Cette méthode ne lance PAS encore le temps.
-     */
+    public int getTotalPopulation() {
+        return (int) runnables.stream()
+                .map(CharacterThread::getCharacter)
+                .filter(c -> c.getHealth() > 0)
+                .count();
+    }
+
+    private void deleteSaveFiles() {
+        File currentDir = new File(".");
+        File[] files = currentDir.listFiles((dir, name) -> name.endsWith(".ser"));
+        if (files != null) for (File f : files) f.delete();
+    }
+
     public void setupSimulation(int nbZones, int nbCharacters) {
+        stopSimulation();
         deleteSaveFiles();
 
-        // Réinitialisation des listes
         places.clear();
         runnables.clear();
         activeThreads.clear();
 
-        if (nbZones < 3) {
-            System.err.println("Erreur: Il faut au moins 3 zones.");
-            return;
-        }
+        if (nbZones < 3) nbZones = 3; // Sécurité minimum
 
-        System.out.println("=== PRÉPARATION DU THÉÂTRE D'ENVAHISSEMENT ===");
         Random rand = new Random();
 
-        // --- A. Création des 3 Lieux Obligatoires et des Chefs Principaux ---
+        // --- 1. CRÉATION DES LIEUX ---
 
-        // 1. Village Gaulois + Chef
-        GaulVillage village = new GaulVillage("Village des Irréductibles", 200, null, 0, new ArrayList<>(), new ArrayList<>());
-        ClanLeader chefGaulois = new ClanLeader("Abraracourcix", "M", 50, village);
-        village.setClanLeader(chefGaulois);
+        // A. Village Gaulois
+        GaulVillage village = new GaulVillage("Village Gaulois", 200, null, 0, new ArrayList<>(), new ArrayList<>());
+        village.setClanLeader(new ClanLeader("Abraracourcix", "M", 50, village));
+        // Stock nourriture
+        village.setFood(Foods.SANGLIER.getRandomFoods(rand.nextInt(20, 50)));
         places.add(village);
 
-        // 2. Camp Romain + Chef
-        RomanFortifiedCamp camp = new RomanFortifiedCamp("Camp de Babaorum", 200, null, 0, new ArrayList<>(), new ArrayList<>());
-        ClanLeader chefRomain = new ClanLeader("Jules César", "M", 55, camp);
-        camp.setClanLeader(chefRomain);
+        // B. Camp Romain
+        RomanFortifiedCamp camp = new RomanFortifiedCamp("Camp Romain", 200, null, 0, new ArrayList<>(), new ArrayList<>());
+        camp.setClanLeader(new ClanLeader("César", "M", 50, camp));
+        // Stock nourriture
+        camp.setFood(Foods.VIN.getRandomFoods(rand.nextInt(20, 50)));
         places.add(camp);
 
-        // 3. Champ de Bataille (Pas de chef)
-        BattleFields battlefield = new BattleFields("Grande Plaine", 1000, null, 0, new ArrayList<>(), new ArrayList<>());
-        places.add(battlefield);
+        // C. Champ de Bataille
+        places.add(new BattleFields("Champ de Bataille", 1000, null, 0, new ArrayList<>(), new ArrayList<>()));
 
-        // --- B. Création des Lieux Supplémentaires ---
+        // D. Lieux Supplémentaires (C'EST ICI QUE CELA MANQUAIT)
         for (int i = 3; i < nbZones; i++) {
             Place p = null;
-            String nom = "Zone " + (i - 2);
-            int typeLieu = rand.nextInt(5);
+            String n = "Zone " + (i - 2);
+            int type = rand.nextInt(5);
 
-            switch (typeLieu) {
-                case 0:
-                    p = new BattleFields("Maquis de " + nom, 500, null, 0, new ArrayList<>(), new ArrayList<>());
-                    break;
-                case 1:
-                    p = new GalloRomanVillage("Bourgade " + nom, 150, null, 0, new ArrayList<>(), new ArrayList<>());
-                    break;
-                case 2:
-                    p = new GaulVillage("Hameau " + nom, 100, null, 0, new ArrayList<>(), new ArrayList<>());
-                    // Ajout d'un chef pour ce nouveau village
-                    p.setClanLeader(new ClanLeader("Chef Hameau " + i, "M", 40, p));
-                    break;
-                case 3:
-                    p = new RomanCity("Civitas " + nom, 300, null, 0, new ArrayList<>(), new ArrayList<>());
-                    break;
-                case 4:
-                    p = new RomanFortifiedCamp("Fort " + nom, 150, null, 0, new ArrayList<>(), new ArrayList<>());
-                    // Ajout d'un chef pour ce nouveau camp
-                    p.setClanLeader(new ClanLeader("Centurion " + i, "M", 35, p));
-                    break;
+            switch(type) {
+                case 0: p = new BattleFields("Maquis " + n, 500, null, 0, new ArrayList<>(), new ArrayList<>()); break;
+                case 1: p = new GalloRomanVillage("Bourgade " + n, 150, null, 0, new ArrayList<>(), new ArrayList<>()); break;
+                case 2: p = new GaulVillage("Hameau " + n, 100, null, 0, new ArrayList<>(), new ArrayList<>()); break;
+                case 3: p = new RomanCity("Civitas " + n, 300, null, 0, new ArrayList<>(), new ArrayList<>()); break;
+                case 4: p = new RomanFortifiedCamp("Fort " + n, 150, null, 0, new ArrayList<>(), new ArrayList<>()); break;
             }
 
             if (p != null) {
+                // On ajoute un peu de nourriture aléatoire aussi dans les zones sauvages
+                p.setFood(Foods.INGREDIENT_SECRET.getRandomFoods(rand.nextInt(5, 15)));
                 places.add(p);
-                System.out.println("Lieu créé : " + p.getName() + (p.getClanLeader() != null ? " (Chef: " + p.getClanLeader().getName() + ")" : ""));
             }
         }
 
-        // --- C. Création des Personnages ---
-        System.out.println("Création de " + nbCharacters + " personnages...");
+        // --- 2. CRÉATION DES PERSONNAGES ---
+        System.out.println(">>> DÉBUT GÉNÉRATION : " + nbCharacters + " demandés.");
+
         for (int i = 0; i < nbCharacters; i++) {
-            Character c = null;
+            Character c;
             Place startPlace;
+            String suffix = " " + (i + 1);
 
-            double height = 1.50 + (rand.nextDouble() * 0.50);
-            int age = 18 + rand.nextInt(50);
-            int strength = 10 + rand.nextInt(20);
-            int endurance = 10 + rand.nextInt(20);
-            boolean isGaulois = rand.nextBoolean();
-            String nameSuffix = " " + i;
-
-            if (isGaulois) {
+            if (rand.nextBoolean()) {
                 startPlace = village;
                 int type = rand.nextInt(5);
-                switch (type) {
-                    case 0: c = new Blacksmith("Forgeron" + nameSuffix, "M", height, age, strength, endurance); break;
-                    case 1: c = new Druid("Druide" + nameSuffix, "M", height, age, strength, endurance); break;
-                    case 2: c = new Innkeeper("Aubergiste" + nameSuffix, "M", height, age, strength, endurance); break;
-                    case 3: c = new Merchant("Marchand" + nameSuffix, "M", height, age, strength, endurance); break;
-                    default: c = new Gaul("Gaulois" + nameSuffix, "M", height, age, strength, endurance); break;
-                }
+                if (type == 0) c = new Druid("Druide" + suffix, "M", 1.8, 60, 10, 10);
+                else if (type == 1) c = new Blacksmith("Forgeron" + suffix, "M", 1.9, 40, 20, 15);
+                else if (type == 2) c = new Merchant("Marchand" + suffix, "M", 1.6, 35, 10, 10);
+                else if (type == 3) c = new Innkeeper("Aubergiste" + suffix, "M", 1.7, 45, 15, 15);
+                else c = new Gaul("Gaulois" + suffix, "M", 1.75, 25, 12, 12);
             } else {
                 startPlace = camp;
                 int type = rand.nextInt(4);
-                switch (type) {
-                    case 0: c = new General("Général" + nameSuffix, "M", height, age, strength, endurance); break;
-                    case 1: c = new Legionary("Légionnaire" + nameSuffix, "M", height, age, strength, endurance); break;
-                    case 2: c = new Prefect("Préfet" + nameSuffix, "M", height, age, strength, endurance); break;
-                    default: c = new Roman("Romain" + nameSuffix, "M", height, age, strength, endurance); break;
-                }
+                if (type == 0) c = new General("Général" + suffix, "M", 1.8, 50, 15, 15);
+                else if (type == 1) c = new Prefect("Préfet" + suffix, "M", 1.7, 45, 10, 10);
+                else if (type == 2) c = new Legionary("Légionnaire" + suffix, "M", 1.8, 25, 15, 15);
+                else c = new Roman("Romain" + suffix, "M", 1.75, 20, 12, 12);
             }
 
-            if (c != null) {
-                startPlace.addCharacter(c);
-                c.setPlace(startPlace);
+            // Force la santé au max
+            if (c.getHealth() <= 0) c.heal(100);
 
-                // IMPORTANT : On passe 'places' au thread pour qu'il puisse se déplacer
-                CharacterThread runnable = new CharacterThread(c);
-                runnables.add(runnable);
-
-                Thread t = new Thread(runnable);
-                activeThreads.add(t);
+            // Ajout au lieu
+            startPlace.addCharacter(c);
+            if (!startPlace.getCharacter().contains(c)) {
+                startPlace.getCharacter().add(c); // Force add si bug
             }
+
+            c.setPlace(startPlace);
+            c.setLastAction("Vient d'arriver");
+
+            CharacterThread runnable = new CharacterThread(c);
+            runnables.add(runnable);
+            activeThreads.add(new Thread(runnable));
         }
+        System.out.println(">>> FIN GÉNÉRATION : " + runnables.size() + " créés.");
     }
 
-    /**
-     * ÉTAPE 2 : Lancement de la simulation en arrière-plan.
-     */
     public void startSimulationInBackground(int durationSeconds) {
-        if (activeThreads.isEmpty()) {
-            System.out.println("Aucune simulation configurée. Lancez setupSimulation d'abord.");
-            return;
-        }
+        if (activeThreads.isEmpty()) return;
+        this.durationSeconds = durationSeconds;
+        this.simulationActive = true;
+        this.endMessage = "";
 
-        simulationActive = true;
+        for (Thread t : activeThreads) t.start();
 
-        // 1. Démarrer les threads de personnages
-        for (Thread t : activeThreads) {
-            t.start();
-        }
-
-        // 2. Lancer le thread de supervision (Timer & Conditions de victoire)
-        // On utilise un Thread à part pour ne pas bloquer l'interface graphique
         new Thread(() -> {
-            System.out.println("--- Simulation lancée pour " + durationSeconds + " secondes ---");
-            long startTime = System.currentTimeMillis();
+            this.startTime = System.currentTimeMillis();
             long maxDurationMs = durationSeconds * 1000L;
 
             while (simulationActive) {
                 try {
-                    Thread.sleep(1000); // Pause 1 seconde
+                    Thread.sleep(1000);
 
-                    // Vérification Temps
-                    long elapsedTime = System.currentTimeMillis() - startTime;
-                    if (elapsedTime > maxDurationMs) {
-                        System.out.println(">>> FIN: Temps écoulé !");
+                    if (System.currentTimeMillis() - startTime > maxDurationMs) {
+                        endMessage = "TEMPS ÉCOULÉ - ÉGALITÉ";
                         simulationActive = false;
                     }
 
-                    // Vérification Survivants
-                    long gauloisVivant = countSurvivors("Gaulois")
-                            + countSurvivors("Forgeron") + countSurvivors("Druide")
-                            + countSurvivors("Aubergiste") + countSurvivors("Marchand");
+                    long nbGaul = countSurvivorsByType(Gaul.class);
+                    long nbRom = countSurvivorsByType(Roman.class);
 
-                    long romainsVivant = countSurvivors("Romain")
-                            + countSurvivors("Général") + countSurvivors("Légionnaire")
-                            + countSurvivors("Préfet");
+                    if (nbGaul == 0 && nbRom > 0) { endMessage = "VICTOIRE ROMAINE !"; simulationActive = false; }
+                    else if (nbRom == 0 && nbGaul > 0) { endMessage = "VICTOIRE GAULOISE !"; simulationActive = false; }
+                    else if (nbRom == 0 && nbGaul == 0) { endMessage = "DESTRUCTION TOTALE"; simulationActive = false; }
 
-                    // Logs console (optionnel, car le GUI affichera les infos)
-                    // System.out.println("[MOTEUR] G:" + gauloisVivant + " vs R:" + romainsVivant);
-
-                    if (gauloisVivant == 0 || romainsVivant == 0) {
-                        System.out.println(">>> FIN: Victoire par élimination !");
-                        simulationActive = false;
-                    }
-
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                } catch (InterruptedException e) { e.printStackTrace(); }
             }
-
-            // Une fois la boucle finie, on arrête tout proprement
             stopSimulation();
-
         }).start();
     }
 
-    /**
-     * Arrêt manuel ou automatique de la simulation.
-     */
     public void stopSimulation() {
         System.out.println("Arrêt de la simulation...");
         simulationActive = false;
-
-        // Arrêt logique des runnables
-        for (CharacterThread runnable : runnables) {
-            runnable.stopSimulation();
-        }
-
-        // Interruption physique des threads
-        for (Thread t : activeThreads) {
-            if (t.isAlive()) {
-                t.interrupt();
-            }
-        }
+        for (CharacterThread r : runnables) r.stopSimulation();
+        for (Thread t : activeThreads) if (t.isAlive()) t.interrupt();
     }
 
-    private long countSurvivors(String nameStart) {
+    private long countSurvivorsByType(Class<?> type) {
         return runnables.stream()
                 .map(CharacterThread::getCharacter)
                 .filter(c -> c.getHealth() > 0)
-                .filter(c -> c.getName().startsWith(nameStart))
+                .filter(type::isInstance)
                 .count();
     }
 }
