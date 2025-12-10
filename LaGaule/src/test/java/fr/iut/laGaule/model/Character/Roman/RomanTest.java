@@ -34,7 +34,7 @@ public class RomanTest {
 
     @Test
     public void testRomanProperties() {
-        assertNull(roman.getPlace(), "La place devrait être null par défaut");
+        assertNull(roman.getPlaceData(), "La place devrait être null par défaut");
     }
 
     @Test

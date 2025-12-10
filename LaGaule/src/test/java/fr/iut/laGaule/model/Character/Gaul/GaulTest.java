@@ -40,7 +40,7 @@ public class GaulTest {
 
     @Test
     public void testGaulProperties() {
-        assertNull(gaul.getPlace(), "La place devrait être null par défaut");
+        assertNull(gaul.getPlaceData(), "La place devrait être null par défaut");
     }
 
     @Test

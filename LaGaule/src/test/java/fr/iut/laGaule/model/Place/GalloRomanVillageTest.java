@@ -53,7 +53,7 @@ public class GalloRomanVillageTest {
     @Test
     public void testIsAllowedCharacterLycanthrope() {
         Lycanthrope lycan = new Lycanthrope("Fenrir", "M", 1.9, 35, 80, 75,
-                AgeCategory.ADULT, 5, Rank.BETA, 60, originGaul);
+                AgeCategory.ADULT, 5, Rank.BETA, 60, true);
         // Lycanthrope is not a Gaul or Roman
         assertFalse(village.isAllowedCharacter(lycan));
     }
@@ -75,7 +75,7 @@ public class GalloRomanVillageTest {
     @Test
     public void testAddCharacterLycanthrope() {
         Lycanthrope lycan = new Lycanthrope("Fenrir", "M", 1.9, 35, 80, 75,
-                AgeCategory.ADULT, 5, Rank.BETA, 60, originGaul);
+                AgeCategory.ADULT, 5, Rank.BETA, 60, true);
         int initialSize = village.getCharacter().size();
         village.addCharacter(lycan);
         // Lycanthrope should not be added
@@ -95,7 +95,7 @@ public class GalloRomanVillageTest {
         Gaul gaul = new Druid("Panoramix", "M", 1.75, 60, 50, 60);
         Roman roman = new Legionary("Brutus", "M", 1.75, 30, 60, 55);
         Lycanthrope lycan = new Lycanthrope("Fenrir", "M", 1.9, 35, 80, 75,
-                AgeCategory.ADULT, 5, Rank.BETA, 60, originGaul);
+                AgeCategory.ADULT, 5, Rank.BETA, 60, true);
         mixedChars.add(gaul);
         mixedChars.add(roman);
         mixedChars.add(lycan);

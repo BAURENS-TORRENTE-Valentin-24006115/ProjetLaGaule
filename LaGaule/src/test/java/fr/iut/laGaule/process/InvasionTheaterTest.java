@@ -58,7 +58,7 @@ public class InvasionTheaterTest {
 
         List<Place> places = invasionTheatre.getPlaces();
         assertNotNull(places);
-        assertEquals(3, places.size());
+        assertEquals(4, places.size()); // 4 lieux de base: village, camp, battlefield, enclosure
     }
 
     @Test
@@ -67,17 +67,17 @@ public class InvasionTheaterTest {
 
         List<Place> places = invasionTheatre.getPlaces();
         assertNotNull(places);
-        assertEquals(5, places.size());
+        assertEquals(6, places.size()); // 4 base + 2 extra
     }
 
     @Test
     public void testSetupSimulationWithTooFewZones() {
         invasionTheatre.setupSimulation(2, 5);
 
-        // Should not create places if less than 3 zones
+        // Should create minimum 4 places (3 zones forced + enclosure)
         List<Place> places = invasionTheatre.getPlaces();
         assertNotNull(places);
-        assertTrue(places.isEmpty());
+        assertFalse(places.isEmpty());
     }
 
     @Test
@@ -126,17 +126,17 @@ public class InvasionTheaterTest {
 
         List<Place> places = invasionTheatre.getPlaces();
         assertNotNull(places);
-        assertEquals(3, places.size());
+        assertEquals(4, places.size()); // 4 lieux de base
     }
 
     @Test
     public void testMultipleSetupSimulationCalls() {
         invasionTheatre.setupSimulation(3, 5);
-        assertEquals(3, invasionTheatre.getPlaces().size());
+        assertEquals(4, invasionTheatre.getPlaces().size());
 
         // Second call should reset and create new places
         invasionTheatre.setupSimulation(4, 8);
-        assertEquals(4, invasionTheatre.getPlaces().size());
+        assertEquals(5, invasionTheatre.getPlaces().size()); // 4 base + 1 extra
     }
 
     @Test
@@ -145,7 +145,7 @@ public class InvasionTheaterTest {
 
         List<Place> places = invasionTheatre.getPlaces();
         assertNotNull(places);
-        assertEquals(10, places.size());
+        assertEquals(11, places.size()); // 4 base + 7 extra
     }
 
     @Test

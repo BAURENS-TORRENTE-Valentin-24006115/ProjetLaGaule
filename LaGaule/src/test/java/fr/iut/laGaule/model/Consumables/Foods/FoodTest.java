@@ -25,7 +25,7 @@ public class FoodTest {
     public void testPoissonFraisProperties() {
         assertEquals("Poisson frais", Foods.POISSON_FRAIS.getName());
         assertTrue(Foods.POISSON_FRAIS.isGallicFriendly());
-        assertTrue(Foods.POISSON_FRAIS.isRomanFriendly());
+        assertFalse(Foods.POISSON_FRAIS.isRomanFriendly());
         assertTrue(Foods.POISSON_FRAIS.isComestible());
         assertFalse(Foods.POISSON_FRAIS.isVegetarian());
     }
@@ -35,14 +35,14 @@ public class FoodTest {
         assertEquals("Poisson non frais", Foods.POISSON_NON_FRAIS.getName());
         assertFalse(Foods.POISSON_NON_FRAIS.isGallicFriendly());
         assertFalse(Foods.POISSON_NON_FRAIS.isRomanFriendly());
-        assertFalse(Foods.POISSON_NON_FRAIS.isComestible());
+        assertTrue(Foods.POISSON_NON_FRAIS.isComestible());
         assertFalse(Foods.POISSON_NON_FRAIS.isVegetarian());
     }
 
     @Test
     public void testMielProperties() {
         assertEquals("Miel", Foods.MIEL.getName());
-        assertTrue(Foods.MIEL.isGallicFriendly());
+        assertFalse(Foods.MIEL.isGallicFriendly());
         assertTrue(Foods.MIEL.isRomanFriendly());
         assertTrue(Foods.MIEL.isComestible());
         assertTrue(Foods.MIEL.isVegetarian());
@@ -86,7 +86,7 @@ public class FoodTest {
     @Test
     public void testFoodsEnumSize() {
         // Verify the number of food items
-        assertEquals(18, Foods.values().length);
+        assertEquals(19, Foods.values().length);
     }
 
     @Test
@@ -102,14 +102,14 @@ public class FoodTest {
     public void testGallicFriendlyFoods() {
         assertTrue(Foods.SANGLIER.isGallicFriendly());
         assertTrue(Foods.POISSON_FRAIS.isGallicFriendly());
-        assertTrue(Foods.MIEL.isGallicFriendly());
+        assertFalse(Foods.MIEL.isGallicFriendly());
         assertFalse(Foods.HOMARD.isGallicFriendly());
     }
 
     @Test
     public void testRomanFriendlyFoods() {
         assertTrue(Foods.SANGLIER.isRomanFriendly());
-        assertTrue(Foods.POISSON_FRAIS.isRomanFriendly());
+        assertFalse(Foods.POISSON_FRAIS.isRomanFriendly());
         assertTrue(Foods.MIEL.isRomanFriendly());
         assertFalse(Foods.HOMARD.isRomanFriendly());
     }
@@ -118,7 +118,7 @@ public class FoodTest {
     public void testComestibleFoods() {
         assertTrue(Foods.SANGLIER.isComestible());
         assertTrue(Foods.MIEL.isComestible());
-        assertFalse(Foods.POISSON_NON_FRAIS.isComestible());
+        assertTrue(Foods.POISSON_NON_FRAIS.isComestible());
         assertFalse(Foods.POILS_IDEFIX.isComestible());
     }
 

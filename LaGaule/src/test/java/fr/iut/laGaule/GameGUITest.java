@@ -202,7 +202,7 @@ public class GameGUITest {
             Method setupButtonActions = GameGUI.class.getDeclaredMethod("setupButtonActions");
             Method refreshData = GameGUI.class.getDeclaredMethod("refreshData");
             Method updateCharacterList = GameGUI.class.getDeclaredMethod("updateCharacterList");
-            Method updateDetailsPanel = GameGUI.class.getDeclaredMethod("updateDetailsPanel");
+            Method updateInspector = GameGUI.class.getDeclaredMethod("updateInspector");
             Method checkClanLeaderCapabilities = GameGUI.class.getDeclaredMethod("checkClanLeaderCapabilities");
             Method enableActionButtons = GameGUI.class.getDeclaredMethod("enableActionButtons", boolean.class);
         }, "Toutes les méthodes privées devraient exister");
@@ -268,18 +268,18 @@ public class GameGUITest {
         selectedCharacterField.setAccessible(true);
         selectedCharacterField.set(gameGUI, null);
 
-        // Appeler updateDetailsPanel
-        Method updateDetailsPanel = GameGUI.class.getDeclaredMethod("updateDetailsPanel");
-        updateDetailsPanel.setAccessible(true);
-        updateDetailsPanel.invoke(gameGUI);
+        // Appeler updateInspector
+        Method updateInspector = GameGUI.class.getDeclaredMethod("updateInspector");
+        updateInspector.setAccessible(true);
+        updateInspector.invoke(gameGUI);
 
         // Vérifier que detailsArea affiche le message approprié
         Field detailsAreaField = GameGUI.class.getDeclaredField("detailsArea");
         detailsAreaField.setAccessible(true);
         JTextArea detailsArea = (JTextArea) detailsAreaField.get(gameGUI);
 
-        assertEquals("Aucune sélection.", detailsArea.getText(),
-                "Le message devrait indiquer aucune sélection");
+        assertEquals("", detailsArea.getText(),
+                "Le message devrait être vide quand aucune sélection");
     }
 
     @Test
@@ -387,8 +387,8 @@ public class GameGUITest {
         JLabel infoLabel = (JLabel) infoLabelField.get(gameGUI);
 
         assertNotNull(infoLabel, "infoLabel devrait être initialisé");
-        assertEquals("Simulation en cours...", infoLabel.getText(),
-                "Le texte initial devrait être 'Simulation en cours...'");
+        assertEquals("Chargement...", infoLabel.getText(),
+                "Le texte initial devrait être 'Chargement...'");
     }
 
     @Test

@@ -48,7 +48,7 @@ class GaulVillageTest {
     @Test
     void testIsAllowedCharacterLycanthrope() {
         Lycanthrope lycan = new Lycanthrope("Fenrir", "M", 2.0, 100, 90, 85,
-                AgeCategory.ADULT, 5, Rank.BETA, 60, originGaul);
+                AgeCategory.ADULT, 5, Rank.BETA, 60, true);
         assertTrue(village.isAllowedCharacter(lycan));
     }
 
@@ -135,7 +135,7 @@ class GaulVillageTest {
     @Test
     void testAddLycanthrope() {
         Lycanthrope lycan = new Lycanthrope("Fenrir", "M", 2.0, 100, 90, 85,
-                AgeCategory.ADULT, 5, Rank.BETA, 60, originGaul);
+                AgeCategory.ADULT, 5, Rank.BETA, 60, true);
         village.addCharacter(lycan);
         assertTrue(village.getCharacter().contains(lycan));
     }

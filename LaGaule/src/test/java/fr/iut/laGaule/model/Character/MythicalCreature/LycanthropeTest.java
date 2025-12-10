@@ -19,13 +19,13 @@ public class LycanthropeTest {
     @BeforeEach
     public void setUp() {
         lycanthrope = new Lycanthrope("Fenrir", "M", 1.90, 35, 80, 75,
-                AgeCategory.ADULT, 5, Rank.BETA, 50, originGaul);
+                AgeCategory.ADULT, 5, Rank.BETA, 50, true);
 
         alphaMale = new Lycanthrope("Alpha", "male", 1.95, 40, 90, 85,
-                AgeCategory.ADULT, 20, Rank.ALPHA, 60, originGaul);
+                AgeCategory.ADULT, 20, Rank.ALPHA, 60, true);
 
         betaFemale = new Lycanthrope("Beta", "female", 1.75, 30, 70, 70,
-                AgeCategory.ADULT, 10, Rank.BETA, 40, originGaul);
+                AgeCategory.ADULT, 10, Rank.BETA, 40, true);
 
         pack = new Pack("TestPack");
     }
@@ -39,7 +39,7 @@ public class LycanthropeTest {
 
     @Test
     public void testLycanthropeProperties() {
-        assertNull(lycanthrope.getPlace(), "La place devrait être null par défaut");
+        assertNull(lycanthrope.getPlaceData(), "La place devrait être null par défaut");
     }
 
     @Test
@@ -193,14 +193,14 @@ public class LycanthropeTest {
     @Test
     public void testYoungLycanthrope() {
         Lycanthrope young = new Lycanthrope("Young", "M", 1.50, 5, 40, 35,
-                AgeCategory.YOUNG, 0, Rank.OMEGA, 30, originGaul);
+                AgeCategory.YOUNG, 0, Rank.OMEGA, 30, true);
         assertEquals(AgeCategory.YOUNG, young.getAgeCategory());
     }
 
     @Test
     public void testOldLycanthrope() {
         Lycanthrope old = new Lycanthrope("Elder", "M", 1.80, 80, 60, 50,
-                AgeCategory.OLD, 15, Rank.ALPHA, 20, originGaul);
+                AgeCategory.OLD, 15, Rank.ALPHA, 20, true);
         assertEquals(AgeCategory.OLD, old.getAgeCategory());
     }
 

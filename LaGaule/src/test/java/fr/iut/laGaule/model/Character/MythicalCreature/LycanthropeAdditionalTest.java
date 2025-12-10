@@ -19,9 +19,9 @@ class LycanthropeAdditionalTest {
     @BeforeEach
     void setUp() {
         lycanthrope = new Lycanthrope("Fenrir", "M", 1.9, 35, 80, 75,
-                AgeCategory.ADULT, 5, Rank.BETA, 50, originGaul);
+                AgeCategory.ADULT, 5, Rank.BETA, 50, true);
         targetLycanthrope = new Lycanthrope("Target", "F", 1.7, 30, 60, 65,
-                AgeCategory.ADULT, 0, Rank.OMEGA, 30, originGaul);
+                AgeCategory.ADULT, 0, Rank.OMEGA, 30, true);
         pack = new Pack("TestPack");
     }
 
@@ -165,7 +165,7 @@ class LycanthropeAdditionalTest {
         // On simule plusieurs transformations pour couvrir les cas Gaul et Roman
         for (int i = 0; i < 10; i++) {
             Lycanthrope testLycan = new Lycanthrope("Test" + i, "M", 1.8, 30, 100, 100,
-                    AgeCategory.ADULT, 100, Rank.ALPHA, 100, originGaul);
+                    AgeCategory.ADULT, 100, Rank.ALPHA, 100, true);
             // Forcer une transformation avec haute probabilité
             testLycan.transformToHuman();
         }
@@ -350,11 +350,11 @@ class LycanthropeAdditionalTest {
     @DisplayName("Test calculateLevel avec différentes catégories d'âge")
     void testCalculateLevelDifferentAgeCategories() {
         Lycanthrope young = new Lycanthrope("Young", "M", 1.6, 10, 50, 50,
-                AgeCategory.YOUNG, 0, Rank.OMEGA, 10, originGaul);
+                AgeCategory.YOUNG, 0, Rank.OMEGA, 10, true);
         Lycanthrope adult = new Lycanthrope("Adult", "M", 1.8, 30, 50, 50,
-                AgeCategory.ADULT, 0, Rank.OMEGA, 10, originGaul);
+                AgeCategory.ADULT, 0, Rank.OMEGA, 10, true);
         Lycanthrope old = new Lycanthrope("Old", "M", 1.7, 60, 50, 50,
-                AgeCategory.OLD, 0, Rank.OMEGA, 10, originGaul);
+                AgeCategory.OLD, 0, Rank.OMEGA, 10, true);
 
         // Les niveaux devraient être différents
         int youngLevel = young.getLevel();

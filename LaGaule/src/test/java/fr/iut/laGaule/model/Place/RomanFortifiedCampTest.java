@@ -54,7 +54,7 @@ public class RomanFortifiedCampTest {
     @Test
     public void testIsAllowedCharacterLycanthrope() {
         Lycanthrope lycan = new Lycanthrope("Fenrir", "M", 1.9, 35, 80, 75,
-                AgeCategory.ADULT, 5, Rank.BETA, 60, originGaul);
+                AgeCategory.ADULT, 5, Rank.BETA, 60, true);
         assertTrue(camp.isAllowedCharacter(lycan));
     }
 
@@ -137,7 +137,7 @@ public class RomanFortifiedCampTest {
     @Test
     public void testAddCharacterLycanthrope() {
         Lycanthrope lycan = new Lycanthrope("Fenrir", "M", 1.9, 35, 80, 75,
-                AgeCategory.ADULT, 5, Rank.BETA, 60, originGaul);
+                AgeCategory.ADULT, 5, Rank.BETA, 60, true);
         camp.addCharacter(lycan);
         assertTrue(camp.getCharacter().contains(lycan));
     }

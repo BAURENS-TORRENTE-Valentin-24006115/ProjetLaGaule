@@ -1,11 +1,13 @@
 package fr.iut.laGaule.model.Character.Gaul;
 
 import fr.iut.laGaule.Serializer;
+import fr.iut.laGaule.model.Place.GaulVillage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,23 +21,26 @@ public class InnkeeperTest {
 
     private Innkeeper innkeeper;
     private Serializer serializer;
+    private GaulVillage village;
 
     @BeforeEach
     public void setUp() {
         innkeeper = new Innkeeper("Ordralfabetix", "M", 1.75, 50, 45, 55);
         serializer = new Serializer();
+        village = new GaulVillage("Village Gaulois", 200, null, 0, new ArrayList<>(), new ArrayList<>());
+        innkeeper.setPlace(village);
 
         // Setup test data
         Map<String, Object> map = new HashMap<>();
         Druid druid = new Druid("TestDruid", "M", 1.75, 60, 50, 60);
         map.put("druid", druid);
-        serializer.serialize("gaul", map);
+        serializer.serialize("Village Gaulois", map);
     }
 
     @AfterEach
     public void tearDown() {
         // Clean up test files
-        File testFile = new File("gaul.ser");
+        File testFile = new File("Village Gaulois.ser");
         if (testFile.exists()) {
             testFile.delete();
         }
@@ -59,7 +64,7 @@ public class InnkeeperTest {
         // Work should complete without exception
         innkeeper.work();
         // Verify the serialized data still exists
-        Map<String, Object> map = serializer.deserialize("gaul");
+        Map<String, Object> map = serializer.deserialize("Village Gaulois");
         assertNotNull(map);
         assertTrue(map.containsKey("druid"));
     }
@@ -67,7 +72,7 @@ public class InnkeeperTest {
     @Test
     public void testWorkWithEmptyData() {
         // Delete the file to create empty condition
-        File testFile = new File("gaul.ser");
+        File testFile = new File("Village Gaulois.ser");
         testFile.delete();
 
         // Should handle gracefully without throwing exception
@@ -85,7 +90,7 @@ public class InnkeeperTest {
         Map<String, Object> map = new HashMap<>();
         map.put("string", "not a gaul");
         map.put("number", 42);
-        serializer.serialize("gaul", map);
+        serializer.serialize("Village Gaulois", map);
 
         // Should handle gracefully
         assertDoesNotThrow(() -> innkeeper.work());
@@ -97,7 +102,7 @@ public class InnkeeperTest {
         innkeeper.work();
 
         // Verify the serialized data still exists
-        Map<String, Object> map = serializer.deserialize("gaul");
+        Map<String, Object> map = serializer.deserialize("Village Gaulois");
         assertNotNull(map);
         assertTrue(map.containsKey("druid"));
     }

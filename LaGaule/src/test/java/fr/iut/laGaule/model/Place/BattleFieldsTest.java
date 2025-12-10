@@ -51,7 +51,7 @@ class BattleFieldsTest {
     @Test
     void testIsAllowedCharacterLycanthrope() {
         Lycanthrope lycan = new Lycanthrope("Fenrir", "M", 2.0, 100, 90, 85,
-                AgeCategory.ADULT, 5, Rank.BETA, 60, originGaul);
+                AgeCategory.ADULT, 5, Rank.BETA, 60, true);
         assertTrue(battlefield.isAllowedCharacter(lycan));
     }
 
@@ -132,7 +132,7 @@ class BattleFieldsTest {
     @Test
     void testAddLycanthrope() {
         Lycanthrope lycan = new Lycanthrope("Fenrir", "M", 2.0, 100, 90, 85,
-                AgeCategory.ADULT, 5, Rank.BETA, 60, originGaul);
+                AgeCategory.ADULT, 5, Rank.BETA, 60, true);
         battlefield.addCharacter(lycan);
         assertTrue(battlefield.getCharacter().contains(lycan));
     }

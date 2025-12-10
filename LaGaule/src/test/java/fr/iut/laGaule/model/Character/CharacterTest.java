@@ -85,7 +85,7 @@ public class CharacterTest {
 
     @Test
     public void testGetPlace() {
-        assertNull(character.getPlace(), "La place devrait être null par défaut");
+        assertNull(character.getPlaceData(), "La place devrait être null par défaut");
     }
 
     @Test
@@ -145,7 +145,7 @@ public class CharacterTest {
         assertEquals(100, character.getHealth());
         assertEquals(50, character.getStrength());
         assertEquals(60, character.getEndurance());
-        assertNull(character.getPlace(), "La place devrait être null par défaut");
+        assertNull(character.getPlaceData(), "La place devrait être null par défaut");
     }
 }
 

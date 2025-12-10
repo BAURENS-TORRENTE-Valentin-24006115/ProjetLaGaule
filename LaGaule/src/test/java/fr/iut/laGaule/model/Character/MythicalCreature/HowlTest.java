@@ -15,7 +15,7 @@ public class HowlTest {
         Lycanthrope lycan = new Lycanthrope(
                 "Wolf", "male", 1.8, 25, 15, 14,
                 AgeCategory.ADULT, 5, Rank.ALPHA, 8,
-                originGaul);
+                true);
 
         // Create a howl
         Howl howl = new Howl(lycan, HowlType.DOMINATION);
@@ -35,12 +35,12 @@ public class HowlTest {
         Lycanthrope alphaMale = new Lycanthrope(
                 "Alpha", "male", 1.9, 30, 18, 16,
                 AgeCategory.ADULT, 10, Rank.ALPHA, 10,
-                originGaul);
+                true);
 
         Lycanthrope betaMember = new Lycanthrope(
                 "Beta", "male", 1.8, 25, 15, 14,
                 AgeCategory.ADULT, 5, Rank.BETA, 8,
-                originGaul);
+                true);
 
         // Add members to pack
         pack.addMember(alphaMale);
@@ -59,7 +59,7 @@ public class HowlTest {
         Lycanthrope lycan = new Lycanthrope(
                 "Dominant", "female", 1.7, 28, 16, 15,
                 AgeCategory.ADULT, 8, Rank.ALPHA, 9,
-                originGaul);
+                true);
 
         Howl howl = lycan.howlDomination();
 
@@ -73,7 +73,7 @@ public class HowlTest {
         Lycanthrope lycan = new Lycanthrope(
                 "Submissive", "male", 1.6, 22, 12, 13,
                 AgeCategory.YOUNG, 2, Rank.OMEGA, 5,
-                originGaul);
+                true);
 
         Howl howl = lycan.howlSubmission();
 
@@ -87,7 +87,7 @@ public class HowlTest {
         Lycanthrope lycan = new Lycanthrope(
                 "Aggressive", "male", 1.75, 26, 17, 15,
                 AgeCategory.ADULT, 7, Rank.GAMMA, 12,
-                originGaul);
+                true);
 
         Howl howl = lycan.howlAggression();
 
@@ -101,12 +101,12 @@ public class HowlTest {
         Lycanthrope emitter = new Lycanthrope(
                 "Emitter", "male", 1.8, 25, 15, 14,
                 AgeCategory.ADULT, 5, Rank.BETA, 8,
-                originGaul);
+                true);
 
         Lycanthrope listener = new Lycanthrope(
                 "Listener", "female", 1.7, 24, 14, 13,
                 AgeCategory.ADULT, 4, Rank.GAMMA, 7,
-                originGaul);
+                true);
 
         Howl howl = new Howl(emitter, HowlType.DOMINATION);
 
@@ -125,7 +125,7 @@ public class HowlTest {
         Lycanthrope lycan = new Lycanthrope(
                 "Test Wolf", "male", 1.8, 25, 15, 14,
                 AgeCategory.ADULT, 5, Rank.ALPHA, 8,
-                originGaul);
+                true);
 
         Howl howl = new Howl(lycan, HowlType.PACK_AFFILIATION);
 
