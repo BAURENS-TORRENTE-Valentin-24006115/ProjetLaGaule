@@ -12,6 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Main class managing the invasion simulation.
+ * It configures the locations, the characters, and controls the progress of the simulation.
+ */
 public class InvasionTheatre {
 
     // Attributs de classe pour stocker l'état du jeu (accessibles par le GUI)
@@ -33,7 +37,7 @@ public class InvasionTheatre {
     // ------------------------------------------
 
     /**
-     * Supprime les anciennes sauvegardes.
+     * Delete last saves
      */
     private void deleteSaveFiles() {
         System.out.println("--- Nettoyage des anciennes sauvegardes (.ser) ---");
@@ -45,8 +49,8 @@ public class InvasionTheatre {
     }
 
     /**
-     * ÉTAPE 1 : Configuration de la simulation (Création des lieux et des persos).
-     * Cette méthode ne lance PAS encore le temps.
+     * STEP 1: Setting up the simulation (Creating locations and characters).
+     * This method does NOT start time yet.
      */
     public void setupSimulation(int nbZones, int nbCharacters) {
         deleteSaveFiles();
@@ -165,7 +169,7 @@ public class InvasionTheatre {
     }
 
     /**
-     * ÉTAPE 2 : Lancement de la simulation en arrière-plan.
+     * STEP 2 : Simulation launched in the background.
      */
     public void startSimulationInBackground(int durationSeconds) {
         if (activeThreads.isEmpty()) {
@@ -227,7 +231,7 @@ public class InvasionTheatre {
     }
 
     /**
-     * Arrêt manuel ou automatique de la simulation.
+     * Manual or automatic shutdown of the simulation.
      */
     public void stopSimulation() {
         System.out.println("Arrêt de la simulation...");

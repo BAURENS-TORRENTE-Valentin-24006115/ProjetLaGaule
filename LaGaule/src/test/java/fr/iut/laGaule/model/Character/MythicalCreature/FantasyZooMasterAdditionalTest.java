@@ -11,7 +11,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Tests supplémentaires pour améliorer la couverture de code de la classe FantasyZooMaster.
+ * Additional tests to improve code coverage of the FantasyZooMaster class.
  */
 class FantasyZooMasterAdditionalTest {
 

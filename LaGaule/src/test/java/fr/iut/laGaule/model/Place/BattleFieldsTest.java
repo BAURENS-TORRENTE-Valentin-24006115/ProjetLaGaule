@@ -13,6 +13,9 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the BattleFields class.
+ */
 class BattleFieldsTest {
 
     private BattleFields battlefield;

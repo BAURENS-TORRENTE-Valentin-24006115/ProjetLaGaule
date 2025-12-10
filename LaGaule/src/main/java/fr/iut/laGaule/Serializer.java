@@ -11,7 +11,10 @@ import fr.iut.laGaule.model.Consumables.Foods.Foods;
 import java.io.*;
 import java.util.*;
 
-
+/**
+ * Serializer class for serializing and deserializing game objects.
+ * This class provides methods to save and load game state, including characters and other objects.
+ */
 public class Serializer{
 
     public void serialize(String zoneName, Map<String, Object> map){

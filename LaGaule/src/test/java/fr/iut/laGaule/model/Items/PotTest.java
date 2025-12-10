@@ -8,7 +8,10 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+/**
+ * Unit tests for the Pot class.
+ * Tests potion concoction and effects based on ingredients.
+ */
 class PotTest {
 
     private Pot pot;

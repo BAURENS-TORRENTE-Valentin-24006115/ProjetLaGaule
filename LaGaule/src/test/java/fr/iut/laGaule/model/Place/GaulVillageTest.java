@@ -13,6 +13,9 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the GaulVillage class.
+ */
 class GaulVillageTest {
 
     private GaulVillage village;

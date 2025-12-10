@@ -7,8 +7,8 @@ import org.junit.jupiter.api.DisplayName;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Tests supplémentaires pour améliorer la couverture de code de la classe Pack.
- * Ces tests couvrent les méthodes non testées dans PackTest.java
+ * Additional tests to improve code coverage of the Pack class.
+ * These tests cover methods not tested in PackTest.java
  */
 class PackAdditionalTest {
 

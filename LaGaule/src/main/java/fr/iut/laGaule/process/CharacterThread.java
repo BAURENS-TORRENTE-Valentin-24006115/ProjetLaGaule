@@ -10,6 +10,11 @@ import fr.iut.laGaule.model.Character.Roman.Prefect;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * A thread that simulates the actions of a character in the game.
+ * Each character performs random actions based on their type until they are no longer active.
+ */
+
 public class CharacterThread implements Runnable{
     public Character character;
     private volatile boolean running = true;
