@@ -118,6 +118,13 @@ public abstract class Character implements Serializable {
     public String getName() { return name; }
 
     /**
+     * Gets the character's sex/gender.
+     *
+     * @return the sex of the character
+     */
+    public String getSex() { return sex; }
+
+    /**
      * Gets the character's endurance.
      *
      * @return the endurance attribute

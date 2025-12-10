@@ -309,3 +309,4 @@ public class Place implements Serializable {
         Character.remove(selectedCharacter);
     }
 }
+
