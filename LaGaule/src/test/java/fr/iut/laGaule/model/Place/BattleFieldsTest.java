@@ -1,11 +1,10 @@
 package fr.iut.laGaule.model.Place;
 
+import fr.iut.laGaule.model.Character.Character;
 import fr.iut.laGaule.model.Character.ClanLeader;
-import fr.iut.laGaule.model.Character.Gaul.Druid;
-import fr.iut.laGaule.model.Character.Gaul.Merchant;
-import fr.iut.laGaule.model.Character.MythicalCreature.Lycanthrope;
-import fr.iut.laGaule.model.Character.Roman.General;
-import fr.iut.laGaule.model.Character.Roman.Legionary;
+import fr.iut.laGaule.model.Character.Gaul.Gaul;
+import fr.iut.laGaule.model.Character.Roman.Roman;
+import fr.iut.laGaule.model.Character.MythicalCreature.*;
 import fr.iut.laGaule.model.Consumables.Foods.Foods;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,86 +13,131 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Unit tests for the BattleFields class.
- * Tests battlefield functionality where Gauls, Romans, and Lycanthropes can all be present.
- */
-public class BattleFieldsTest {
+class BattleFieldsTest {
 
     private BattleFields battlefield;
-    private ClanLeader leader;
+    private ArrayList<Character> characters;
+    private ArrayList<Foods> foods;
 
     @BeforeEach
-    public void setUp() {
-        leader = new ClanLeader("Warlord", "M", 40);
-        battlefield = new BattleFields("Alesia", 3000, leader, 0, new ArrayList<>(), new ArrayList<>());
+    void setUp() {
+        characters = new ArrayList<>();
+        foods = new ArrayList<>();
+        battlefield = new BattleFields("Grande Plaine", 1000, null, 0, characters, foods);
     }
 
     @Test
-    public void testBattleFieldsCreation() {
-        assertEquals("Alesia", battlefield.getName());
-        assertEquals(3000, battlefield.getArea());
+    void testConstructor() {
+        assertEquals("Grande Plaine", battlefield.getName());
+        assertEquals(1000, battlefield.getArea());
+        assertNotNull(battlefield.getCharacter());
+    }
+
+    @Test
+    void testIsAllowedCharacterGaul() {
+        Gaul gaul = new Gaul("Astérix", "M", 1.50, 35, 80, 70);
+        assertTrue(battlefield.isAllowedCharacter(gaul));
+    }
+
+    @Test
+    void testIsAllowedCharacterRoman() {
+        Roman roman = new Roman("Marcus", "M", 1.75, 30, 60, 65);
+        assertTrue(battlefield.isAllowedCharacter(roman));
+    }
+
+    @Test
+    void testIsAllowedCharacterLycanthrope() {
+        Lycanthrope lycan = new Lycanthrope("Fenrir", "M", 2.0, 100, 90, 85,
+                AgeCategory.ADULT, 5, Rank.BETA, 60);
+        assertTrue(battlefield.isAllowedCharacter(lycan));
+    }
+
+    @Test
+    void testAddCharacterGaul() {
+        Gaul gaul = new Gaul("Astérix", "M", 1.50, 35, 80, 70);
+        battlefield.addCharacter(gaul);
+        assertTrue(battlefield.getCharacter().contains(gaul));
+    }
+
+    @Test
+    void testAddCharacterRoman() {
+        Roman roman = new Roman("Marcus", "M", 1.75, 30, 60, 65);
+        battlefield.addCharacter(roman);
+        assertTrue(battlefield.getCharacter().contains(roman));
+    }
+
+    @Test
+    void testAddCharacterNull() {
+        int initialSize = battlefield.getCharacter().size();
+        battlefield.addCharacter(null);
+        assertEquals(initialSize, battlefield.getCharacter().size());
+    }
+
+    @Test
+    void testConstructorWithMixedCharacters() {
+        ArrayList<Character> mixedChars = new ArrayList<>();
+        mixedChars.add(new Gaul("Astérix", "M", 1.50, 35, 80, 70));
+        mixedChars.add(new Roman("Marcus", "M", 1.75, 30, 60, 65));
+
+        BattleFields mixedBattlefield = new BattleFields("Test Battlefield", 500, null, 0, mixedChars, new ArrayList<>());
+
+        // Both should be added
+        assertEquals(2, mixedBattlefield.getCharacter().size());
+    }
+
+    @Test
+    void testSetClanLeader() {
+        ClanLeader leader = new ClanLeader("Commander", "M", 45);
+        battlefield.setClanLeader(leader);
         assertEquals(leader, battlefield.getClanLeader());
     }
 
     @Test
-    public void testAddGaulCharacter() {
-        Druid druid = new Druid("Panoramix", "M", 1.75, 60, 50, 60);
-        battlefield.addCharacter(druid);
-
-        assertTrue(battlefield.getCharacter().contains(druid));
-        assertEquals(1, battlefield.getNbCharacter());
+    void testAddFood() {
+        battlefield.addFood(Foods.SANGLIER);
+        assertTrue(battlefield.getFood().contains(Foods.SANGLIER));
     }
 
     @Test
-    public void testAddRomanCharacter() {
-        Legionary legionary = new Legionary("Brutus", "M", 1.75, 30, 60, 55);
-        battlefield.addCharacter(legionary);
+    void testHealCharacters() {
+        Gaul gaul = new Gaul("Astérix", "M", 1.50, 35, 80, 70);
+        gaul.receiveDamage(40);
+        battlefield.addCharacter(gaul);
 
-        assertTrue(battlefield.getCharacter().contains(legionary));
-        assertEquals(1, battlefield.getNbCharacter());
+        battlefield.healCharacters(20);
+        assertEquals(80, gaul.getHealth());
     }
 
     @Test
-    public void testAddLycanthrope() {
-        Lycanthrope lycanthrope = new Lycanthrope("Fenrir", "M", 1.90, 35, 80, 75);
-        battlefield.addCharacter(lycanthrope);
+    void testFeedCharacters() {
+        Gaul gaul = new Gaul("Astérix", "M", 1.50, 35, 80, 70);
+        battlefield.addCharacter(gaul);
+        battlefield.addFood(Foods.SANGLIER);
 
-        assertTrue(battlefield.getCharacter().contains(lycanthrope));
-        assertEquals(1, battlefield.getNbCharacter());
+        int initialFoodSize = battlefield.getFood().size();
+        battlefield.feedCharacters();
+        assertEquals(initialFoodSize - 1, battlefield.getFood().size());
     }
 
     @Test
-    public void testAddAllCharacterTypes() {
-        Druid druid = new Druid("Panoramix", "M", 1.75, 60, 50, 60);
-        General general = new General("Pompey", "M", 1.82, 45, 70, 65);
-        Lycanthrope lycanthrope = new Lycanthrope("Fenrir", "M", 1.90, 35, 80, 75);
-
-        battlefield.addCharacter(druid);
-        battlefield.addCharacter(general);
-        battlefield.addCharacter(lycanthrope);
-
-        assertEquals(3, battlefield.getNbCharacter());
-        assertTrue(battlefield.getCharacter().contains(druid));
-        assertTrue(battlefield.getCharacter().contains(general));
-        assertTrue(battlefield.getCharacter().contains(lycanthrope));
+    void testToString() {
+        String result = battlefield.toString();
+        assertNotNull(result);
+        assertTrue(result.contains("Superficie"));
     }
 
     @Test
-    public void testConstructorAcceptsAllAllowedCharacters() {
-        ArrayList<fr.iut.laGaule.model.Character.Character> characters = new ArrayList<>();
-        characters.add(new Druid("Panoramix", "M", 1.75, 60, 50, 60));
-        characters.add(new Lycanthrope("Fenrir", "M", 1.90, 35, 80, 75));
-        characters.add(new Merchant("Unhygienix", "M", 1.70, 45, 40, 50));
-        characters.add(new General("Pompey", "M", 1.82, 45, 70, 65));
-        characters.add(new Legionary("Brutus", "M", 1.75, 30, 60, 55));
+    void testAddLycanthrope() {
+        Lycanthrope lycan = new Lycanthrope("Fenrir", "M", 2.0, 100, 90, 85,
+                AgeCategory.ADULT, 5, Rank.BETA, 60);
+        battlefield.addCharacter(lycan);
+        assertTrue(battlefield.getCharacter().contains(lycan));
+    }
 
-        ArrayList<Foods> foods = new ArrayList<>();
-
-        BattleFields populatedBattlefield = new BattleFields("Gergovie", 3000, leader, 5, characters, foods);
-
-        // All 5 characters should be added
-        assertEquals(5, populatedBattlefield.getCharacter().size());
+    @Test
+    void testConstructorWithNullCharacters() {
+        BattleFields nullCharBattlefield = new BattleFields("Test", 100, null, 0, new ArrayList<>(), new ArrayList<>());
+        assertNotNull(nullCharBattlefield.getCharacter());
+        assertTrue(nullCharBattlefield.getCharacter().isEmpty());
     }
 }
-

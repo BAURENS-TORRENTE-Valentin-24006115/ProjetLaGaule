@@ -1,9 +1,8 @@
 package fr.iut.laGaule.model.Character.MythicalCreature;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test class for the Howl system in Lycanthropes.

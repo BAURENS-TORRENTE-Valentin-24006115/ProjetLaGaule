@@ -65,7 +65,11 @@ public class Howl {
         System.out.println("Strength: " + emitter.getStrength());
         System.out.println("Endurance: " + emitter.getEndurance());
         System.out.println("Domination Factor: " + emitter.getDominationFactor());
-        System.out.println("Hierarchy Rank: " + emitter.getHierarchyRank().getSymbol() + " (" + emitter.getHierarchyRank().name() + ")");
+        if (emitter.getHierarchyRank() != null) {
+            System.out.println("Hierarchy Rank: " + emitter.getHierarchyRank().getSymbol() + " (" + emitter.getHierarchyRank().name() + ")");
+        } else {
+            System.out.println("Hierarchy Rank: None");
+        }
         System.out.println("Level: " + emitter.getLevel());
         System.out.println("Impetuosity Factor: " + emitter.getImpetuosityFactor());
         System.out.println("Pack: " + (emitter.isSolitary() ? "Solitary" : emitter.getPack() != null ? emitter.getPack().getName() : "None"));
