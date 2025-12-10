@@ -1,5 +1,8 @@
 package fr.iut.laGaule.process;
 
+import fr.iut.laGaule.model.Character.MythicalCreature.AgeCategory;
+import fr.iut.laGaule.model.Character.MythicalCreature.Lycanthrope;
+import fr.iut.laGaule.model.Character.MythicalCreature.Pack;
 import fr.iut.laGaule.model.Consumables.Foods.Foods;
 import fr.iut.laGaule.process.CharacterThread;
 import fr.iut.laGaule.model.Character.Character;
@@ -88,6 +91,14 @@ public class InvasionTheatre {
         // C. Champ de Bataille
         places.add(new BattleFields("Champ de Bataille", 1000, null, 0, new ArrayList<>(), new ArrayList<>()));
 
+
+        Enclosure enclosure = new Enclosure("enclo", 1000, null, 0, new ArrayList<>(), new ArrayList<>());
+        enclosure.setFood(Foods.SANGLIER.getRandomFoods(10));
+        places.add(enclosure);
+
+        // MEUTE PRINCIPALE
+        Pack pack = new Pack("Meute de la Lune");
+
         // D. Lieux Supplémentaires (C'EST ICI QUE CELA MANQUAIT)
         for (int i = 3; i < nbZones; i++) {
             Place p = null;
@@ -125,13 +136,26 @@ public class InvasionTheatre {
                 else if (type == 2) c = new Merchant("Marchand" + suffix, "M", 1.6, 35, 10, 10);
                 else if (type == 3) c = new Innkeeper("Aubergiste" + suffix, "M", 1.7, 45, 15, 15);
                 else c = new Gaul("Gaulois" + suffix, "M", 1.75, 25, 12, 12);
-            } else {
+            } else if (rand.nextBoolean()) {
                 startPlace = camp;
                 int type = rand.nextInt(4);
                 if (type == 0) c = new General("Général" + suffix, "M", 1.8, 50, 15, 15);
                 else if (type == 1) c = new Prefect("Préfet" + suffix, "M", 1.7, 45, 10, 10);
                 else if (type == 2) c = new Legionary("Légionnaire" + suffix, "M", 1.8, 25, 15, 15);
                 else c = new Roman("Romain" + suffix, "M", 1.75, 20, 12, 12);
+            }else{
+                // LYCANTHROPE
+                startPlace = enclosure;
+                boolean originGaul = rand.nextBoolean();
+
+                // Création
+                c = new Lycanthrope(
+                        "Loup" + suffix, "M", 1.9, 30, 25, 20,
+                        AgeCategory.ADULT, 0, null, 20, originGaul
+                );
+
+                // Ajout à la meute
+                ((Lycanthrope) c).joinPack(pack);
             }
 
             // Force la santé au max

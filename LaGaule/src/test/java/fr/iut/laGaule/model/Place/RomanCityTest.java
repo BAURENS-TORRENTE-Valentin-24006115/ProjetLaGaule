@@ -47,7 +47,7 @@ public class RomanCityTest {
     @Test
     public void testIsAllowedCharacterLycanthrope() {
         Lycanthrope lycan = new Lycanthrope("Fenrir", "M", 1.9, 35, 80, 75,
-                AgeCategory.ADULT, 5, Rank.BETA, 60);
+                AgeCategory.ADULT, 5, Rank.BETA, 60, originGaul);
         assertTrue(city.isAllowedCharacter(lycan));
     }
 
@@ -67,7 +67,7 @@ public class RomanCityTest {
     @Test
     public void testAddCharacterLycanthrope() {
         Lycanthrope lycan = new Lycanthrope("Fenrir", "M", 1.9, 35, 80, 75,
-                AgeCategory.ADULT, 5, Rank.BETA, 60);
+                AgeCategory.ADULT, 5, Rank.BETA, 60, originGaul);
         city.addCharacter(lycan);
         assertTrue(city.getCharacter().contains(lycan));
     }

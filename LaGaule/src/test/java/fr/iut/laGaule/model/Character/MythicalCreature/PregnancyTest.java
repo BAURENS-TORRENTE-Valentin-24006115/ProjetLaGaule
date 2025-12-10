@@ -17,8 +17,8 @@ public class PregnancyTest {
     public void setUp() {
         mother = new Lycanthrope(
                 "AlphaFemale", "female", 1.7, 5, 80, 80,
-                AgeCategory.ADULT, 40, Rank.ALPHA, 25
-        );
+                AgeCategory.ADULT, 40, Rank.ALPHA, 25,
+                originGaul);
         pregnancy = new Pregnancy(mother, 5, 3);
     }
 

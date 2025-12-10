@@ -29,9 +29,9 @@ class FantasyZooMasterAdditionalTest {
         enclosure2 = new Enclosure("Enclosure2", 500, null, 0, new ArrayList<>(), new ArrayList<>());
 
         solitaryMale = new Lycanthrope("SolitaryMale", "male", 1.8, 5, 80, 75,
-                AgeCategory.ADULT, 0, null, 30);
+                AgeCategory.ADULT, 0, null, 30, originGaul);
         solitaryFemale = new Lycanthrope("SolitaryFemale", "female", 1.7, 5, 70, 70,
-                AgeCategory.ADULT, 0, null, 25);
+                AgeCategory.ADULT, 0, null, 25, originGaul);
 
         pack = new Pack("TestPack");
     }
@@ -251,9 +251,9 @@ class FantasyZooMasterAdditionalTest {
     @DisplayName("Test avec plusieurs mâles et femelles après déplacement")
     void testFormNewPackMultipleSolitaries() {
         Lycanthrope male2 = new Lycanthrope("Male2", "male", 1.75, 4, 75, 70,
-                AgeCategory.ADULT, 0, null, 25);
+                AgeCategory.ADULT, 0, null, 25, originGaul);
         Lycanthrope female2 = new Lycanthrope("Female2", "female", 1.65, 4, 65, 65,
-                AgeCategory.ADULT, 0, null, 20);
+                AgeCategory.ADULT, 0, null, 20, originGaul);
 
         zooMaster.addManagedEnclosure(enclosure1);
         zooMaster.addManagedEnclosure(enclosure2);
@@ -276,7 +276,7 @@ class FantasyZooMasterAdditionalTest {
     @DisplayName("Test comportement quand un pack existe déjà")
     void testCheckAndFormNewPackExistingPack() {
         Lycanthrope packMember = new Lycanthrope("PackMember", "male", 1.8, 5, 80, 75,
-                AgeCategory.ADULT, 10, Rank.BETA, 30);
+                AgeCategory.ADULT, 10, Rank.BETA, 30, originGaul);
         pack.addMember(packMember);
 
         zooMaster.addManagedEnclosure(enclosure1);

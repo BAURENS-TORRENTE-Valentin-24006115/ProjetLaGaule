@@ -23,13 +23,13 @@ class PackAdditionalTest {
         pack = new Pack("TestPack");
 
         alphaMale = new Lycanthrope("AlphaMale", "male", 1.8, 5, 90, 85,
-                AgeCategory.ADULT, 50, Rank.ALPHA, 30);
+                AgeCategory.ADULT, 50, Rank.ALPHA, 30, originGaul);
         alphaFemale = new Lycanthrope("AlphaFemale", "female", 1.7, 5, 80, 80,
-                AgeCategory.ADULT, 40, Rank.ALPHA, 25);
+                AgeCategory.ADULT, 40, Rank.ALPHA, 25, originGaul);
         betaMale = new Lycanthrope("BetaMale", "male", 1.75, 4, 75, 75,
-                AgeCategory.ADULT, 30, Rank.BETA, 20);
+                AgeCategory.ADULT, 30, Rank.BETA, 20, originGaul);
         omegaMember = new Lycanthrope("OmegaMember", "male", 1.6, 3, 50, 50,
-                AgeCategory.ADULT, -10, Rank.OMEGA, 15);
+                AgeCategory.ADULT, -10, Rank.OMEGA, 15, originGaul);
 
         pack.addMember(alphaMale);
         pack.addMember(alphaFemale);
@@ -66,7 +66,7 @@ class PackAdditionalTest {
     @DisplayName("Test handleMemberDeath avec alpha femelle")
     void testHandleMemberDeathAlphaFemale() {
         Lycanthrope betaFemale = new Lycanthrope("BetaFemale", "female", 1.65, 4, 70, 70,
-                AgeCategory.ADULT, 20, Rank.BETA, 20);
+                AgeCategory.ADULT, 20, Rank.BETA, 20, originGaul);
         pack.addMember(betaFemale);
 
         pack.handleMemberDeath(alphaFemale);
@@ -78,7 +78,7 @@ class PackAdditionalTest {
     @DisplayName("Test handleMemberDeath avec membre non présent")
     void testHandleMemberDeathNonMember() {
         Lycanthrope outsider = new Lycanthrope("Outsider", "male", 1.7, 3, 60, 60,
-                AgeCategory.ADULT, 0, Rank.BETA, 10);
+                AgeCategory.ADULT, 0, Rank.BETA, 10, originGaul);
         int initialSize = pack.getSize();
 
         pack.handleMemberDeath(outsider);
@@ -108,9 +108,9 @@ class PackAdditionalTest {
     void testEstablishAlphaCoupleViaManage() {
         Pack newPack = new Pack("NewPack");
         Lycanthrope male = new Lycanthrope("Male", "male", 1.8, 5, 85, 80,
-                AgeCategory.ADULT, 40, Rank.BETA, 25);
+                AgeCategory.ADULT, 40, Rank.BETA, 25, originGaul);
         Lycanthrope female = new Lycanthrope("Female", "female", 1.7, 5, 75, 75,
-                AgeCategory.ADULT, 35, Rank.BETA, 20);
+                AgeCategory.ADULT, 35, Rank.BETA, 20, originGaul);
 
         newPack.addMember(male);
         newPack.addMember(female);
@@ -125,7 +125,7 @@ class PackAdditionalTest {
     void testEstablishAlphaCoupleNoAdults() {
         Pack youngPack = new Pack("YoungPack");
         Lycanthrope youngMale = new Lycanthrope("Young", "male", 1.5, 1, 50, 50,
-                AgeCategory.YOUNG, 0, Rank.OMEGA, 10);
+                AgeCategory.YOUNG, 0, Rank.OMEGA, 10, originGaul);
 
         youngPack.addMember(youngMale);
         // Pas de setAlphaMale car il est jeune
@@ -281,7 +281,7 @@ class PackAdditionalTest {
     @DisplayName("Test setAlphaMale avec un nouveau membre")
     void testSetAlphaMale() {
         Lycanthrope newAlpha = new Lycanthrope("NewAlpha", "male", 1.85, 6, 95, 90,
-                AgeCategory.ADULT, 60, Rank.BETA, 35);
+                AgeCategory.ADULT, 60, Rank.BETA, 35, originGaul);
         pack.addMember(newAlpha);
 
         pack.setAlphaMale(newAlpha);
@@ -294,7 +294,7 @@ class PackAdditionalTest {
     @DisplayName("Test setAlphaFemale avec un nouveau membre")
     void testSetAlphaFemale() {
         Lycanthrope newAlpha = new Lycanthrope("NewAlphaFemale", "female", 1.75, 6, 85, 85,
-                AgeCategory.ADULT, 55, Rank.BETA, 30);
+                AgeCategory.ADULT, 55, Rank.BETA, 30, originGaul);
         pack.addMember(newAlpha);
 
         pack.setAlphaFemale(newAlpha);
@@ -343,7 +343,7 @@ class PackAdditionalTest {
     @DisplayName("Test removeMember avec membre non présent")
     void testRemoveMemberNotPresent() {
         Lycanthrope outsider = new Lycanthrope("Outsider", "male", 1.7, 3, 60, 60,
-                AgeCategory.ADULT, 0, Rank.BETA, 10);
+                AgeCategory.ADULT, 0, Rank.BETA, 10, originGaul);
         int initialSize = pack.getSize();
 
         pack.removeMember(outsider);

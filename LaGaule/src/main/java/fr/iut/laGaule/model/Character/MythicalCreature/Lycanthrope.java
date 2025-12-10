@@ -4,6 +4,8 @@ import fr.iut.laGaule.model.Character.Character;
 import fr.iut.laGaule.model.Character.Gaul.Gaul;
 import fr.iut.laGaule.model.Character.Roman.Roman;
 
+import java.util.List;
+
 /**
  * Represents a Lycanthrope (werewolf) character in the game.
  * Lycanthropes are mythical creatures that can inhabit various places
@@ -23,23 +25,25 @@ public class Lycanthrope extends Character {
     private int impetuosityFactor;
     private Pack pack;
     private boolean isSolitary;
+    private List<String> DominationHistory;
 
     /**
      * Constructs a new Lycanthrope with the specified attributes.
      *
-     * @param name the name of the lycanthrope
-     * @param sex the sex/gender of the lycanthrope
-     * @param height the height of the lycanthrope in meters
-     * @param age the age of the lycanthrope in years
-     * @param strength the strength attribute of the lycanthrope
-     * @param endurance the endurance attribute of the lycanthrope
-     * @param ageCategory the age category (young, adult, or old)
-     * @param dominationFactor the domination factor (difference between dominations exercised and received)
-     * @param hierarchyRank the rank within the pack hierarchy
+     * @param name              the name of the lycanthrope
+     * @param sex               the sex/gender of the lycanthrope
+     * @param height            the height of the lycanthrope in meters
+     * @param age               the age of the lycanthrope in years
+     * @param strength          the strength attribute of the lycanthrope
+     * @param endurance         the endurance attribute of the lycanthrope
+     * @param ageCategory       the age category (young, adult, or old)
+     * @param dominationFactor  the domination factor (difference between dominations exercised and received)
+     * @param hierarchyRank     the rank within the pack hierarchy
      * @param impetuosityFactor the impetuosity factor of the lycanthrope
+     * @param originGaul
      */
     public Lycanthrope(String name, String sex, double height, int age, int strength, int endurance,
-                       AgeCategory ageCategory, int dominationFactor, Rank hierarchyRank, int impetuosityFactor) {
+                       AgeCategory ageCategory, int dominationFactor, Rank hierarchyRank, int impetuosityFactor, boolean originGaul) {
         super(name, sex, height, age, strength, endurance);
         this.ageCategory = ageCategory;
         this.impetuosityFactor = impetuosityFactor;
@@ -694,5 +698,9 @@ public class Lycanthrope extends Character {
      */
     public void setSolitary(boolean solitary) {
         isSolitary = solitary;
+    }
+
+    public List<String> getDominationHistory() {
+        return DominationHistory;
     }
 }

@@ -1,13 +1,13 @@
 package fr.iut.laGaule.model.Character;
 
-import fr.iut.laGaule.Serializer;
 import fr.iut.laGaule.model.Character.Gaul.*;
+import fr.iut.laGaule.model.Character.MythicalCreature.AgeCategory;
 import fr.iut.laGaule.model.Character.MythicalCreature.Lycanthrope;
+import fr.iut.laGaule.model.Character.MythicalCreature.Rank;
 import fr.iut.laGaule.model.Character.Roman.*;
 import fr.iut.laGaule.model.Place.*;
 
 import java.io.Serializable;
-import java.util.Map;
 
 /**
  * Class representing a clan leader who manages a place
@@ -149,13 +149,14 @@ public class ClanLeader implements Serializable {
             // Créatures fantastiques
             case "lycanthrope":
                 // Création avec valeurs par défaut pour les nouveaux paramètres
+                boolean originGaul = false;
                 newCharacter = new Lycanthrope(
                     name, sex, height, age, strength, endurance,
-                    fr.iut.laGaule.model.Character.MythicalCreature.AgeCategory.ADULT, // AgeCategory par défaut
+                    AgeCategory.ADULT, // AgeCategory par défaut
                     0, // dominationFactor initial à 0
-                    fr.iut.laGaule.model.Character.MythicalCreature.Rank.OMEGA, // Rank par défaut (Omega)
-                    50 // impetuosityFactor par défaut
-                );
+                    Rank.OMEGA, // Rank par défaut (Omega)
+                    50, // impetuosityFactor par défaut
+                        originGaul);
                 break;
 
             default:

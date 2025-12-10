@@ -31,15 +31,15 @@ public class FantasyZooMasterTest {
 
         solitaryLycan = new Lycanthrope(
                 "SolitaryWolf", "male", 1.8, 25, 70, 65,
-                AgeCategory.ADULT, 0, Rank.OMEGA, 50
-        );
+                AgeCategory.ADULT, 0, Rank.OMEGA, 50,
+                originGaul);
         solitaryLycan.becomeSolitary();
 
         pack = new Pack("TestPack");
         packLycan = new Lycanthrope(
                 "PackWolf", "female", 1.7, 25, 65, 60,
-                AgeCategory.ADULT, 10, Rank.BETA, 40
-        );
+                AgeCategory.ADULT, 10, Rank.BETA, 40,
+                originGaul);
         pack.addMember(packLycan);
     }
 

@@ -41,7 +41,7 @@ public class EnclosureTest {
     @Test
     public void testIsAllowedCharacterLycanthrope() {
         Lycanthrope lycan = new Lycanthrope("Fenrir", "M", 1.9, 35, 80, 75,
-                AgeCategory.ADULT, 5, Rank.BETA, 60);
+                AgeCategory.ADULT, 5, Rank.BETA, 60, originGaul);
         assertTrue(enclosure.isAllowedCharacter(lycan));
     }
 
@@ -60,7 +60,7 @@ public class EnclosureTest {
     @Test
     public void testAddCharacterLycanthrope() {
         Lycanthrope lycan = new Lycanthrope("Fenrir", "M", 1.9, 35, 80, 75,
-                AgeCategory.ADULT, 5, Rank.BETA, 60);
+                AgeCategory.ADULT, 5, Rank.BETA, 60, originGaul);
         enclosure.addCharacter(lycan);
         assertTrue(enclosure.getCharacter().contains(lycan));
     }
@@ -94,7 +94,7 @@ public class EnclosureTest {
     public void testConstructorWithMixedCharacters() {
         ArrayList<Character> mixedChars = new ArrayList<>();
         Lycanthrope lycan = new Lycanthrope("Fenrir", "M", 1.9, 35, 80, 75,
-                AgeCategory.ADULT, 5, Rank.BETA, 60);
+                AgeCategory.ADULT, 5, Rank.BETA, 60, originGaul);
         Gaul gaul = new Druid("Panoramix", "M", 1.75, 60, 50, 60);
         mixedChars.add(lycan);
         mixedChars.add(gaul);

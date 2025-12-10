@@ -34,8 +34,8 @@ class PackTest {
             AgeCategory.ADULT,
             50,
             Rank.ALPHA,
-            30
-        );
+            30,
+                originGaul);
 
         // Create alpha female
         alphaFemale = new Lycanthrope(
@@ -48,8 +48,8 @@ class PackTest {
             AgeCategory.ADULT,
             40,
             Rank.ALPHA,
-            25
-        );
+            25,
+                originGaul);
 
         pack.addMember(alphaMale);
         pack.addMember(alphaFemale);
@@ -91,8 +91,8 @@ class PackTest {
             AgeCategory.ADULT,
             55,
             Rank.BETA,
-            35
-        );
+            35,
+                originGaul);
         pack.addMember(betaMale);
 
         // Make alpha male lose dominance
@@ -147,8 +147,8 @@ class PackTest {
             AgeCategory.YOUNG,
             10,
             Rank.ALPHA,
-            20
-        );
+            20,
+                originGaul);
 
         Pack youngPack = new Pack("YoungPack");
         youngPack.addMember(youngMale);
@@ -234,8 +234,8 @@ class PackTest {
             AgeCategory.ADULT,
             20,
             Rank.BETA,
-            25
-        );
+            25,
+                originGaul);
 
         int initialSize = pack.getSize();
         pack.addMember(newMember);
@@ -279,8 +279,8 @@ class PackTest {
                 AgeCategory.ADULT,
                 -10,
                 Rank.OMEGA,
-                15
-            );
+                15,
+                    originGaul);
             pack.addMember(omega);
         }
 

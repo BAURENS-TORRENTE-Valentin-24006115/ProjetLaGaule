@@ -3,6 +3,7 @@ package fr.iut.laGaule.process;
 import fr.iut.laGaule.Serializer;
 import fr.iut.laGaule.model.Character.Character;
 import fr.iut.laGaule.model.Character.Gaul.*;
+import fr.iut.laGaule.model.Character.MythicalCreature.Lycanthrope;
 import fr.iut.laGaule.model.Character.Roman.General;
 import fr.iut.laGaule.model.Character.Roman.Legionary;
 import fr.iut.laGaule.model.Character.Roman.Prefect;
@@ -191,6 +192,53 @@ public class CharacterThread implements Runnable {
                         }
                     } else {
                         character.setLastAction("Collecte les impôts 🪙");
+                    }
+                } else if (character instanceof Lycanthrope) {
+                    Lycanthrope wolf = (Lycanthrope) character;
+                    int dice = random.nextInt(100);
+
+                    // 1. TRANSFORMATION (5%)
+                    if (dice < 5) {
+                        Character newHuman = wolf.transformToHuman();
+                        if (newHuman != null) {
+                            fr.iut.laGaule.model.Place.Place currentPlace = (fr.iut.laGaule.model.Place.Place) wolf.getPlaceData();
+                            synchronized (currentPlace) {
+                                currentPlace.getCharacter().remove(wolf);
+                                currentPlace.getCharacter().add(newHuman);
+                            }
+                            newHuman.setPlace(currentPlace);
+                            newHuman.setLastAction("METAMORPHOSIS ! ✨");
+                            this.character = newHuman; // LE THREAD CHANGE DE CIBLE
+                            continue;
+                        }
+                    }
+
+                    // 2. DOMINATION (40%)
+                    else if (dice < 45) {
+                        // On cherche un voisin manuellement car findEnemy cherche des ennemis
+                        Lycanthrope target = null;
+                        try {
+                            for(Character n : ((fr.iut.laGaule.model.Place.Place)wolf.getPlaceData()).getCharacter()) {
+                                if(n instanceof Lycanthrope && n != wolf) { target = (Lycanthrope)n; break; }
+                            }
+                        } catch(Exception e){}
+
+                        if (target != null) {
+                            if (wolf.attemptDomination(target)) character.setLastAction("A dominé " + target.getName() + " 💪");
+                            else character.setLastAction("Echec domination sur " + target.getName());
+                        } else {
+                            character.setLastAction("Cherche sa place dans la meute");
+                        }
+                    }
+
+                    // 3. HURLEMENTS & REPOS
+                    else {
+                        if (random.nextBoolean()) {
+                            wolf.howlPackAffiliation();
+                            character.setLastAction("Hurle avec la meute 🐺");
+                        } else {
+                            character.setLastAction("Dort dans la tanière 💤");
+                        }
                     }
                 }
 

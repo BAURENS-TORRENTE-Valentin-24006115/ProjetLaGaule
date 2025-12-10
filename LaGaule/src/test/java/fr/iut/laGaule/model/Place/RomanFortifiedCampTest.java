@@ -4,7 +4,6 @@ import fr.iut.laGaule.model.Character.Character;
 import fr.iut.laGaule.model.Character.ClanLeader;
 import fr.iut.laGaule.model.Character.Gaul.Gaul;
 import fr.iut.laGaule.model.Character.Gaul.Druid;
-import fr.iut.laGaule.model.Character.Roman.Roman;
 import fr.iut.laGaule.model.Character.Roman.Legionary;
 import fr.iut.laGaule.model.Character.Roman.General;
 import fr.iut.laGaule.model.Character.Roman.Prefect;
@@ -55,7 +54,7 @@ public class RomanFortifiedCampTest {
     @Test
     public void testIsAllowedCharacterLycanthrope() {
         Lycanthrope lycan = new Lycanthrope("Fenrir", "M", 1.9, 35, 80, 75,
-                AgeCategory.ADULT, 5, Rank.BETA, 60);
+                AgeCategory.ADULT, 5, Rank.BETA, 60, originGaul);
         assertTrue(camp.isAllowedCharacter(lycan));
     }
 
@@ -138,7 +137,7 @@ public class RomanFortifiedCampTest {
     @Test
     public void testAddCharacterLycanthrope() {
         Lycanthrope lycan = new Lycanthrope("Fenrir", "M", 1.9, 35, 80, 75,
-                AgeCategory.ADULT, 5, Rank.BETA, 60);
+                AgeCategory.ADULT, 5, Rank.BETA, 60, originGaul);
         camp.addCharacter(lycan);
         assertTrue(camp.getCharacter().contains(lycan));
     }

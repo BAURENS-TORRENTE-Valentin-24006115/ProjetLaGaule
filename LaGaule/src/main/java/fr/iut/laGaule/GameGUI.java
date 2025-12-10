@@ -1,5 +1,6 @@
 package fr.iut.laGaule;
 
+import fr.iut.laGaule.model.Character.MythicalCreature.Lycanthrope;
 import fr.iut.laGaule.process.InvasionTheatre;
 import fr.iut.laGaule.model.Place.*;
 import fr.iut.laGaule.model.Character.Character;
@@ -382,8 +383,9 @@ public class GameGUI extends JFrame {
     }
 
     private void updateInspector() {
+        StringBuilder sb;
         if (isInspectPlace && selectedPlace != null) {
-            StringBuilder sb = new StringBuilder();
+            sb = new StringBuilder();
             sb.append("=== ZONE : ").append(selectedPlace.getName()).append(" ===\n\n");
 
             if (selectedPlace.getFood() != null && !selectedPlace.getFood().isEmpty()) {
@@ -398,27 +400,37 @@ public class GameGUI extends JFrame {
             detailsArea.setText(sb.toString());
             detailsArea.setCaretPosition(0);
 
-        } else if (!isInspectPlace && selectedCharacter != null) {
-            String placeName = "Inconnu";
-            try {
-                Object p = selectedCharacter.getPlace();
-                if (p != null) placeName = (p instanceof Place) ? ((Place) p).getName() : p.toString();
-            } catch (Exception ignored) {}
-
-            String action = selectedCharacter.getLastAction();
-            if (action == null) action = "---";
-
-            String text = "=== INFO ===\nNom: " + selectedCharacter.getName() +
-                    "\nClasse: " + selectedCharacter.getClass().getSimpleName() +
-                    "\nLieu: " + placeName +
-                    "\n\n=== STATS ===\nSanté: " + selectedCharacter.getHealth() +
-                    "\nFaim : " + selectedCharacter.getHunger() + // <--- AJOUTEZ LE GETTER SI DISPO
-                    "\nForce: " + selectedCharacter.getStrength() +
-                    "\n\n=== ACTION ===\n" + action;
-            detailsArea.setText(text);
-            detailsArea.setCaretPosition(0);
         } else {
-            detailsArea.setText("");
+            sb = null;
+            if (!isInspectPlace && selectedCharacter != null) {
+                String placeName = "Inconnu";
+                try {
+                    Object p = selectedCharacter.getPlace();
+                    if (p != null) placeName = (p instanceof Place) ? ((Place) p).getName() : p.toString();
+                } catch (Exception ignored) {
+                }
+
+                String action = selectedCharacter.getLastAction();
+                if (action == null) action = "---";
+
+                String text = "=== INFO ===\nNom: " + selectedCharacter.getName() +
+                        "\nClasse: " + selectedCharacter.getClass().getSimpleName() +
+                        "\nLieu: " + placeName +
+                        "\n\n=== STATS ===\nSanté: " + selectedCharacter.getHealth() +
+                        "\nFaim : " + selectedCharacter.getHunger() + // <--- AJOUTEZ LE GETTER SI DISPO
+                        "\nForce: " + selectedCharacter.getStrength() +
+                        "\n\n=== ACTION ===\n" + action;
+                detailsArea.setText(text);
+                detailsArea.setCaretPosition(0);
+            } else if (selectedCharacter instanceof Lycanthrope) {
+                Lycanthrope l = (Lycanthrope) selectedCharacter;
+                sb.append("\n🐺 LYCANTHROPE\nRang: ").append(l.getHierarchyRank());
+                sb.append("\nDomination: ").append(l.getDominationFactor());
+                sb.append("\n\n🏆 DOMINATIONS:");
+                for (String s : l.getDominationHistory()) sb.append("\n- ").append(s);
+            } else {
+                detailsArea.setText("");
+            }
         }
     }
 
@@ -478,7 +490,13 @@ public class GameGUI extends JFrame {
                 setText(c.getName() + " (" + c.getHealth() + "%)");
                 if (c.getHealth() < 30) setForeground(Color.RED); else setForeground(Color.BLACK);
                 if (isSelected) setBackground(Color.LIGHT_GRAY);
+                if (c instanceof Lycanthrope) {
+                    String rank = ((Lycanthrope) c).getHierarchyRank() != null ? ((Lycanthrope) c).getHierarchyRank().getSymbol() : "?";
+                    setText(c.getName() + " [" + rank + "] (" + c.getHealth() + "%)");
+                    setForeground(new Color(142, 68, 173)); // Violet
+                }
             }
+
             return this;
         }
     }

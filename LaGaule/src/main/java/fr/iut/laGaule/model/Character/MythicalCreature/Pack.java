@@ -569,7 +569,7 @@ public class Pack {
         }
 
         System.out.println("\n=== Pack Dynamics: " + name + " ===");
-        java.util.Random random = new java.util.Random();
+        Random random = new Random();
 
         // Omegas are often targeted
         List<Lycanthrope> omegas = getOmegas();
@@ -750,6 +750,7 @@ public class Pack {
             double height = 0.3 + (random.nextDouble() * 0.2); // 0.3-0.5m for pups
             int impetuosity = random.nextInt(30);
 
+            boolean originGaul = false;
             Lycanthrope pup = new Lycanthrope(
                 puppyName,
                 sex,
@@ -760,8 +761,8 @@ public class Pack {
                 AgeCategory.YOUNG,
                 0, // no domination factor yet
                 Rank.OMEGA, // pups start at lowest rank
-                impetuosity
-            );
+                impetuosity,
+                    originGaul);
 
             addMember(pup);
             System.out.println("  - Born: " + puppyName + " (" + sex + ")");
