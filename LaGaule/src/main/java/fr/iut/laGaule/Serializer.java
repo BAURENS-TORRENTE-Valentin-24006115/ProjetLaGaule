@@ -123,28 +123,5 @@ public class Serializer{
     }
 
 
-    public static void main(String[] args) {
-        Druid charle = new Druid("charle","female",25,16,48,56);
-        General bobi = new General("bobi","female",25,15,48,46);
-        Map<String,Object> map = new HashMap<>();
-        map.put("charle",charle);
-        Serializer serializer = new Serializer();
-        serializer.serialize("france", map);
-        map = null;
-        map = serializer.deserialize("france");
-        System.out.println(map);
-        map.put("bobi",bobi);
-        serializer.serialize("france", map);
-        serializer.deserialize("france");
-        System.out.println(map);
-        General bob = (General) map.get("bobi");
-        bob.receiveDamage(50);
-        map.remove("bobi");
-        map.put(bob.getName(),bob);
-        serializer.serialize("truck", map);
-        map = null;
-        map = serializer.deserialize("truck");
-        System.out.println(map);
-        System.out.println(((General) map.get("bobi")).getHealth());
-    }
+
 }

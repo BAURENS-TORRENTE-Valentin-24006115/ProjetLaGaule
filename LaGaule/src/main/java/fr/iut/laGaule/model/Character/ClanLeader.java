@@ -1,11 +1,13 @@
 package fr.iut.laGaule.model.Character;
 
+import fr.iut.laGaule.Serializer;
 import fr.iut.laGaule.model.Character.Gaul.*;
 import fr.iut.laGaule.model.Character.MythicalCreature.Lycanthrope;
 import fr.iut.laGaule.model.Character.Roman.*;
 import fr.iut.laGaule.model.Place.*;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * Class representing a clan leader who manages a place
@@ -346,6 +348,43 @@ public class ClanLeader implements Serializable {
 
         System.out.println(this.name + " a transféré " + character.getName() +
                          " de " + managedPlace.getName() + " vers " + enclosure.getName());
+    }
+    public void transferCharacter(Character character,Place oui) {
+        Serializer serializer =  new Serializer();
+        if(oui.isAllowedCharacter(character)){
+            if(character.getPlace()!=null){
+                Map<String, Object> fi = serializer.deserialize(character.getPlace());
+                fi.remove(character.getName());
+                serializer.serialize(character.getPlace(),fi);
+            }
+            character.setPlace(oui);
+            Map<String, Object> fi2 = serializer.deserialize(oui.getName());
+            fi2.put(character.getName(),character);
+            serializer.serialize(oui.getName(),fi2);
+        }
+    }
+
+    /**
+     * Rappelle un personnage distant vers le lieu géré par ce chef.
+     * @param character Le personnage à rappeler.
+     * @param currentPlace Le lieu actuel où se trouve le personnage.
+     */
+    public void recallCharacter(Character character, Place currentPlace) {
+        if (managedPlace == null) return;
+
+        System.out.println(this.name + " rappelle " + character.getName() + " au bercail !");
+
+        // On utilise la logique de transfert existante, mais vers le lieu géré
+        // 1. Retrait de l'ancien lieu (Mémoire)
+        if(currentPlace != null) {
+            synchronized(currentPlace) { currentPlace.removeCharacter(character); }
+        }
+
+        // 2. Ajout au lieu du chef (Mémoire)
+        synchronized(managedPlace) { managedPlace.addCharacter(character); }
+
+        // 3. Mise à jour de la référence du perso
+        character.setPlace(managedPlace);
     }
 
     @Override

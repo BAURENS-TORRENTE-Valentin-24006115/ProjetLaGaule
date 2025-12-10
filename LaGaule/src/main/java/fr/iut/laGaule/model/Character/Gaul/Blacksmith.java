@@ -42,7 +42,7 @@ public class Blacksmith extends Gaul{
     public void work() {
         System.out.println(this.name + " forges swords and shields.");
         Serializer serializer = new Serializer();
-        Map<String, Object> map = serializer.deserialize("gaul");
+        Map<String, Object> map = serializer.deserialize(getPlace());
         if (map == null || map.isEmpty()) {
             System.out.println("Erreur : Impossible de charger les données pour 'gaul' (Map vide ou null).");
             return;

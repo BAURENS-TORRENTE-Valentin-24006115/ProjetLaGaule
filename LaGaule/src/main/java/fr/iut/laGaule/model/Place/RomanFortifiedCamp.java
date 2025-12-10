@@ -52,7 +52,7 @@ public class RomanFortifiedCamp extends Place {
      * @param character the character to verify
      * @return true if the character is a General, Legionary, or Lycanthrope, false otherwise
      */
-    private boolean isAllowedCharacter(Character character) {
+    public boolean isAllowedCharacter(Character character) {
         return character instanceof General || character instanceof Legionary || character instanceof Lycanthrope;
     }
 

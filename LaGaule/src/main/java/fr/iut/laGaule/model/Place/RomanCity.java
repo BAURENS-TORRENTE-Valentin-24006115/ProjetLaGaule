@@ -51,7 +51,7 @@ public class RomanCity extends Place {
      * @param character the character to verify
      * @return true if the character is a Roman or Lycanthrope, false otherwise
      */
-    private boolean isAllowedCharacter(Character character) {
+    public boolean isAllowedCharacter(Character character) {
         return character instanceof Roman || character instanceof Lycanthrope;
     }
 

@@ -32,4 +32,8 @@ public class Gaul extends Character {
      */
     protected void work() {
     }
+
+    public int getMagicPotionLevel() {
+        return magicPotionLevel;
+    }
 }
