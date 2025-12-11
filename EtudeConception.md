@@ -27,7 +27,8 @@ L'application a été développé en séparant le code par grande classe de fonc
 
 ## 4. Comportement importants
 
-/// A compléter par William
+Une simulation commence après avoir choisi les différents paramètres de celle-ci dans le menu de départ. Ces paramètres sont : le nombre de zones, le nombre de personnages et le temps avant la fin.
+Suite à cela, tout est géré dans différentes classes. L'affichage se fait dans GameGUI. La création des lieux, des personnages et des chefs de clan, la mise en marche de la simulation sont assurées (ou "se trouvent"), la création de la nourriture, tout cela se trouve dans InvasionTheatre, et les actions des personnages sont choisies aléatoirement dans CharacterThread, lancé par InvasionTheatre.
 
 ---
 
